@@ -2,6 +2,7 @@ import { Button } from "../../components/Button";
 import { Heading } from "../../components/Heading";
 import { Text } from "../../components/Text";
 import { TextInput } from "../../components/TextInput";
+import { Checkbox } from "../../components/Checkbox";
 
 import { EnvelopeClosedIcon } from "@radix-ui/react-icons";
 
@@ -34,6 +35,12 @@ function Home() {
                             <EnvelopeClosedIcon/>
                         </TextInput.Icon>
                     </TextInput.Root>
+                    <label htmlFor="check" className="flex items-center gap-2 my-2">
+                        <Checkbox id="check" />
+                        <Text size="sm">
+                            Checkbox
+                        </Text>
+                    </label>
                     <Button className="bg-emerald-500 text-zinc-50">Botão</Button>
                 </div>
             </div>
