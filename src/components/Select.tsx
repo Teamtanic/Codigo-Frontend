@@ -1,6 +1,4 @@
-import { clsx } from "clsx";
-import { Slot } from "@radix-ui/react-slot";
-import { ChangeEvent, ChangeEventHandler, SelectHTMLAttributes, useState } from "react";
+import { useState } from "react";
 import { Fragment } from 'react'
 import { Menu, Transition } from '@headlessui/react'
 import { CaretDown } from 'phosphor-react'
@@ -23,25 +21,10 @@ export function Select({
     options,
     placeHolder,
     selectedValue: propSelectedValue,
-    onChange,
-    asChild,
-    className,
 }: SelectProps) {
-    const Component = asChild ? Slot : "select";
 
     // Estado local para controlar o valor selecionado
     const [selectedValue, setSelectedValue] = useState(propSelectedValue);
-
-    // Função de retorno de chamada para lidar com alterações no valor selecionado
-    const handleSelectChange = (e: ChangeEvent<HTMLSelectElement>) => {
-        const newValue = e.target.value;
-        setSelectedValue(newValue);
-
-        // Chame a função de retorno de chamada (se fornecida) para notificar sobre a alteração
-        if (onChange) {
-            onChange(newValue);
-        }
-    };
 
     const handleSelectOption = (e: string) => {
         const newValue = e;
@@ -95,23 +78,4 @@ export function Select({
             </Transition>
         </Menu>
     );
-
-    /*
-        return (
-            <Component
-                className={clsx(
-                    "font-poppins py-3 px-4 bg-emerald-500 rounded font-semibold text-black text-sm w-full transition-colors hover:bg-emerald-400 focus:ring-2 ring-white",
-                    className
-                    )}
-                    value={selectedValue}
-                    onChange={handleSelectChange}
-                    >
-                {options.map((option) => (
-                    <option className="rounded-sm" key={option.value} value={option.value}>
-                    {option.label}
-                </option>
-                ))}
-            </Component>
-      );
-    */
 }
