@@ -10,7 +10,7 @@ export interface TextInputRootProps {
 
 function TextInputRoot({ children, labelFor, labelText }: TextInputRootProps) {
   return (
-    <label htmlFor={labelFor} className="flex flex-col">
+    <label htmlFor={labelFor} className="flex flex-col w-full">
       <Text>{labelText}</Text>
       <div className="font-poppins py-4 px-3 h-12 rounded bg-gray-200  w-full focus-within:ring-2 ring-emerald-800 flex items-center gap-3">
         {children}
