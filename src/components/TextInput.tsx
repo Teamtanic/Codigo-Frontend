@@ -1,15 +1,21 @@
 import { Slot } from "@radix-ui/react-slot";
 import { InputHTMLAttributes, ReactNode } from "react";
+import { Text } from "./Text";
 
 export interface TextInputRootProps {
+  labelText?: string;
+  labelFor?: string;
   children: ReactNode;
 }
 
-function TextInputRoot({ children }: TextInputRootProps) {
+function TextInputRoot({ children, labelFor, labelText }: TextInputRootProps) {
   return (
-    <div className="font-poppins py-4 px-3 h-12 rounded bg-gray-200  w-full focus-within:ring-2 ring-emerald-800 flex items-center gap-3">
-      {children}
-    </div>
+    <label htmlFor={labelFor} className="flex flex-col">
+      <Text>{labelText}</Text>
+      <div className="font-poppins py-4 px-3 h-12 rounded bg-gray-200  w-full focus-within:ring-2 ring-emerald-800 flex items-center gap-3">
+        {children}
+      </div>
+    </label>
   );
 }
 

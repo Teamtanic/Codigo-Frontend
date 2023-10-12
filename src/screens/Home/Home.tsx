@@ -32,11 +32,11 @@ function Home() {
                     <Text>Empresas md Text 18</Text>
                     <Text size="sm">Empresas sm Text 16</Text>
                     <Text size="xm">Empresas xm Text 14</Text>
-                    <TextInput.Root>
+                    <TextInput.Root labelFor="text" labelText="Texto">
                         <TextInput.Icon>
                             <EnvelopeClosedIcon/>
                         </TextInput.Icon>
-                        <TextInput.Input placeholder="Insira seu texto" />
+                        <TextInput.Input id="text" type="text" placeholder="Insira seu texto" />
                         <TextInput.Icon>
                             <EnvelopeClosedIcon/>
                         </TextInput.Icon>
