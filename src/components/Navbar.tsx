@@ -1,5 +1,7 @@
 import { Menu, Transition } from '@headlessui/react'
 import { Fragment } from 'react'
+import { Heading } from './Heading';
+import { Text } from './Text';
 
 export interface NavbarProps {
     //user: UserProps (criar UserProps)
@@ -17,7 +19,7 @@ export function Navbar({}:NavbarProps){
                     <div className="flex items-center justify-start">
                     <a href="/teste" className="flex ml-2 md:mr-24">
                         <img src="/guara-logo.png" className="h-16 mr-3" alt="Guará Junior Logo" />
-                        <span className="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap dark:text-white">GuaráRP</span>
+                        <Heading size='lg'>GuaráRP</Heading>
                     </a>
                     </div>
                     <Menu as="div" className="relative">
@@ -37,16 +39,16 @@ export function Navbar({}:NavbarProps){
                             leaveFrom="transform opacity-100 scale-100"
                             leaveTo="transform opacity-0 scale-95"
                         >
-                            <Menu.Items className={`absolute right-0 my-4 text-base list-none bg-white divide-y divide-gray-100 rounded shadow dark:bg-gray-700 dark:divide-gray-600`} id="dropdown-user">
+                            <Menu.Items className={`absolute right-0 my-4 bg-white divide-y divide-gray-100 rounded shadow dark:bg-gray-700 dark:divide-gray-600`} id="dropdown-user">
                             {user.map((info) => (
                             <Menu.Item key={info.name}>
-                                    <div className="px-4 py-3" role="none">
-                                        <p className="text-sm text-gray-900 dark:text-white" role="none">
+                                    <div className="px-4 py-3 flex flex-col">
+                                        <Text className="text-sm text-gray-900 dark:text-white">
                                         {info.name}
-                                    </p>
-                                    <p className="text-sm font-medium text-gray-900 truncate dark:text-gray-300" role="none">
+                                    </Text>
+                                    <Text className="text-sm font-medium text-gray-900 truncate dark:text-gray-300">
                                         {info.email}
-                                    </p>
+                                    </Text>
                                     </div>
                             </Menu.Item>
                             ))}
