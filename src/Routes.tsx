@@ -14,6 +14,7 @@ import {
       <Router>
         <Switch>
           <Route path="/" element={<PasswordRecovery />} />
+          <Route path="/teste" element={<Home />} />
         </Switch>
       </Router>
     );
