@@ -3,10 +3,14 @@ import { Heading } from "../../components/Heading";
 import { Text } from "../../components/Text";
 import { TextInput } from "../../components/TextInput";
 import { Checkbox } from "../../components/Checkbox";
+import { Card } from "../../components/Card"
+import { Navbar } from "../../components/Navbar"
+import { SidebarMenu } from "../../components/SidebarMenu"
+import { Container } from "../../components/Container";
 
 import { EnvelopeClosedIcon } from "@radix-ui/react-icons";
 
-import logo from "../../../public/guara-logo.png";
+import logo from '/guara-logo.png';
 import { Select } from "../../components/Select";
 
 function Home() {
@@ -15,9 +19,26 @@ function Home() {
         {value: "mi", label: "Milho!"},
         {value: "café", label: "Café"}
     ];
+
+    var acesso = [
+      {label: "RH", link:"/teste", notify: 3},
+      {label: "Projetos", link:"/teste"}
+    ];
     return (
-        <div className="flex flex-col items-end h-full w-full">
-            <div className="flex justify-center flex-col items-center h-full bg-green-300">
+        <Container>
+            <Navbar/>
+            <SidebarMenu menuItems={acesso} />
+
+            <Card className="bg-blue-300">
+                <div >
+                    <Text>Teste</Text>
+                </div>
+            </Card>
+            <Card className="bg-zinc-500 rounded-bl-none">
+                <div className="bg-zinc-900 w-[120px] h-[120px]">
+                </div>
+            </Card>
+            <div className="flex justify-center flex-col items-center h-full mr-0 ml-auto bg-green-300">
                 {
                 /* Botar minimo depois */
                 }
@@ -51,7 +72,7 @@ function Home() {
                     <Button className="bg-emerald-500 text-zinc-50">Botão</Button>
                 </div>
             </div>
-        </div>
+        </Container>
     );
 }
 
