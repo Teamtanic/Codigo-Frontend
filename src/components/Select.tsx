@@ -35,8 +35,6 @@ export function Select({
         return classes.filter(Boolean).join(' ')
     }
 
-    console.log(selectedValue);
-
     return (
         <Menu as="div" className="relative inline-block text-left">
             <div>
