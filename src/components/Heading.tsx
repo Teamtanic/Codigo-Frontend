@@ -21,7 +21,7 @@ export function Heading({
     <>
       <Component
         className={clsx(
-          "text-gray-900 font-bold font-poppins",
+          "text-gray-900 dark:text-gray-100 font-bold font-poppins",
           {
             "text-lg": size === "sm",
             "text-xl": size === "md",

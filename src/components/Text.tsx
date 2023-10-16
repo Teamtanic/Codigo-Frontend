@@ -16,7 +16,7 @@ export function Text({ size = "md", children, asChild, className }: TextProps) {
     <>
       <Component
         className={clsx(
-          "text-gray-900 font-poppins",
+          "text-gray-900 dark:text-gray-100 font-poppins",
           {
             "text-xs": size === "xm",
             "text-sm": size === "sm",
