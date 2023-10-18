@@ -12,6 +12,7 @@ import { EnvelopeClosedIcon } from "@radix-ui/react-icons";
 
 import logo from '/guara-logo.png';
 import { Select } from "../../components/Select";
+import { AndroidLogo } from "phosphor-react";
 
 function Home() {
     var options = [
@@ -69,7 +70,9 @@ function Home() {
                             Checkbox
                         </Text>
                     </label>
-                    <Button className="bg-emerald-500 text-zinc-50">Botão</Button>
+                    <Button icon={<AndroidLogo/>} iconPosition="left" className="bg-emerald-500 text-zinc-50">
+                        Botão
+                    </Button>
                 </div>
             </div>
         </Container>
