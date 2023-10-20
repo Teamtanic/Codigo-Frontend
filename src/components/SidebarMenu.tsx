@@ -1,8 +1,8 @@
 import { Link } from "react-router-dom"; // Importe o Link para criar links internos da sua aplicação
 import { Text } from "./Text";
 import { CaretLeft, CaretRight } from "phosphor-react";
-import { Card } from "./Card";
 import { useState } from "react";
+import { Button } from "./Button";
 
 export interface SidebarMenuProps {
   // Defina as propriedades necessárias, como os itens do menu
@@ -22,14 +22,15 @@ export function SidebarMenu({ menuItems }: SidebarMenuProps) {
 
   return (
     <div className="flex h-screen fixed overflow-y-auto">
-      <aside className={`bg-gray-800 ${sidebarClasses} border-r-4 border-r-gray-800/20`}>
+      <aside className={` bg-gray-100 dark:bg-gray-800 ${sidebarClasses} border-r-4 border-r-gray-200/20 dark:border-r-gray-800/20`}>
         <div className="flex flex-col h-full">
           <nav className="flex-1 space-y-2 px-4 py-4">
             {menuItems.map((item, index) => (
               <Link
                 to={item.link}
                 key={index}
-                className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+                className={`flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group ${!isSidebarVisible ? "hidden" : ""
+                  }`}
               >
                 <Text className="flex-1 ml-3 whitespace-nowrap">{item.label}</Text>
                 {
@@ -41,16 +42,15 @@ export function SidebarMenu({ menuItems }: SidebarMenuProps) {
         </div>
       </aside>
 
-      <div className="flex items-center">
-        <Card className="flex items-center rounded-l-none bg-gray-700">
-          <button >
-            {isSidebarVisible ?
-              <CaretLeft size={32} onClick={toggleSidebar} />
-              :
-              <CaretRight size={32} onClick={toggleSidebar} />
-            }
-          </button>
-        </Card>
+      <div className="flex items-center" >
+        <div onClick={toggleSidebar}>
+          <Button icon={isSidebarVisible ?
+            <CaretLeft size={32} className="text-gray-900 dark:text-gray-100" />
+            :
+            <CaretRight size={32} className="text-gray-900 dark:text-gray-100" />
+          } className="border-r-gray-200/20 bg-gray-200/20 hover:bg-gray-200  dark:bg-gray-700 rounded-l-none focus:ring-0 ">
+          </Button>
+        </div>
       </div>
     </div>
   );
