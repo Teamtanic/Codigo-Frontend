@@ -8,7 +8,9 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   asChild?: boolean;
   className?: string;
   icon?: ReactNode;
-  iconPosition?: "left" | "right"; // Nova propriedade para controlar a posição do ícone
+  iconPosition?: "left" | "right";
+  textStyle?: string;
+  textSize?: "xm" | "sm" | "md";
 }
 
 export function Button({
@@ -16,6 +18,8 @@ export function Button({
   asChild,
   iconPosition = "left", // Posição padrão do ícone é à esquerda
   icon,
+  textStyle,
+  textSize,
   className,
   ...props
 }: ButtonProps) {
@@ -32,7 +36,7 @@ export function Button({
       {iconPosition === "left" && (
           <Slot className="w-6 h-6 text-gray-900">{icon}</Slot>
       )}
-      <Text className={`text-center flex-1 ${icon && iconPosition === "left" ? "-translate-x-3" : iconPosition === "right" ? "translate-x-3" : ""}`}>{children}</Text>
+      <Text size={textSize} className={`text-center flex-1 ${icon && iconPosition === "left" ? "-translate-x-3" : iconPosition === "right" ? "translate-x-3" : ""} ${textStyle}`}>{children}</Text>
       {iconPosition === "right" && (
           <Slot className="w-6 h-6 text-gray-900">{icon}</Slot>
       )}
