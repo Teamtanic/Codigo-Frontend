@@ -13,21 +13,23 @@ import { EnvelopeClosedIcon } from "@radix-ui/react-icons";
 import logo from '/guara-logo.png';
 import { Select } from "../../components/Select";
 import { AndroidLogo } from "phosphor-react";
+import { CardModal } from "../../components/CardModal";
+import { TextAreaInput } from "../../components/TextBox";
 
 function Home() {
     var options = [
-        {value: "teste", label: "Um teste"},
-        {value: "mi", label: "Milho!"},
-        {value: "café", label: "Café"}
+        { value: "teste", label: "Um teste" },
+        { value: "mi", label: "Milho!" },
+        { value: "café", label: "Café" }
     ];
 
     var acesso = [
-      {label: "RH", link:"/teste", notify: 3},
-      {label: "Projetos", link:"/teste"}
+        { label: "RH", link: "/teste", notify: 3 },
+        { label: "Projetos", link: "/teste" }
     ];
     return (
         <Container>
-            <Navbar/>
+            <Navbar />
             <SidebarMenu menuItems={acesso} />
 
             <Card className="bg-blue-300">
@@ -35,13 +37,37 @@ function Home() {
                     <Text>Teste</Text>
                 </div>
             </Card>
+            <CardModal title="Cadastro">
+                <div className="flex flex-col w-full px-24 mb-12">
+                    <div className="flex w-full gap-12">
+                        <label htmlFor="check" className="flex items-center gap-2 my-2">
+                            <Checkbox id="check" />
+                            <Text size="sm">
+                                Checkbox
+                            </Text>
+                        </label>
+
+                        <label htmlFor="check" className="flex items-center gap-2 my-2 mr-5">
+                            <Checkbox id="check" />
+                            <Text size="sm">
+                                Checkbox
+                            </Text>
+                        </label>
+
+                        <TextInput.Root labelFor="nome" labelText="Nome">
+                            <TextInput.Input id="nome" type="text" placeholder="Dê um nome para seu produto..." />
+                        </TextInput.Root>
+                    </div>
+                    <TextAreaInput labelFor="description" labelText="Descrição" id="desc" placeholder="Dê uma descrição para seu produto..."></TextAreaInput>
+                </div>
+            </CardModal>
             <Card className="bg-zinc-500 rounded-bl-none">
                 <div className="bg-zinc-900 w-[120px] h-[120px]">
                 </div>
             </Card>
             <div className="flex justify-center flex-col items-center h-full mr-0 ml-auto bg-green-300">
                 {
-                /* Botar minimo depois */
+                    /* Botar minimo depois */
                 }
                 <Select placeHolder="Escolha sua opção" options={options} />
                 <div className="flex justify-center items-center flex-col px-32">
@@ -56,21 +82,21 @@ function Home() {
                     <Text size="xm">Empresas xm Text 14</Text>
                     <TextInput.Root labelFor="text" labelText="Texto">
                         <TextInput.Icon>
-                            <EnvelopeClosedIcon/>
+                            <EnvelopeClosedIcon />
                         </TextInput.Icon>
                         <TextInput.Input id="text" type="text" placeholder="Insira seu texto" />
                         <TextInput.Icon>
-                            <EnvelopeClosedIcon/>
+                            <EnvelopeClosedIcon />
                         </TextInput.Icon>
                     </TextInput.Root>
-                    
+
                     <label htmlFor="check" className="flex items-center gap-2 my-2">
                         <Checkbox id="check" />
                         <Text size="sm">
                             Checkbox
                         </Text>
                     </label>
-                    <Button icon={<AndroidLogo/>} iconPosition="left" className="bg-emerald-500 text-zinc-50">
+                    <Button icon={<AndroidLogo />} iconPosition="left" className="bg-emerald-500 text-zinc-50">
                         Botão
                     </Button>
                 </div>
