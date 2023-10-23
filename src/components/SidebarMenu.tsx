@@ -1,20 +1,24 @@
 import { Link } from "react-router-dom"; // Importe o Link para criar links internos da sua aplicação
 import { Text } from "./Text";
 import { CaretLeft, CaretRight } from "phosphor-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "./Button";
 
 export interface SidebarMenuProps {
-  // Defina as propriedades necessárias, como os itens do menu
+  sideBarVisible?: boolean;
   menuItems: Array<{ label: string; link: string, notify?: number; }>;
 }
 
-export function SidebarMenu({ menuItems }: SidebarMenuProps) {
-  const [isSidebarVisible, setSidebarVisible] = useState(true);
+export function SidebarMenu({ menuItems, sideBarVisible = false }: SidebarMenuProps) {
+  const [isSidebarVisible, setSidebarVisible] = useState(false);
 
   const toggleSidebar = () => {
     setSidebarVisible(!isSidebarVisible);
   };
+
+  useEffect(() => {
+    setSidebarVisible(sideBarVisible);
+  }, [sideBarVisible]);
 
   const sidebarClasses = isSidebarVisible
     ? 'w-64 transition-all ease-in-out duration-200'
@@ -22,7 +26,7 @@ export function SidebarMenu({ menuItems }: SidebarMenuProps) {
 
   return (
     <div className="flex h-screen fixed overflow-y-auto">
-      <aside className={` bg-gray-100 dark:bg-gray-800 ${sidebarClasses} border-r-4 border-r-gray-200/20 dark:border-r-gray-800/20`}>
+      <aside className={` bg-gray-100 dark:bg-gray-800 ${sidebarClasses} md:border-r-4 border-r-gray-200/20 dark:border-r-gray-800/20`}>
         <div className="flex flex-col h-full">
           <nav className="flex-1 space-y-2 px-4 py-4">
             {menuItems.map((item, index) => (
@@ -42,13 +46,13 @@ export function SidebarMenu({ menuItems }: SidebarMenuProps) {
         </div>
       </aside>
 
-      <div className="flex items-center" >
+      <div className="flex items-center max-md:hidden" >
         <div onClick={toggleSidebar}>
           <Button icon={isSidebarVisible ?
             <CaretLeft size={32} className="text-gray-900 dark:text-gray-100" />
             :
             <CaretRight size={32} className="text-gray-900 dark:text-gray-100" />
-          } className="border-r-gray-200/20 bg-gray-200/20 hover:bg-gray-200  dark:bg-gray-700 rounded-l-none focus:ring-0 ">
+          } className="border-r-gray-200/20 bg-gray-200/20 hover:bg-gray-200  dark:bg-gray-700 dark:hover:bg-gray-600 rounded-l-none focus:ring-0 ">
           </Button>
         </div>
       </div>
