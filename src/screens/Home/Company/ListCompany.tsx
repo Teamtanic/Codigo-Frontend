@@ -7,7 +7,7 @@ import { Text } from "../../../components/Text";
 import { TextInput } from "../../../components/TextInput";
 import { Button } from "../../../components/Button";
 import { useState } from "react";
-
+import { MagnifyingGlass } from 'phosphor-react';
 
 export function ListCompany() {
     const [isDialogVisible, setIsDialogVisible] = useState(false);
@@ -49,6 +49,9 @@ export function ListCompany() {
                 <div className="w-full mt-3">
                     <Card className="w-full py-3 px-4">
                         <TextInput.Root colorLabel="text-gray-900">
+                            <TextInput.Icon>
+                                <MagnifyingGlass />
+                            </TextInput.Icon>
                             <TextInput.Input id="nome" type="text" placeholder="Pesquisar..." />
                         </TextInput.Root>
                     </Card>
