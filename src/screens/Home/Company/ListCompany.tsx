@@ -70,9 +70,9 @@ export function ListCompany() {
                                                     <Heading className="!text-gray-800 max-h-10 truncate">{empresa.nome}</Heading>
                                                 </td>
                                                 <td className="col-span-2 flex justify-start">
-                                                    <Heading className="!text-gray-800 m-auto">
-                                                        <Card className="bg-blue-950 w-full flex items-center justify-center">
-                                                            <Text>{empresa.relacao}</Text>
+                                                    <Heading className="m-auto">
+                                                        <Card className="!bg-blue-950 w-full flex items-center justify-center">
+                                                            <Text className="!text-gray-100 ">{empresa.relacao}</Text>
                                                         </Card>
                                                     </Heading>
                                                 </td>

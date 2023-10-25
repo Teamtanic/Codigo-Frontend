@@ -52,7 +52,7 @@ export function SidebarMenu({ menuItems, sideBarVisible = false }: SidebarMenuPr
             <CaretLeft size={32} className="text-gray-900 dark:text-gray-100" />
             :
             <CaretRight size={32} className="text-gray-900 dark:text-gray-100" />
-          } className="border-r-gray-200/20 hover:bg-gray-200  dark:bg-gray-800 dark:hover:bg-gray-600 rounded-l-none focus:ring-0 ">
+          } className="border-r-gray-200/20 bg-gray-200 hover:bg-gray-100  dark:bg-gray-800 dark:hover:bg-gray-600 rounded-l-none focus:ring-0 ">
           </Button>
         </div>
       </div>
