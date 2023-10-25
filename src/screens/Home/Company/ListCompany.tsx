@@ -43,7 +43,7 @@ export function ListCompany() {
     return (
         <Container>
             <Navbar />
-            <div className="w-full flex py-6 p-24 flex-col">
+            <div className="w-full flex py-6 p-24 max-md:p-6 flex-col">
                 <Heading size="lg">Empresas</Heading>
 
                 <div className="w-full mt-3">
@@ -58,19 +58,19 @@ export function ListCompany() {
                             <thead>
                                 <Card className="w-full py-3 px-4 rounded-bl-none items-center">
                                     <tr className="w-full grid grid-cols-9 justify-start gap-3">
-                                        <th className="col-span-1 flex justify-start">
+                                        <th className="col-span-1 max-md:col-span-2 flex justify-start">
                                             <Heading className="!text-gray-800">ID</Heading>
                                         </th>
-                                        <th className="col-span-3 flex justify-start">
+                                        <th className="col-span-3 max-md:col-span-4 flex justify-start">
                                             <Heading className="!text-gray-800">| Nome</Heading>
                                         </th>
-                                        <th className="col-span-2 flex justify-center">
+                                        <th className="col-span-2 max-md:col-span-3 flex justify-center">
                                             <Heading className="!text-gray-800">| Relação</Heading>
                                         </th>
-                                        <th className="col-span-2 flex justify-start">
+                                        <th className="col-span-2 max-md:hidden flex justify-start">
                                             <Heading className="!text-gray-800">| Código</Heading>
                                         </th>
-                                        <th className="col-span-1 flex justify-start">
+                                        <th className="col-span-1 max-md:col-span-0 flex justify-start max-md:hidden">
                                         </th>
                                     </tr>
                                 </Card>
@@ -79,27 +79,27 @@ export function ListCompany() {
                             <tbody>
                                 {empresas.map(empresa => {
                                     return (
-                                        <Card key={empresa.id} className="w-full py-3 px-4 mt-4">
-                                            <tr className="grid px-4 grid-cols-9 items-center overflow-hidden gap-3">
-                                                <td className="col-span-1 flex justify-start truncate">
-                                                    <Button className="bg-transparent !justify-start hover:bg-gray-200" title='Clique para copiar' textStyle="!text-gray-800 truncate font-semibold !text-left" onClick={copyText}>
+                                        <Card key={empresa.id} className="w-full py-3 px-4 mt-4 shadow-md">
+                                            <tr className="grid px-4 max-md:px-1 max-md:gap-1 grid-cols-9 items-center overflow-hidden gap-3">
+                                                <td className="col-span-1 max-md:col-span-2 flex justify-start truncate">
+                                                    <Button className="bg-transparent !px-1 !justify-start hover:bg-gray-200" title='Clique para copiar' textSize="xm" textStyle="!text-gray-800 truncate font-semibold !text-left" onClick={copyText}>
                                                         {empresa.id}
                                                     </Button>
                                                 </td>
-                                                <td className="col-span-3 flex justify-start">
+                                                <td className="col-span-3 max-md:col-span-4 flex justify-start">
                                                     <Text className="!text-gray-800 max-h-10 truncate font-semibold">{empresa.nome}</Text>
                                                 </td>
-                                                <td className="col-span-2 flex justify-start">
+                                                <td className="col-span-2 max-md:col-span-3 flex justify-start">
                                                     <Text className="m-auto">
                                                         <Card className={`${empresa.relacao == "fornecedor" ? "!bg-blue-950 ": "!bg-emerald-600"} w-full flex items-center justify-center`}>
                                                             <Text size="xm" className="!text-gray-100 font-semibold">{empresa.relacao}</Text>
                                                         </Card>
                                                     </Text>
                                                 </td>
-                                                <td className="col-span-2 flex justify-start">
+                                                <td className="col-span-2 flex justify-start max-md:hidden">
                                                     <Text className="!text-gray-800 truncate font-semibold">{empresa.codigo}</Text>
                                                 </td>
-                                                <td className="col-span-1 flex justify-start">
+                                                <td className="col-span-1 flex justify-start max-md:hidden">
                                                     <DotsThreeOutlineVertical className="!text-gray-800 truncate ml-auto mr-0" size={32} />
                                                 </td>
                                             </tr>
