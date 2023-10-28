@@ -18,8 +18,8 @@ export function Text({ size = "md", children, asChild, className }: TextProps) {
         className={clsx(
           "font-poppins",
           {
-            "text-xs": size === "xm",
-            "text-sm": size === "sm",
+            "text-xs max-sm:text-2xs": size === "xm",
+            "text-sm ": size === "sm",
             "text-md": size === "md",
           },
           className ? className : "text-gray-900 dark:text-gray-100"
