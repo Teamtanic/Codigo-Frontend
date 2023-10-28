@@ -6,8 +6,16 @@ import { Navbar } from "../../../components/Navbar";
 import { Text } from "../../../components/Text";
 import { TextInput } from "../../../components/TextInput";
 import { Button } from "../../../components/Button";
-import { useState } from "react";
+import { Fragment, useRef, useState } from "react";
 import { MagnifyingGlass } from 'phosphor-react';
+import { Menu, Transition } from "@headlessui/react";
+
+interface CompanyProps {
+    id: string,
+    nome: string,
+    relacao: string,
+    codigo: string
+}
 
 export function ListCompany() {
     const [isDialogVisible, setIsDialogVisible] = useState(false);
@@ -138,14 +146,48 @@ export function ListCompany() {
                                                     </Card>
                                                 </td>
                                                 <td className="px-6 max-md:hidden rounded-r-xl">
-                                                    <div className="hover:bg-gray-200 h-full p-1 w-fit rounded-full mr-0 ml-auto">
-                                                        <DotsThreeOutlineVertical className="!text-gray-800 truncate ml-auto mr-0" size={32} />
-                                                    </div>
+                                                    <Menu as="div" className="relative w-fit mr-0 ml-auto">
+                                                        <Menu.Button>
+                                                            <Button className="hover:!bg-gray-200 !h-full !bg-transparent !p-1 !w-fit rounded-full "
+                                                                title="Opções">
+                                                                <DotsThreeOutlineVertical className="!text-gray-800 truncate ml-auto mr-0" size={32} />
+                                                            </Button>
+                                                        </Menu.Button>
+
+                                                        <Transition
+                                                            as={Fragment}
+                                                            enter="transition ease-out duration-100"
+                                                            enterFrom="transform opacity-0 scale-95"
+                                                            enterTo="transform opacity-100 scale-100"
+                                                            leave="transition ease-in duration-75"
+                                                            leaveFrom="transform opacity-100 scale-100"
+                                                            leaveTo="transform opacity-0 scale-95"
+                                                        >
+
+                                                            <Menu.Items className={`absolute z-30 right-0 bg-white divide-y divide-gray-100 rounded shadow dark:bg-gray-700 dark:divide-gray-600`} id="dropdown-options">
+                                                                <Menu.Item key={'delete'}>
+                                                                    <div className="my-1 px-4 py-2 flex flex-col cursor-pointer">
+                                                                        <Text className="text-sm text-gray-900 dark:text-white">
+                                                                            Deletar
+                                                                        </Text>
+                                                                    </div>
+                                                                </Menu.Item>
+                                                                <Menu.Item key={'editar'}>
+                                                                    <div className="px-4 py-2 my-1 flex flex-col cursor-pointer">
+                                                                        <Text className="text-sm text-gray-900 dark:text-white">
+                                                                            Editar
+                                                                        </Text>
+                                                                    </div>
+                                                                </Menu.Item>
+                                                            </Menu.Items>
+                                                        </Transition>
+                                                    </Menu>
                                                 </td>
                                             </tr>
                                         </Card>
                                     )
                                 })}
+
                                 {isDialogVisible && (
                                     <div className="fixed w-fit bottom-5 right-5 bg-white p-3 rounded shadow border border-gray-300">
                                         <Text className="text-gray-900">Copiado!</Text>
