@@ -23,9 +23,9 @@ export function Heading({
         className={clsx(
           "text-gray-900 dark:text-gray-100 font-bold font-poppins",
           {
-            "md:text-lg max-md::text-md": size === "sm",
-            "md:text-xl max-md::text-lg": size === "md",
-            "md:text-2xl max-md:text-xl": size === "lg",
+            "md:text-lg max-md:text-md max-sm:text-sm": size === "sm",
+            "md:text-xl max-md:text-md max-sm:text-sm": size === "md",
+            "md:text-2xl max-md:text-xl max-sm:text-lg": size === "lg",
           },
           className
         )}
