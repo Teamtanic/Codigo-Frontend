@@ -1,8 +1,10 @@
 /** @type {import('tailwindcss').Config} */
 export default {
+  darkMode: 'class',
   content: ["./src/**/*.tsx", "./index.html"],
   theme: {
     fontSize: {
+      "2xs": 12,
       xs: 14,
       sm: 16,
       md: 18,
@@ -16,6 +18,9 @@ export default {
         poppins: "Poppins",
         sans: "Inter, sans-serif"
       },
+      screens: {
+        'md': '860px'
+      }
     },
 
   },
