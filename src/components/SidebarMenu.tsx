@@ -25,7 +25,7 @@ export function SidebarMenu({ menuItems, sideBarVisible = false }: SidebarMenuPr
     : 'w-0 transition-all ease-in-out duration-200';
 
   return (
-    <div className="flex h-screen fixed overflow-y-auto">
+    <div className="flex h-screen fixed overflow-y-auto z-40">
       <aside className={` bg-gray-100 dark:bg-gray-800 ${sidebarClasses} md:border-r-4 border-r-gray-200/20 dark:border-r-gray-800/20`}>
         <div className="flex flex-col h-full">
           <nav className="flex-1 space-y-2 px-4 py-4">

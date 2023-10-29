@@ -36,12 +36,12 @@ export function Navbar({ hasSide = true }: NavbarProps) {
                         <List size={32} className='text-gray-900 dark:text-gray-100' />
                     </Button>
                         <div className="flex items-center md:justify-start max-md:justify-center max-md:-translate-x-3 w-full">
-                            <a href="/teste" className="flex ml-2 md:mr-24">
+                            <a href="/teste" className="flex ml-2 md:mr-24 max-md:mr-10">
                                 <img src="/guara-logo.png" className="md:h-16 max-md:h-10 mr-3" alt="Guará Junior Logo" />
                                 <Heading size='lg'>GuaráRP</Heading>
                             </a>
                         </div>
-                        <Menu as="div" className="relative ml-auto mr-0 ">
+                        <Menu as="div" className="relative ml-auto mr-0 w-10">
                             <div>
                                 <Menu.Button className="flex text-sm bg-gray-800 rounded-full focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600" aria-expanded="false" data-dropdown-toggle="dropdown-user">
                                     <span className="sr-only">Abrir menu de usuário</span>
