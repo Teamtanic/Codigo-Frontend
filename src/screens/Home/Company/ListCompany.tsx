@@ -18,7 +18,6 @@ interface CompanyProps {
 }
 
 export function ListCompany() {
-    const [isDialogVisible, setIsDialogVisible] = useState(false);
 
     var empresas = [
         { id: "d5d6be6e-d332-41be-b601-8bd2ae4e6935", nome: 'MCDONALDS', relacao: 'fornecedor', codigo: "61556481000100" },
@@ -62,6 +61,8 @@ export function ListCompany() {
         }
     }
 
+    const [openMenus, setOpenMenus] = useState<string[]>([]);
+
     function copyText(event: React.MouseEvent<HTMLElement>, id: string) {
         const { target } = event;
 
@@ -71,11 +72,13 @@ export function ListCompany() {
             if (textToCopy) {
                 navigator.clipboard.writeText(textToCopy);
 
-                setIsDialogVisible(true);
+                // Abra o menu para o elemento clicado
+                setOpenMenus([id]);
 
+                // Defina um temporizador para fechar o menu após 2 segundos
                 setTimeout(() => {
-                    setIsDialogVisible(false);
-                }, 3000);
+                    setOpenMenus([]);
+                }, 1500);
             }
         }
     }
@@ -126,11 +129,40 @@ export function ListCompany() {
                                         <Card asChild key={empresa.id} className="">
                                             <tr className="h-16 border-b-8 border-white dark:border-gray-700">
                                                 <td className="w-32 rounded-l-xl">
-                                                    <Button className="bg-transparent !px-1 !justify-start hover:bg-gray-200" title='Clique para copiar' textSize="xm" textStyle="!text-gray-800 truncate font-semibold" onClick={(event) => copyText(event, empresa.id)}>
-                                                        {formatUUID(empresa.id)}
-                                                    </Button>
+                                                    <Menu >
+                                                        <Menu.Button>
+                                                            <Button className="bg-transparent !px-1 !justify-start hover:bg-gray-200" title='Clique para copiar' textSize="xm" textStyle="!text-gray-800 truncate font-semibold"
+                                                                onClick={(event) => {
+                                                                    copyText(event, empresa.id);
+
+                                                                }}>
+                                                                {formatUUID(empresa.id)}
+                                                            </Button>
+                                                        </Menu.Button>
+
+                                                        <Transition
+                                                            as={Fragment}
+                                                            show={openMenus.includes(empresa.id)}
+                                                            enter="transition ease-out duration-100"
+                                                            enterFrom="transform opacity-0 scale-95"
+                                                            enterTo="transform opacity-100 scale-100"
+                                                            leave="transition ease-in duration-75"
+                                                            leaveFrom="transform opacity-100 scale-100"
+                                                            leaveTo="transform opacity-0 scale-95"
+                                                        >
+                                                            <Menu.Items className={`absolute z-30 left-32 max-md:left-20 max-sm:left-14 bg-white divide-y divide-gray-100 rounded shadow dark:bg-gray-700 dark:divide-gray-600`} id="dropdown-copy">
+                                                                <Menu.Item key={'copiado'}>
+                                                                    <div className="my-1 px-4 py-2 flex flex-col cursor-pointer">
+                                                                        <Text className="text-sm text-gray-900 dark:text-white">
+                                                                            Copiado!
+                                                                        </Text>
+                                                                    </div>
+                                                                </Menu.Item>
+                                                            </Menu.Items>
+                                                        </Transition>
+                                                    </Menu>
                                                 </td>
-                                                <td className="px-2">
+                                                <td className="px-2 py-4">
                                                     <Text className="!text-gray-800 max-h-10 truncate font-semibold">{empresa.nome}</Text>
                                                 </td>
                                                 <td className="px-2 max-md:rounded-r-xl">
@@ -187,14 +219,17 @@ export function ListCompany() {
                                         </Card>
                                     )
                                 })}
-
-                                {isDialogVisible && (
-                                    <div className="fixed w-fit bottom-5 right-5 bg-white p-3 rounded shadow border border-gray-300">
-                                        <Text className="text-gray-900">Copiado!</Text>
-                                    </div>
-                                )}
                             </tbody>
                         </table>
+
+                        <div className="fixed w-fit bottom-5 right-8 rounded shadow">
+                            <Button>
+                                <Text size="sm" className="text-gray-100">
+                                    Adicionar
+                                </Text>
+                            </Button>
+                        </div>
+
                     </div>
                 </div>
             </div>
