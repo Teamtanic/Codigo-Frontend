@@ -9,9 +9,10 @@ interface CardModalProps {
     title?: string,
     action?: string,
     onConfirm?: () => Promise<void>;
+    triggerStyle?: string;
 }
 
-export const CardModal = ({ children, title, onConfirm, action }: CardModalProps) => {
+export const CardModal = ({ children, title, onConfirm, action, triggerStyle }: CardModalProps) => {
     const [isOpen, setIsOpen] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -32,9 +33,9 @@ export const CardModal = ({ children, title, onConfirm, action }: CardModalProps
         <Dialog.Root open={isOpen} onOpenChange={(open) => setIsOpen(open)}
         >
             <Dialog.Trigger asChild>
-                <button className="text-violet11 shadow-blackA4 hover:bg-mauve3 inline-flex h-[35px] items-center justify-center rounded-[4px] bg-white px-[15px] font-medium leading-none shadow-[0_2px_10px] focus:shadow-[0_0_0_2px] focus:shadow-black focus:outline-none">
+                <Button className={`!w-fit inline-flex items-center justify-center rounded-[4px] px-[15px] font-medium leading-none shadow-[0_2px_10px] focus:shadow-[0_0_0_2px] focus:shadow-black focus:outline-none ${triggerStyle}`}>
                     {action ? action : "Abrir"}
-                </button>
+                </Button>
             </Dialog.Trigger>
             <Dialog.Portal >
                 <Dialog.Overlay className="bg-black/60 inset-0 z-[60] fixed" />
