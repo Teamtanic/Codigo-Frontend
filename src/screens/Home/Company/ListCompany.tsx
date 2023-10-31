@@ -6,9 +6,13 @@ import { Navbar } from "../../../components/Navbar";
 import { Text } from "../../../components/Text";
 import { TextInput } from "../../../components/TextInput";
 import { Button } from "../../../components/Button";
-import { Fragment, useRef, useState } from "react";
+import React, { Fragment, useState } from "react";
 import { MagnifyingGlass } from 'phosphor-react';
 import { Menu, Transition } from "@headlessui/react";
+import * as Popover from '@radix-ui/react-popover';
+import { CardModal } from "../../../components/CardModal";
+import { Checkbox } from "../../../components/Checkbox";
+import { TextAreaInput } from "../../../components/TextBox";
 
 interface CompanyProps {
     id: string,
@@ -63,6 +67,8 @@ export function ListCompany() {
 
     const [openMenus, setOpenMenus] = useState<string[]>([]);
 
+    const timeoutId = React.useRef<number | null>(null);
+
     function copyText(event: React.MouseEvent<HTMLElement>, id: string) {
         const { target } = event;
 
@@ -75,10 +81,17 @@ export function ListCompany() {
                 // Abra o menu para o elemento clicado
                 setOpenMenus([id]);
 
-                // Defina um temporizador para fechar o menu após 2 segundos
-                setTimeout(() => {
+                console.log("antes:" + timeoutId);
+                if (timeoutId.current) {
+                    console.log(timeoutId);
+                    clearTimeout(timeoutId.current);
+                }
+
+                console.log(timeoutId);
+                // Defina um temporizador para fechar o menu
+                timeoutId.current = setTimeout(() => {
                     setOpenMenus([]);
-                }, 1500);
+                }, 2500);
             }
         }
     }
@@ -129,38 +142,27 @@ export function ListCompany() {
                                         <Card asChild key={empresa.id} className="">
                                             <tr className="h-16 border-b-8 border-white dark:border-gray-700">
                                                 <td className="w-32 rounded-l-xl">
-                                                    <Menu >
-                                                        <Menu.Button>
+                                                    <Popover.Root open={openMenus.includes(empresa.id)}>
+                                                        <Popover.Trigger >
                                                             <Button className="bg-transparent !px-1 !justify-start hover:bg-gray-200" title='Clique para copiar' textSize="xm" textStyle="!text-gray-800 truncate font-semibold"
                                                                 onClick={(event) => {
                                                                     copyText(event, empresa.id);
-
                                                                 }}>
                                                                 {formatUUID(empresa.id)}
                                                             </Button>
-                                                        </Menu.Button>
+                                                        </Popover.Trigger>
 
-                                                        <Transition
-                                                            as={Fragment}
-                                                            show={openMenus.includes(empresa.id)}
-                                                            enter="transition ease-out duration-100"
-                                                            enterFrom="transform opacity-0 scale-95"
-                                                            enterTo="transform opacity-100 scale-100"
-                                                            leave="transition ease-in duration-75"
-                                                            leaveFrom="transform opacity-100 scale-100"
-                                                            leaveTo="transform opacity-0 scale-95"
-                                                        >
-                                                            <Menu.Items className={`absolute z-30 left-32 max-md:left-20 max-sm:left-14 bg-white divide-y divide-gray-100 rounded shadow dark:bg-gray-700 dark:divide-gray-600`} id="dropdown-copy">
-                                                                <Menu.Item key={'copiado'}>
-                                                                    <div className="my-1 px-4 py-2 flex flex-col cursor-pointer">
-                                                                        <Text className="text-sm text-gray-900 dark:text-white">
-                                                                            Copiado!
-                                                                        </Text>
-                                                                    </div>
-                                                                </Menu.Item>
-                                                            </Menu.Items>
-                                                        </Transition>
-                                                    </Menu>
+                                                        <Popover.Portal>
+
+                                                            <Popover.Content className="h-fit w-fit px-3 py-2 bg-gray-50 shadow-[0_3px_10px_rgb(0,0,0,0.2)]">
+                                                                <Text size="xm">
+                                                                    Copiado
+                                                                </Text>
+                                                                <Popover.Arrow className="fill-gray-50" />
+                                                            </Popover.Content>
+                                                        </Popover.Portal>
+
+                                                    </Popover.Root>
                                                 </td>
                                                 <td className="px-2 py-4">
                                                     <Text className="!text-gray-800 max-h-10 truncate font-semibold">{empresa.nome}</Text>
@@ -222,17 +224,34 @@ export function ListCompany() {
                             </tbody>
                         </table>
 
-                        <div className="fixed w-fit bottom-5 right-8 rounded shadow">
-                            <Button>
-                                <Text size="sm" className="text-gray-100">
-                                    Adicionar
-                                </Text>
-                            </Button>
-                        </div>
+                        <CardModal title="Cadastro" action="Adicionar" triggerStyle="fixed w-fit bottom-5 right-8 rounded shadow !text-gray-100">
+                            <div className="flex flex-col w-full px-24 mb-12">
+                                <div className="flex w-full gap-12">
+                                    <label htmlFor="check" className="flex items-center gap-2 my-2">
+                                        <Checkbox id="check" />
+                                        <Text size="sm">
+                                            Checkbox
+                                        </Text>
+                                    </label>
 
+                                    <label htmlFor="check" className="flex items-center gap-2 my-2 mr-5">
+                                        <Checkbox id="check" />
+                                        <Text size="sm">
+                                            Checkbox
+                                        </Text>
+                                    </label>
+
+                                    <TextInput.Root labelFor="nome" labelText="Nome">
+                                        <TextInput.Input id="nome" type="text" placeholder="Dê um nome para seu produto..." />
+                                    </TextInput.Root>
+                                </div>
+                                <TextAreaInput labelFor="description" labelText="Descrição" id="desc" placeholder="Dê uma descrição para seu produto..."></TextAreaInput>
+                            </div>
+                        </CardModal>
                     </div>
                 </div>
             </div>
+
         </Container>
     )
 }
