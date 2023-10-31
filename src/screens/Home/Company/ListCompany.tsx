@@ -114,10 +114,10 @@ export function ListCompany() {
                     </Card>
 
                     <div className="mt-10">
-                        <table className="w-full">
+                        <table className="w-full border-separate border-spacing-y-4 ">
                             <thead >
                                 <Card asChild  >
-                                    <tr className="w-full py-3 text-left border-b-8 border-white dark:border-gray-700">
+                                    <tr className="w-full py-3 text-left dark:border-gray-700 ">
                                         <th className="py-3 px-4 rounded-bl-none rounded-tl-2xl items-center border-r-4 border-gray-700">
                                             <Heading className="!text-gray-800">ID</Heading>
                                         </th>
@@ -139,9 +139,10 @@ export function ListCompany() {
                             <tbody>
                                 {empresas.map(empresa => {
                                     return (
-                                        <Card asChild key={empresa.id} className="">
-                                            <tr className="h-16 border-b-8 border-white dark:border-gray-700">
-                                                <td className="w-32 rounded-l-xl">
+                                        <Card asChild key={empresa.id} className="cursor-pointer hover:bg-gray-400 
+                                        shadow-[rgba(0,_0,_0,_0.24)_0px_3px_8px]">
+                                            <tr className="h-16 dark:border-gray-700">
+                                                <td className="w-32 rounded-l-xl mb-20">
                                                     <Popover.Root open={openMenus.includes(empresa.id)}>
                                                         <Popover.Trigger >
                                                             <Button className="bg-transparent !px-1 !justify-start hover:bg-gray-200" title='Clique para copiar' textSize="xm" textStyle="!text-gray-800 truncate font-semibold"
