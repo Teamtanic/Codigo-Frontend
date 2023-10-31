@@ -200,17 +200,17 @@ export function ListCompany() {
                                                         >
 
                                                             <Menu.Items className={`absolute z-30 right-0 bg-white divide-y divide-gray-100 rounded shadow dark:bg-gray-700 dark:divide-gray-600`} id="dropdown-options">
-                                                                <Menu.Item key={'delete'}>
-                                                                    <div className="my-1 px-4 py-2 flex flex-col cursor-pointer">
-                                                                        <Text className="text-sm text-gray-900 dark:text-white">
-                                                                            Deletar
-                                                                        </Text>
-                                                                    </div>
-                                                                </Menu.Item>
                                                                 <Menu.Item key={'editar'}>
                                                                     <div className="px-4 py-2 my-1 flex flex-col cursor-pointer">
                                                                         <Text className="text-sm text-gray-900 dark:text-white">
                                                                             Editar
+                                                                        </Text>
+                                                                    </div>
+                                                                </Menu.Item>
+                                                                <Menu.Item key={'delete'}>
+                                                                    <div className="my-1 px-4 py-2 flex flex-col cursor-pointer">
+                                                                        <Text className="text-sm text-gray-900 dark:text-white">
+                                                                            Deletar
                                                                         </Text>
                                                                     </div>
                                                                 </Menu.Item>
@@ -225,7 +225,7 @@ export function ListCompany() {
                             </tbody>
                         </table>
 
-                        <CardModal title="Cadastro" action="Adicionar" triggerStyle="fixed w-fit bottom-5 right-8 rounded shadow !text-gray-100">
+                        <CardModal title="Cadastro" action="Adicionar" triggerStyle="fixed w-fit bottom-5 right-8 rounded shadow-[rgba(0,_0,_0,_0.25)_0px_25px_50px_-12px] !text-gray-100">
                             <div className="flex flex-col w-full px-24 mb-12">
                                 <div className="flex w-full gap-12">
                                     <label htmlFor="check" className="flex items-center gap-2 my-2">
