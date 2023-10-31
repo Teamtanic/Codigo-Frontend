@@ -29,7 +29,7 @@ export function SidebarMenu({ menuItems, sideBarVisible = false }: SidebarMenuPr
     <div className="flex h-screen fixed overflow-y-auto z-40">
       <aside className={` bg-gray-100 dark:bg-gray-800 ${sidebarClasses} md:border-r-4 border-r-gray-200/20 dark:border-r-gray-800/20`}>
         <div className="flex flex-col h-full">
-          <nav className={`h-full mb-44 px-4 py-4 overflow-x-hidden ${!isSidebarVisible ? "overflow-y-hidden" : "overflow-y-scroll"}`}>
+          <nav className={`h-full mb-44 px-4 py-4 overflow-x-hidden ${!isSidebarVisible ? "overflow-y-hidden" : "overflow-y-auto"}`}>
             {menuItems.map((item, index) => (
               <Link
                 to={item.link}
