@@ -1,8 +1,9 @@
 import { Link } from "react-router-dom"; // Importe o Link para criar links internos da sua aplicação
 import { Text } from "./Text";
-import { CaretLeft, CaretRight } from "phosphor-react";
+import { CaretLeft, CaretRight, Moon } from "phosphor-react";
 import { useEffect, useState } from "react";
 import { Button } from "./Button";
+import ThemeToggle from "./ThemeToggle";
 
 export interface SidebarMenuProps {
   sideBarVisible?: boolean;
@@ -28,7 +29,7 @@ export function SidebarMenu({ menuItems, sideBarVisible = false }: SidebarMenuPr
     <div className="flex h-screen fixed overflow-y-auto z-40">
       <aside className={` bg-gray-100 dark:bg-gray-800 ${sidebarClasses} md:border-r-4 border-r-gray-200/20 dark:border-r-gray-800/20`}>
         <div className="flex flex-col h-full">
-          <nav className="flex-1 space-y-2 px-4 py-4">
+          <nav className={`h-full mb-44 px-4 py-4 overflow-x-hidden ${!isSidebarVisible ? "overflow-y-hidden" : "overflow-y-scroll"}`}>
             {menuItems.map((item, index) => (
               <Link
                 to={item.link}
@@ -42,6 +43,10 @@ export function SidebarMenu({ menuItems, sideBarVisible = false }: SidebarMenuPr
                 }
               </Link>
             ))}
+            <div className={`fixed bottom-3 w-52 ${!isSidebarVisible ? "hidden" : ""}`}>
+
+              <ThemeToggle />
+            </div>
           </nav>
         </div>
       </aside>
