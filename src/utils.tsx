@@ -30,3 +30,17 @@ export function formatUUID(inputString: string) {
         return inputString;
     }
 }
+
+export function formatPhoneNumber(phoneNumber: string) {
+    if (phoneNumber.length === 10) {
+      return phoneNumber
+        .replace(/\D/g, '') // Remove caracteres não numéricos
+        .replace(/(\d{2})(\d{4})(\d{4})/, '($1) $2-$3'); // Formato para telefone (10 dígitos)
+    } else if (phoneNumber.length === 11) {
+      return phoneNumber
+        .replace(/\D/g, '') // Remove caracteres não numéricos
+        .replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3'); // Formato para celular (11 dígitos)
+    } else {
+      return phoneNumber;
+    }
+  }
