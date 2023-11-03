@@ -9,7 +9,7 @@ import {
   import PasswordRecovery from "./screens/Home/RecoveryPassword";
 import { ListCompany } from "./screens/Company/ListCompany";
 import { DetailsCompany } from "./screens/Company/DetailsCompany";
-import { ListProductsWarehouse } from "./screens/Warehouse/ListProductsWarehouse";
+import { ListProductWarehouse } from "./screens/Warehouse/ListProductWarehouse";
   //#endregion
   
   function Routes() {
@@ -20,7 +20,7 @@ import { ListProductsWarehouse } from "./screens/Warehouse/ListProductsWarehouse
           <Route path="/teste" element={<Home />} />
           <Route path="/empresas" element={<ListCompany />} />
           <Route path="/empresa" element={<DetailsCompany />} />
-          <Route path="/almoxarifado" element={<ListProductsWarehouse />} />
+          <Route path="/almoxarifado" element={<ListProductWarehouse />} />
         </Switch>
       </Router>
     );

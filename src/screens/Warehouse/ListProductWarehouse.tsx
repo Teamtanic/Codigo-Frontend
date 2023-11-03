@@ -10,16 +10,8 @@ import { Fragment } from "react";
 import { MagnifyingGlass } from 'phosphor-react';
 import { Menu, Transition } from "@headlessui/react";
 import { CardModal } from "../../components/CardModal";
-import { Checkbox } from "../../components/Checkbox";
 
-interface CompanyProps {
-    id: string,
-    nome: string,
-    relacao: string,
-    codigo: string
-}
-
-export function ListProductsWarehouse() {
+export function ListProductWarehouse() {
 
     var warehouse = [
         { id: "75b6a6f8-88fb-4642-bd79-60cd4865691c", product: "Cadeira", quantity: 12 },
