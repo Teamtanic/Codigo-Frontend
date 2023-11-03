@@ -36,7 +36,7 @@ export function Navbar({ hasSide = true }: NavbarProps) {
                         <List size={32} className='text-gray-900 dark:text-gray-100' />
                     </Button>
                         <div className="flex items-center md:justify-start max-md:justify-center max-md:-translate-x-3 w-full">
-                            <a href="/teste" className="flex ml-2 md:mr-24 max-md:mr-10">
+                            <a href="/teste" className="flex items-center ml-2 md:mr-24 max-md:mr-10">
                                 <img src="/guara-logo.png" className="md:h-16 max-md:h-10 mr-3" alt="Guará Junior Logo" />
                                 <Heading size='lg'>GuaráRP</Heading>
                             </a>
