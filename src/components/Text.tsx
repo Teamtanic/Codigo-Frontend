@@ -20,7 +20,7 @@ export function Text({ size = "md", children, asChild, className }: TextProps) {
           {
             "text-xs max-sm:text-2xs": size === "xm",
             "text-sm max-sm:text-xs": size === "sm",
-            "text-md": size === "md",
+            "text-md max-sm:text-sm": size === "md",
           },
           className ? className : "text-gray-900 dark:text-gray-100"
         )}
