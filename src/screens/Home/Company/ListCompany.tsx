@@ -12,7 +12,7 @@ import { Menu, Transition } from "@headlessui/react";
 import * as Popover from '@radix-ui/react-popover';
 import { CardModal } from "../../../components/CardModal";
 import { Checkbox } from "../../../components/Checkbox";
-import { TextAreaInput } from "../../../components/TextBox";
+import { codeMask, formatUUID } from "../../../utils";
 
 interface CompanyProps {
     id: string,
@@ -32,39 +32,6 @@ export function ListCompany() {
         { id: "4d19e455-9725-435f-96f4-c0d0a684a202", nome: 'Microsoft', relacao: 'fornecedor', codigo: "48820178000105" }
     ];
 
-    const codeMask = (code: string) => {
-        if (code.length === 11) {
-            return code
-                .replace(/\D/g, '') // substitui qualquer caracter que nao seja numero por nada
-                .replace(/(\d{3})(\d)/, '$1.$2') // captura 2 grupos de numero o primeiro de 3 e o segundo de 1, apos capturar o primeiro grupo ele adiciona um ponto antes do segundo grupo de numero
-                .replace(/(\d{3})(\d)/, '$1.$2')
-                .replace(/(\d{3})(\d{1,2})/, '$1-$2')
-                .replace(/(-\d{2})\d+?$/, '$1') // captura 2 numeros seguidos de um traço e não deixa ser digitado mais nada
-        }
-
-        if (code.length === 14) {
-            return code
-                .replace(/\D+/g, '') // não deixa ser digitado nenhuma letra
-                .replace(/(\d{2})(\d)/, '$1.$2') // captura 2 grupos de número o primeiro com 2 digitos e o segundo de com 3 digitos, apos capturar o primeiro grupo ele adiciona um ponto antes do segundo grupo de número
-                .replace(/(\d{3})(\d)/, '$1.$2')
-                .replace(/(\d{3})(\d)/, '$1/$2') // captura 2 grupos de número o primeiro e o segundo com 3 digitos, separados por /
-                .replace(/(\d{4})(\d)/, '$1-$2')
-                .replace(/(-\d{2})\d+?$/, '$1') // captura os dois últimos 2 números, com um - antes dos dois números
-        }
-
-        return ''
-    }
-
-    function formatUUID(inputString: string) {
-        if (inputString.length === 36) {
-            const startChars = inputString.slice(0, 5);
-            const endChars = inputString.slice(-5);
-            return `${startChars}...${endChars}`;
-        } else {
-            return inputString;
-        }
-    }
-
     const [openMenus, setOpenMenus] = useState<string[]>([]);
 
     const timeoutId = React.useRef<number | null>(null);
@@ -81,13 +48,10 @@ export function ListCompany() {
                 // Abra o menu para o elemento clicado
                 setOpenMenus([id]);
 
-                console.log("antes:" + timeoutId);
                 if (timeoutId.current) {
-                    console.log(timeoutId);
                     clearTimeout(timeoutId.current);
                 }
 
-                console.log(timeoutId);
                 // Defina um temporizador para fechar o menu
                 timeoutId.current = setTimeout(() => {
                     setOpenMenus([]);
