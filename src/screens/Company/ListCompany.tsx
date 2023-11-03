@@ -1,18 +1,18 @@
 import { DotsThreeOutlineVertical } from "phosphor-react";
-import { Card } from "../../../components/Card";
-import { Container } from "../../../components/Container";
-import { Heading } from "../../../components/Heading";
-import { Navbar } from "../../../components/Navbar";
-import { Text } from "../../../components/Text";
-import { TextInput } from "../../../components/TextInput";
-import { Button } from "../../../components/Button";
+import { Card } from "../../components/Card";
+import { Container } from "../../components/Container";
+import { Heading } from "../../components/Heading";
+import { Navbar } from "../../components/Navbar";
+import { Text } from "../../components/Text";
+import { TextInput } from "../../components/TextInput";
+import { Button } from "../../components/Button";
 import React, { Fragment, useState } from "react";
 import { MagnifyingGlass } from 'phosphor-react';
 import { Menu, Transition } from "@headlessui/react";
 import * as Popover from '@radix-ui/react-popover';
-import { CardModal } from "../../../components/CardModal";
-import { Checkbox } from "../../../components/Checkbox";
-import { codeMask, formatUUID } from "../../../utils";
+import { CardModal } from "../../components/CardModal";
+import { Checkbox } from "../../components/Checkbox";
+import { codeMask, formatUUID } from "../../utils";
 
 interface CompanyProps {
     id: string,

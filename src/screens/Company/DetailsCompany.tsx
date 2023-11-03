@@ -1,9 +1,9 @@
-import { Card } from "../../../components/Card";
-import { Container } from "../../../components/Container";
-import { Heading } from "../../../components/Heading";
-import { Navbar } from "../../../components/Navbar";
-import { Text } from "../../../components/Text";
-import { codeMask, formatPhoneNumber } from "../../../utils";
+import { Card } from "../../components/Card";
+import { Container } from "../../components/Container";
+import { Heading } from "../../components/Heading";
+import { Navbar } from "../../components/Navbar";
+import { Text } from "../../components/Text";
+import { codeMask, formatPhoneNumber } from "../../utils";
 import * as Tabs from '@radix-ui/react-tabs';
 
 export function DetailsCompany() {

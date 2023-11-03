@@ -7,8 +7,8 @@ import {
   //#region Pages
   import Home from "./screens/Home/Home";
   import PasswordRecovery from "./screens/Home/RecoveryPassword";
-import { ListCompany } from "./screens/Home/Company/ListCompany";
-import { DetailsCompany } from "./screens/Home/Company/DetailsCompany";
+import { ListCompany } from "./screens/Company/ListCompany";
+import { DetailsCompany } from "./screens/Company/DetailsCompany";
   //#endregion
   
   function Routes() {
