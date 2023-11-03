@@ -27,7 +27,7 @@ export function ListProductWarehouse() {
         <Container>
             <Navbar />
             <div className="w-full flex py-6 p-24 max-md:p-6 flex-col">
-                <Heading size="lg">Empresas</Heading>
+                <Heading size="lg">Produtos no Almoxarifado</Heading>
 
                 <div className="w-full mt-3">
                     <Card className="w-full py-3 px-4">
