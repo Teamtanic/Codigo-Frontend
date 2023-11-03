@@ -7,13 +7,14 @@ export interface TextInputRootProps {
   labelFor?: string;
   children: ReactNode;
   className?: string;
+  labelStyle?: string;
   colorLabel?: string;
 }
 
-function TextInputRoot({ children, labelFor, labelText, className }: TextInputRootProps) {
+function TextInputRoot({ children, labelFor, labelText, className = '', labelStyle = '' }: TextInputRootProps) {
   return (
     <label htmlFor={labelFor} className="flex flex-col w-full">
-      <Text className={`!${className}`}>{labelText}</Text>
+      <Text className={`${labelStyle}`}>{labelText}</Text>
       <div className={`font-poppins ${className} py-4 px-3 h-12 rounded bg-gray-200  w-full focus-within:ring-2 ring-emerald-800 flex items-center gap-3`}>
         {children}
       </div>
