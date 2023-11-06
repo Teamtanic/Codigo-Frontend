@@ -1,12 +1,12 @@
 import {
-    BrowserRouter as Router,
-    Routes as Switch,
-    Route,
-  } from "react-router-dom";
-  
-  //#region Pages
-  import Home from "./screens/Home/Home";
-  import PasswordRecovery from "./screens/Home/RecoveryPassword";
+  BrowserRouter as Router,
+  Routes as Switch,
+  Route,
+} from "react-router-dom";
+
+//#region Pages
+import Home from "./screens/Home/Home";
+import PasswordRecovery from "./screens/Home/RecoveryPassword";
 import { ListCompany } from "./screens/Company/ListCompany";
 import { DetailsCompany } from "./screens/Company/DetailsCompany";
 import { ListProductWarehouse } from "./screens/Warehouse/ListProductWarehouse";
@@ -20,41 +20,53 @@ import { DetailsDepartment } from "./screens/RH/Department/DetailsDepartment";
 import { ListRoles } from "./screens/RH/Role/ListRole";
 import { DetailsRole } from "./screens/RH/Role/DetailsRole";
 import { DetailsUser } from "./screens/RH/User/DetailsUser";
-  //#endregion
-  
-  function Routes() {
-    return (
-      <Router>
-        <Switch>
-          <Route path="/" element={<PasswordRecovery />} />
-          <Route path="/teste" element={<Home />} />
+import { ListTransaction } from "./screens/Financial/Transaction/ListTransaction";
+import { ListBank } from "./screens/Financial/Bank/ListBank";
+import { DetailsProductWarehouse } from "./screens/Warehouse/DetailsProductWarehouse";
+import { DetailsBank } from "./screens/Financial/Bank/DetailsBank";
+import { DetailsTransaction } from "./screens/Financial/Transaction/DetailsTransaction";
+//#endregion
 
-          <Route path="/empresas" element={<ListCompany />} />
-          <Route path="/empresa" element={<DetailsCompany />} />
+function Routes() {
+  return (
+    <Router>
+      <Switch>
+        <Route path="/" element={<PasswordRecovery />} />
+        <Route path="/teste" element={<Home />} />
 
-          <Route path="/almoxarifado" element={<ListProductWarehouse />} />
+        <Route path="/empresas" element={<ListCompany />} />
+        <Route path="/empresa" element={<DetailsCompany />} />
 
-          <Route path="/projetos" element={<ListProject />} />
+        <Route path="/almoxarifado" element={<ListProductWarehouse />} />
+        <Route path="/produto" element={<DetailsProductWarehouse />} />
 
-          <Route path="/cursos" element={<ListCourse />} />
-          <Route path="/curso" element={<DetailsCourse />} />
+        <Route path="/projetos" element={<ListProject />} />
 
-          <Route path="/cargos" element={<ListRoles />} />
-          <Route path="/cargo" element={<DetailsRole />} />
+        <Route path="/transacoes" element={<ListTransaction />} />
+        <Route path="/transacao" element={<DetailsTransaction />} />
 
-          <Route path="/departamentos" element={<ListDepartment />} />
-          <Route path="/departamento" element={<DetailsDepartment />} />
+        <Route path="/bancos" element={<ListBank />} />
+        <Route path="/banco" element={<DetailsBank />} />
 
-          <Route path="/autoridades" element={<ListAuthority />} />
+        <Route path="/cursos" element={<ListCourse />} />
+        <Route path="/curso" element={<DetailsCourse />} />
 
-          <Route path="/privileges" element={<ListAuthority />} />
+        <Route path="/cargos" element={<ListRoles />} />
+        <Route path="/cargo" element={<DetailsRole />} />
 
-          <Route path="/usuarios" element={<ListUser />} />
-          <Route path="/usuario" element={<DetailsUser />} />
+        <Route path="/departamentos" element={<ListDepartment />} />
+        <Route path="/departamento" element={<DetailsDepartment />} />
 
-        </Switch>
-      </Router>
-    );
-  }
-  
-  export default Routes;
+        <Route path="/autoridades" element={<ListAuthority />} />
+
+        <Route path="/privileges" element={<ListAuthority />} />
+
+        <Route path="/usuarios" element={<ListUser />} />
+        <Route path="/usuario" element={<DetailsUser />} />
+
+      </Switch>
+    </Router>
+  );
+}
+
+export default Routes;
