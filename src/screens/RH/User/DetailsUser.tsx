@@ -14,7 +14,12 @@ export function DetailsUser() {
     {
         id: "d5d6be6e-d332-41be-b601-8bd2ae4e6935", name: 'Paulo Galvao', prontuary: 'CB3046874', department: "Financeiro",
         telephone: "1334684219", cell_phone: "13997854230", email: "paulo@gmail.com",
-        role: "Chefe", course: "Análise e Desenvolvimento de Sistemas"
+        role: "Chefe", course: "Análise e Desenvolvimento de Sistemas",
+        project: [
+            { id: "75b6a6f8-88fb-4642-bd79-60cd4865691c", description: "Análise e Desenvolvimento de Sistemas" },
+            { id: "ad24ccc1-efe2-4b17-8bbe-05a4e730b12a", description: "Turismo" },
+            { id: "f5537fec-16f2-452b-a6e4-4e60d36f5686", description: "Letras" },
+        ]
     };
 
     return (
@@ -53,18 +58,18 @@ export function DetailsUser() {
                 </Card>
 
                 <Tabs.Root
-                    className="flex flex-col w-full shadow-[0_2px_10px] shadow-blackA2 mt-6"
+                    className="flex flex-col w-full mt-6"
                     defaultValue="tab1"
                 >
-                    <Tabs.List className="shrink-0 flex border-b border-mauve6" aria-label="Dados da empresa">
+                    <Tabs.List className="shrink-0 flex border-b" aria-label="Dados da empresa">
                         <Tabs.Trigger
-                            className="bg-gray-100 px-5 h-[45px] flex-1 flex items-center justify-center text-[15px] leading-none text-mauve11 select-none first:rounded-tl-md last:rounded-tr-md hover:text-violet11 data-[state=active]:text-violet11 data-[state=active]:shadow-[inset_0_-1px_0_0,0_1px_0_0] data-[state=active]:shadow-current data-[state=active]:focus:relative data-[state=inactive]:bg-gray-200 outline-none cursor-default"
+                            className="bg-gray-100 px-5 h-[45px] flex-1 flex items-center justify-center text-[15px] leading-none select-none first:rounded-tl-md last:rounded-tr-md data-[state=active]:shadow-[inset_0_-1px_0_0,0_1px_0_0] data-[state=active]:shadow-current data-[state=active]:focus:relative data-[state=inactive]:bg-gray-200 outline-none cursor-default"
                             value="tab1"
                         >
                             Documentos
                         </Tabs.Trigger>
                         <Tabs.Trigger
-                            className="bg-gray-100 px-5 h-[45px] flex-1 flex items-center justify-center text-[15px] leading-none text-mauve11 select-none first:rounded-tl-md last:rounded-tr-md hover:text-violet11 data-[state=active]:text-violet11 data-[state=active]:shadow-[inset_0_-1px_0_0,0_1px_0_0] data-[state=active]:shadow-current data-[state=active]:focus:relative data-[state=inactive]:bg-gray-200 outline-none cursor-default"
+                            className="bg-gray-100 px-5 h-[45px] flex-1 flex items-center justify-center text-[15px] leading-none select-none first:rounded-tl-md last:rounded-tr-md data-[state=active]:shadow-[inset_0_-1px_0_0,0_1px_0_0] data-[state=active]:shadow-current data-[state=active]:focus:relative data-[state=inactive]:bg-gray-200 outline-none cursor-default"
                             value="tab2"
                         >
                             Projetos
@@ -81,7 +86,7 @@ export function DetailsUser() {
                         className="grow p-5 bg-gray-100 rounded-b-md outline-none "
                         value="tab2"
                     >
-                        <TableListProject />
+                        <TableListProject data={user.project} />
                     </Tabs.Content>
                 </Tabs.Root>
             </div>
