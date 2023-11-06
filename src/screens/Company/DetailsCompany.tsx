@@ -29,7 +29,7 @@ export function DetailsCompany() {
                             </div>
                             <Text className="!text-gray-500 font-semibold">{codeMask(empresa.codigo)}</Text>
                             <Card className={`${empresa.relacao == "fornecedor" ? "!bg-blue-950 " : "!bg-emerald-600"} w-fit flex items-center justify-center max-sm:hidden`}>
-                                <Text className="" size="xm">{empresa.relacao}</Text>
+                                <Text className="!text-gray-100" size="xm">{empresa.relacao}</Text>
                             </Card>
                         </div>
                         <div className="bg-gray-300 w-full flex flex-col justify-evenly p-4">
@@ -50,24 +50,24 @@ export function DetailsCompany() {
                 </Card>
 
                 <Tabs.Root
-                    className="flex flex-col w-full shadow-[0_2px_10px] shadow-blackA2 mt-6"
+                    className="flex flex-col w-full mt-6"
                     defaultValue="tab1"
                 >
-                    <Tabs.List className="shrink-0 flex border-b border-mauve6" aria-label="Dados da empresa">
+                    <Tabs.List className="shrink-0 flex border-b" aria-label="Dados da empresa">
                         <Tabs.Trigger
-                            className="bg-gray-100 px-5 h-[45px] flex-1 flex items-center justify-center text-[15px] leading-none text-mauve11 select-none first:rounded-tl-md last:rounded-tr-md hover:text-violet11 data-[state=active]:text-violet11 data-[state=active]:shadow-[inset_0_-1px_0_0,0_1px_0_0] data-[state=active]:shadow-current data-[state=active]:focus:relative data-[state=inactive]:bg-gray-200 outline-none cursor-default"
+                            className="bg-gray-100 px-5 h-[45px] flex-1 flex items-center justify-center text-[15px] leading-none select-none first:rounded-tl-md last:rounded-tr-md data-[state=active]:shadow-[inset_0_-1px_0_0,0_1px_0_0] data-[state=active]:shadow-current data-[state=active]:focus:relative data-[state=inactive]:bg-gray-200 outline-none cursor-default"
                             value="tab1"
                         >
                             Documentos
                         </Tabs.Trigger>
                         <Tabs.Trigger
-                            className="bg-gray-100 px-5 h-[45px] flex-1 flex items-center justify-center text-[15px] leading-none text-mauve11 select-none first:rounded-tl-md last:rounded-tr-md hover:text-violet11 data-[state=active]:text-violet11 data-[state=active]:shadow-[inset_0_-1px_0_0,0_1px_0_0] data-[state=active]:shadow-current data-[state=active]:focus:relative data-[state=inactive]:bg-gray-200 outline-none cursor-default"
+                            className="bg-gray-100 px-5 h-[45px] flex-1 flex items-center justify-center text-[15px] leading-none select-none first:rounded-tl-md last:rounded-tr-md data-[state=active]:shadow-[inset_0_-1px_0_0,0_1px_0_0] data-[state=active]:shadow-current data-[state=active]:focus:relative data-[state=inactive]:bg-gray-200 outline-none cursor-default"
                             value="tab2"
                         >
                             Vendas
                         </Tabs.Trigger>
                         <Tabs.Trigger
-                            className="bg-gray-100 px-5 h-[45px] flex-1 flex items-center justify-center text-[15px] leading-none text-mauve11 select-none first:rounded-tl-md last:rounded-tr-md hover:text-violet11 data-[state=active]:text-violet11 data-[state=active]:shadow-[inset_0_-1px_0_0,0_1px_0_0] data-[state=active]:shadow-current data-[state=active]:focus:relative data-[state=inactive]:bg-gray-200 outline-none cursor-default"
+                            className="bg-gray-100 px-5 h-[45px] flex-1 flex items-center justify-center text-[15px] leading-none select-none first:rounded-tl-md last:rounded-tr-md data-[state=active]:shadow-[inset_0_-1px_0_0,0_1px_0_0] data-[state=active]:shadow-current data-[state=active]:focus:relative data-[state=inactive]:bg-gray-200 outline-none cursor-default"
                             value="tab3"
                         >
                             Produtos
