@@ -44,3 +44,7 @@ export function formatPhoneNumber(phoneNumber: string) {
       return phoneNumber;
     }
   }
+
+ export function amountMask(amount: number){
+    return `R$ ${amount.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`
+  }
