@@ -8,17 +8,23 @@ import React, { Fragment, useState } from "react"
 import * as Popover from '@radix-ui/react-popover';
 import { formatUUID } from "../utils"
 
-interface Column {
+export interface Column {
     key: string;
     heading: string;
-    truncate?: boolean;
     width?: string;
     copiableId?: boolean;
+    card?: boolean;
+    cardStyle?: string | ((row: Record<string, any>) => string);
+    textStyle?: string;
 }
 
-interface TableProps {
+export interface TableProps {
     data: Record<string, any>[];
     columns: Column[];
+}
+
+export interface DataProps {
+    data: Record<string, any>[];
 }
 
 
@@ -84,7 +90,7 @@ export function Table({ data, columns }: TableProps) {
                                 {columns.map((column, index) => (
                                     <td
                                         key={column.key}
-                                        className={`px-2 ${column.copiableId === true ? 'w-32 py-2' : 'py-4 '} ${index === 0 ? 'rounded-l-xl' : ''} ${column.truncate ? 'max-w-[220px] truncate' : ''} ${column.width ? `max-md:w-${column.width}` : ''}
+                                        className={`px-2 max-w-[220px] truncate ${column.copiableId === true ? 'w-32 py-2' : 'py-4 '} ${index === 0 ? 'rounded-l-xl' : ''} ${column.width ? `max-md:w-${column.width}` : ''}
                                 ${index === columns.length - 1 ? 'max-md:rounded-r-xl' : ''}`}
                                     >
                                         {column.copiableId === true ?
@@ -101,7 +107,7 @@ export function Table({ data, columns }: TableProps) {
                                                 <Popover.Portal>
 
                                                     <Popover.Content className="h-fit w-fit px-3 py-2 bg-gray-50 shadow-[0_3px_10px_rgb(0,0,0,0.2)]">
-                                                        <Text size="xm">
+                                                        <Text size="xm" className="!text-gray-900">
                                                             Copiado
                                                         </Text>
                                                         <Popover.Arrow className="fill-gray-50" />
@@ -109,7 +115,20 @@ export function Table({ data, columns }: TableProps) {
                                                 </Popover.Portal>
 
                                             </Popover.Root>
-                                            : <Text className="!text-gray-800 max-h-10 truncate font-semibold">{item[column.key]}</Text>
+                                            : column.card ?
+                                                <Card className={
+                                                    `${column.card ?
+                                                        (typeof column.cardStyle === 'function' ? column.cardStyle(item) : column.cardStyle)
+                                                        : ''} bg-blue-200`
+                                                }>
+                                                    <Text className={`text-gray-800 ${column.textStyle ? column.textStyle : ''} max-h-10 truncate font-semibold`}>
+                                                        {item[column.key]}
+                                                    </Text>
+                                                </Card>
+                                                :
+                                                <Text className={`text-gray-800 ${column.textStyle ? column.textStyle : ''} max-h-10 truncate font-semibold`}>
+                                                    {item[column.key]}
+                                                </Text>
                                         }
                                     </td>
                                 ))}
