@@ -1,9 +1,15 @@
-import { DataProps, Table } from "../../../components/Table";
+import { Column, Table } from "../../../components/Table";
 
-export function TableListCourse({ data }: DataProps) {
-    var columns = [
-        { key: 'name', heading: 'Curso' },
-        { key: 'employees', heading: 'Funcionários' },
+export interface CourseProps {
+    id: string,
+    name: string,
+    employees: string
+}
+
+export function TableListCourse({ data }: {data : CourseProps[]}) {
+    var columns : Column<CourseProps>[] = [
+        { key: 'name', title: 'Curso' },
+        { key: 'employees', title: 'Funcionários' },
     ];
 
     return (

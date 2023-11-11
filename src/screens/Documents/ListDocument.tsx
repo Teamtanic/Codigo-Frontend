@@ -5,25 +5,58 @@ import { Navbar } from "../../components/Navbar";
 import { TextInput } from "../../components/TextInput";
 import { MagnifyingGlass } from 'phosphor-react';
 import { CardModal } from "../../components/CardModal";
-import { Text } from "../../components/Text";
-import { TableListProject } from "./TableListProject"
+import { TableListDocument } from "./TableListDocument";
 
-export function ListProject() {
-    var projects = [
-        { id: "75b6a6f8-88fb-4642-bd79-60cd4865691c", description: "Análise e Desenvolvimento de Sistemas" },
-        { id: "ad24ccc1-efe2-4b17-8bbe-05a4e730b12a", description: "Turismo" },
-        { id: "f5537fec-16f2-452b-a6e4-4e60d36f5686", description: "Letras" },
-        { id: "3f506407-4638-4bd0-abb9-d2bcf415239c", description: "Automação Industrial" },
-        { id: "78e1efba-f2d1-473c-b656-8f70c9e8a94c", description: "Matemática" },
-        { id: "277dc916-e89e-444d-ac02-3bab065e488d", description: "Ciência da Computação" },
-        { id: "7ab0ac84-4500-4d68-907c-1ef5ed21d9ad", description: "Geografia" },
+export function ListDocument() {
+    var documents = [
+        {
+            id: "75b6a6f8-88fb-4642-bd79-60cd4865691c",
+            name: "dOC_3245_Mc",
+            dt_doc: "20/10/2023",
+            size: "103MB",
+            type: "PDF",
+            doc_type: "Contrato"
+        },
+        {
+            id: "ad24ccc1-efe2-4b17-8bbe-05a4e730b12a",
+            name: "dOC_3245_Mc",
+            dt_doc: "20/10/2023",
+            size: "103MB",
+            type: "PDF",
+            doc_type: "Contrato"
+        },
+        {
+            id: "f5537fec-16f2-452b-a6e4-4e60d36f5686",
+            name: "dOC_3245_Mc",
+            dt_doc: "20/10/2023",
+            size: "103MB",
+            type: "PDF",
+            doc_type: "Contrato"
+        },
+        {
+            id: "3f506407-4638-4bd0-abb9-d2bcf415239c",
+            name: "dOC_3245_Mc",
+            dt_doc: "20/10/2023",
+            size: "103MB",
+            type: "PDF",
+            doc_type: "Contrato"
+        },
+        {
+            id: "277dc916-e89e-444d-ac02-3bab065e488d",
+            name: "dOC_3245_Mc",
+            dt_doc: "20/10/2023",
+            size: "103MB",
+            type: "PDF",
+            doc_type: "Contrato"
+        }
     ];
+
 
     return (
         <Container>
             <Navbar />
             <div className="w-full flex py-6 p-24 max-md:p-6 flex-col">
-                <Heading size="lg">Projetos</Heading>
+                <Heading size="lg">Cargos</Heading>
 
                 <div className="w-full mt-3">
                     <Card className="w-full py-3 px-4">
@@ -35,23 +68,8 @@ export function ListProject() {
                         </TextInput.Root>
                     </Card>
 
-
-                    <TableListProject data={projects} />
-                    
-                    <div className="mt-10 justify-start  flex flex-wrap w-full">
-                        {projects.map(project => {
-                            return (
-                                <div className="px-3 py-2 max-sm:w-full max-md:w-1/2 md:w-1/2">
-                                    <Card asChild >
-                                        <div className="px-4 py-2 w-full h-full">
-                                            <Heading className="!text-gray-900">Titulo</Heading>
-                                            <Heading size="sm" className="!text-gray-700">Titulo</Heading>
-                                            <Text className="!text-gray-700">{project.description}</Text>
-                                        </div>
-                                    </Card>
-                                </div>
-                            )
-                        })}
+                    <div className="mt-10">
+                        <TableListDocument data={documents} />
 
                         <CardModal title="Cadastro de Produto" action="Adicionar" triggerStyle="fixed w-fit bottom-5 right-8 rounded shadow-[rgba(0,_0,_0,_0.25)_0px_25px_50px_-12px] !text-gray-100">
                             <div className="flex flex-col w-full max-md:px-12 md:px-24 mb-12 gap-4">

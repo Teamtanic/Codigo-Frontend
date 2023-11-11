@@ -25,6 +25,8 @@ import { ListBank } from "./screens/Financial/Bank/ListBank";
 import { DetailsProductWarehouse } from "./screens/Warehouse/DetailsProductWarehouse";
 import { DetailsBank } from "./screens/Financial/Bank/DetailsBank";
 import { DetailsTransaction } from "./screens/Financial/Transaction/DetailsTransaction";
+import { ListDocument } from "./screens/Documents/ListDocument";
+import { DetailsDocument } from "./screens/Documents/DetailsDocument";
 //#endregion
 
 function Routes() {
@@ -63,6 +65,9 @@ function Routes() {
 
         <Route path="/usuarios" element={<ListUser />} />
         <Route path="/usuario" element={<DetailsUser />} />
+
+        <Route path="/documentos" element={<ListDocument />} />
+        <Route path="/documento" element={<DetailsDocument />} />
 
       </Switch>
     </Router>

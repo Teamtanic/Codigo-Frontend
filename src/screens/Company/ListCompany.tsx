@@ -10,12 +10,8 @@ import { Checkbox } from "../../components/Checkbox";
 import { TableListCompany } from "./TableListCompany";
 import { codeMask } from "../../utils";
 
-interface CompanyProps {
-    id: string,
-    nome: string,
-    relacao: string,
-    codigo: string
-}
+
+
 
 export function ListCompany() {
     var empresas = [

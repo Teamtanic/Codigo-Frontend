@@ -1,13 +1,36 @@
-import { Column, DataProps, Table } from "../../../components/Table";
+import { Card } from "../../../components/Card";
+import { CopiableText } from "../../../components/CopiableText";
+import { Column, Table } from "../../../components/Table";
+import { Text } from "../../../components/Text";
 
-export function TableListTransaction({ data }: DataProps) {
+export interface TransactionProps {
+    id: string;
+    description: string;
+    amount: string;
+    type: string;
+    dt_cashflow: string;
+}
 
-    var columns : Column[] = [
-        { key: 'id', heading: 'ID', copiableId: true },
-        { key: 'description', heading: 'Descrição' },
-        { key: 'amount', heading: 'Valor' },
-        { key: 'type', heading: 'Transação', card: true, cardStyle: (row) => row.type === 'ENTRADA' ? 'bg-emerald-400' : 'bg-red-400' },
-        { key: 'dt_cashflow', heading: 'Data' },
+export function TableListTransaction({ data }: {data : TransactionProps[]}) {
+
+    var columns : Column<TransactionProps>[] = [
+        { key: 'id', title: 'ID', render: ({id}) => 
+        <CopiableText id={true} text={id}></CopiableText>,
+        width: '10'
+    },
+        { key: 'description', title: 'Descrição' },
+        { key: 'amount', title: 'Valor' },
+        { key: 'type', title: 'Transação', 
+        render: ({type}) => 
+            <Card className={
+                `${type === 'ENTRADA' ? '!bg-emerald-400' : '!bg-red-400'}`
+            }>
+                <Text className={`!text-gray-100 text-sm max-h-10 truncate font-semibold`}>
+                    {type}
+                </Text>
+            </Card>
+        },
+        { key: 'dt_cashflow', title: 'Data' },
     ];
 
     return (

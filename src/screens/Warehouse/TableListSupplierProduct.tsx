@@ -1,9 +1,15 @@
-import { DataProps, Table } from "../../components/Table";
+import { Column, Table } from "../../components/Table";
 
-export function TableListSupplierProduct({data} : DataProps) {
-    var columns = [
-        { key: 'supplier', heading: 'Empresa' },
-        { key: 'price', heading: 'Preço' },
+export interface SupplierProductProps {
+    id: string,
+    supplier: string,
+    price: string
+}
+
+export function TableListSupplierProduct({data} : {data : SupplierProductProps[]}) {
+    var columns : Column<SupplierProductProps>[] = [
+        { key: 'supplier', title: 'Empresa' },
+        { key: 'price', title: 'Preço' },
     ];
 
     return (

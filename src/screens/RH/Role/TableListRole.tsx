@@ -1,9 +1,15 @@
-import { DataProps, Table } from "../../../components/Table";
+import { Column, Table } from "../../../components/Table";
 
-export function TableListRole({ data }: DataProps) {
-    var columns = [
-        { key: 'name', heading: 'Cargo' },
-        { key: 'employees', heading: 'Funcionários' },
+export interface RoleProps {
+    id: string,
+    name: string,
+    employees: string
+}
+
+export function TableListRole({ data }: {data : RoleProps[]}) {
+    var columns : Column<RoleProps>[] = [
+        { key: 'name', title: 'Cargo' },
+        { key: 'employees', title: 'Funcionários' },
     ];
     
     return (

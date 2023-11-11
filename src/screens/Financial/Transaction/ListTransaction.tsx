@@ -5,16 +5,10 @@ import { Navbar } from "../../../components/Navbar";
 import { TextInput } from "../../../components/TextInput";
 import { MagnifyingGlass } from 'phosphor-react';
 import { CardModal } from "../../../components/CardModal";
-import { TableListTransaction } from "./TableListTransaction";
+import { TableListTransaction, TransactionProps } from "./TableListTransaction";
 import { amountMask } from "../../../utils";
 
-interface TransactionProps {
-    id: string;
-    description: string;
-    amount: string;
-    type: string;
-    dt_cashflow: string;
-}
+
 
 
 export function ListTransaction() {

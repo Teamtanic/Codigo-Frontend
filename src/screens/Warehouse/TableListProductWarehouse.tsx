@@ -1,9 +1,15 @@
-import { DataProps, Table } from "../../components/Table";
+import { Column, Table } from "../../components/Table";
 
-export function TableListProductWarehouse({data} : DataProps) {
-    var columns = [
-        { key: 'product', heading: 'Produto' },
-        { key: 'quantity', heading: 'Quantidade' },
+export interface ProductWarehouseProps {
+    id: string,
+    product: string,
+    quantity: string
+}
+
+export function TableListProductWarehouse({data} : {data : ProductWarehouseProps[]}) {
+    var columns : Column<ProductWarehouseProps>[] = [
+        { key: 'product', title: 'Produto' },
+        { key: 'quantity', title: 'Quantidade' },
     ];
 
     return (
