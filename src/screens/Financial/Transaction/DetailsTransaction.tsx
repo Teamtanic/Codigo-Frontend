@@ -59,15 +59,15 @@ export function DetailsTransaction() {
                                     <Text className="!text-gray-900 font-semibold">Valor da transação: </Text>
                                     <Text className="!text-gray-900">{amountMask(transaction.amount)}</Text>
                                 </div>
-                                <Card className={`w-fit flex items-center max-sm:hidden ${transaction.type === 'ENTRADA' ? 'bg-emerald-400' : 'bg-red-400'}`}>
-                                    <Text className="" size="xm">{transaction.type}</Text>
+                                <Card className={`w-fit flex items-center max-sm:hidden max-md:hidden ${transaction.type === 'ENTRADA' ? '!bg-emerald-400' : '!bg-red-400'}`}>
+                                    <Text className="!text-gray-900 font-semibold" size="xm">{transaction.type}</Text>
                                 </Card>
                             </div>
-                            <Card className={`w-fit flex items-center md:hidden ${transaction.type === 'ENTRADA' ? 'bg-emerald-400' : 'bg-red-400'}`}>
-                                <Text className="" size="xm">{transaction.type}</Text>
+                            <Card className={`w-fit flex items-center md:hidden ${transaction.type === 'ENTRADA' ? '!bg-emerald-400' : '!bg-red-400'}`}>
+                                <Text className="!text-gray-900 font-semibold" size="xm">{transaction.type}</Text>
                             </Card>
                             <Text size="xm" className="!text-gray-900 font-semibold">Método de pagamento: {transaction.payment_method}</Text>
-                            <Text size="xm" className="!text-gray-900 font-semibold">Parcelas: {transaction.qty_installments} parcela de {transaction.installments}</Text>
+                            <Text size="xm" className="!text-gray-900 font-semibold">Parcelas: {transaction.qty_installments} parcela de {amountMask(transaction.installments)}</Text>
                         </div>
                     </div>
                 </Card>
