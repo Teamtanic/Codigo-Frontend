@@ -1,0 +1,20 @@
+import { CardModal } from "../../../components/CardModal";
+import { TextInput } from "../../../components/TextInput";
+
+export function BankAddModal() {
+    return (
+        <CardModal title="Cadastro de Banco" action="Adicionar Banco" triggerStyle="fixed w-fit bottom-5 right-8 rounded shadow-[rgba(0,_0,_0,_0.25)_0px_25px_50px_-12px] !text-gray-100">
+            <div className="flex flex-col w-full max-md:px-12 md:px-24 mb-12 gap-4">
+                <TextInput.Root labelFor="name" labelText="Nome">
+                    <TextInput.Input id="name" type="text" placeholder="Digite o banco..." />
+                </TextInput.Root>
+                <TextInput.Root labelFor="location" labelText="Localização">
+                    <TextInput.Input id="location" type="number" min="0" placeholder="Digite a localização..." />
+                </TextInput.Root>
+                <TextInput.Root labelFor="balance" labelText="Saldo">
+                    <TextInput.Input id="balance" type="text" placeholder="Informe o saldo na conta..." />
+                </TextInput.Root>
+            </div>
+        </CardModal>
+    );
+}
