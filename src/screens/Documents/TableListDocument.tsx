@@ -1,4 +1,5 @@
 import { Column, Table } from "../../components/Table";
+import { TableListProps } from "../Project/TableListProject";
 
 export interface DocumentProps {
     id: string,
@@ -9,7 +10,7 @@ export interface DocumentProps {
     doc_type: string,
 }
 
-export function TableListDocument({ data }: {data: DocumentProps[]}) {
+export function TableListDocument({ data }: {data: DocumentProps[]}, { hasOptions = true }: TableListProps) {
     var columns : Column<DocumentProps>[] = [
         { key: 'name', title: 'Nome' },
         { key: 'dt_doc', title: 'Data' },
@@ -19,6 +20,6 @@ export function TableListDocument({ data }: {data: DocumentProps[]}) {
     ];
     
     return (
-        <Table data={data} columns={columns} />
+        <Table data={data} menu={hasOptions} columns={columns} />
     )
 }
