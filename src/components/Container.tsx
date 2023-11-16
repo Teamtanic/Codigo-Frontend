@@ -9,7 +9,7 @@ export interface ContainerProps{
 
 export function Container ({children, hasNav = true, className}:ContainerProps) {
     return (
-        <div className={clsx(`flex min-h-full h-auto w-full dark:bg-gray-700 ${hasNav ? "md:mt-20 pt-2 max-md:mt-14" : ""}`, className)}>
+        <div className={clsx(`flex min-h-full h-auto w-full bg-gray-200 dark:bg-gray-700 ${hasNav ? "md:mt-20 pt-2 max-md:mt-14" : ""}`, className)}>
             {children}
         </div>
     )
