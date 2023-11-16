@@ -5,19 +5,31 @@ import { Navbar } from "../../components/Navbar";
 import { TextInput } from "../../components/TextInput";
 import { MagnifyingGlass } from 'phosphor-react';
 import { CardModal } from "../../components/CardModal";
-import { Text } from "../../components/Text";
-import { TableListProject } from "./TableListProject"
+import { ProjectProps, TableListProject } from "./TableListProject"
+import { ProjectAddModal } from "./ProjectAddModal";
 
 export function ListProject() {
     var projects = [
-        { id: "75b6a6f8-88fb-4642-bd79-60cd4865691c", description: "Análise e Desenvolvimento de Sistemas" },
-        { id: "ad24ccc1-efe2-4b17-8bbe-05a4e730b12a", description: "Turismo" },
-        { id: "f5537fec-16f2-452b-a6e4-4e60d36f5686", description: "Letras" },
-        { id: "3f506407-4638-4bd0-abb9-d2bcf415239c", description: "Automação Industrial" },
-        { id: "78e1efba-f2d1-473c-b656-8f70c9e8a94c", description: "Matemática" },
-        { id: "277dc916-e89e-444d-ac02-3bab065e488d", description: "Ciência da Computação" },
-        { id: "7ab0ac84-4500-4d68-907c-1ef5ed21d9ad", description: "Geografia" },
+        { id: "75b6a6f8-88fb-4642-bd79-60cd4865691c", description: "Análise e Desenvolvimento de Sistemas", status: true, customer: "McDonalds" },
+        { id: "ad24ccc1-efe2-4b17-8bbe-05a4e730b12a", description: "Turismo", status: true, customer: "Usiminas" },
+        { id: "f5537fec-16f2-452b-a6e4-4e60d36f5686", description: "Letras", status: false, customer: "Interpol" },
+        { id: "3f506407-4638-4bd0-abb9-d2bcf415239c", description: "Automação Industrial", status: true, customer: "BOPE" },
+        { id: "78e1efba-f2d1-473c-b656-8f70c9e8a94c", description: "Matemática", status: false, customer: "Burger King" },
+        { id: "277dc916-e89e-444d-ac02-3bab065e488d", description: "Ciência da Computação", status: false, customer: "EMTU" },
+        { id: "7ab0ac84-4500-4d68-907c-1ef5ed21d9ad", description: "Geografia", status: false, customer: "McDonalds" },
+        { id: "75b6a6f8-88fb-4642-bd79-60cd4865691c", description: "Análise e Desenvolvimento de Sistemas", status: true, customer: "McDonalds" },
+        { id: "ad24ccc1-efe2-4b17-8bbe-05a4e730b12a", description: "Turismo", status: true, customer: "Usiminas" },
+        { id: "f5537fec-16f2-452b-a6e4-4e60d36f5686", description: "Letras", status: false, customer: "Interpol" },
+        { id: "3f506407-4638-4bd0-abb9-d2bcf415239c", description: "Automação Industrial", status: true, customer: "BOPE" },
+        { id: "78e1efba-f2d1-473c-b656-8f70c9e8a94c", description: "Matemática", status: false, customer: "Burger King" },
+        { id: "277dc916-e89e-444d-ac02-3bab065e488d", description: "Ciência da Computação", status: false, customer: "EMTU" },
+        { id: "7ab0ac84-4500-4d68-907c-1ef5ed21d9ad", description: "Geografia", status: false, customer: "McDonalds" },
     ];
+
+    const projectsDTO: ProjectProps[] = projects.map(project => ({
+        ...project,
+        status: project.status === true ? 'Em aberto' : 'Fechado'
+    }))
 
     return (
         <Container>
@@ -27,7 +39,7 @@ export function ListProject() {
 
                 <div className="w-full mt-3">
                     <Card className="w-full py-3 px-4">
-                        <TextInput.Root colorLabel="text-gray-900">
+                        <TextInput.Root labelStyle="text-gray-900">
                             <TextInput.Icon>
                                 <MagnifyingGlass />
                             </TextInput.Icon>
@@ -35,40 +47,10 @@ export function ListProject() {
                         </TextInput.Root>
                     </Card>
 
-
-                    <TableListProject data={projects} />
-                    
-                    <div className="mt-10 justify-start  flex flex-wrap w-full">
-                        {projects.map(project => {
-                            return (
-                                <div className="px-3 py-2 max-sm:w-full max-md:w-1/2 md:w-1/2">
-                                    <Card asChild >
-                                        <div className="px-4 py-2 w-full h-full">
-                                            <Heading className="!text-gray-900">Titulo</Heading>
-                                            <Heading size="sm" className="!text-gray-700">Titulo</Heading>
-                                            <Text className="!text-gray-700">{project.description}</Text>
-                                        </div>
-                                    </Card>
-                                </div>
-                            )
-                        })}
-
-                        <CardModal title="Cadastro de Produto" action="Adicionar" triggerStyle="fixed w-fit bottom-5 right-8 rounded shadow-[rgba(0,_0,_0,_0.25)_0px_25px_50px_-12px] !text-gray-100">
-                            <div className="flex flex-col w-full max-md:px-12 md:px-24 mb-12 gap-4">
-                                <TextInput.Root labelFor="product" labelText="Produto">
-                                    <TextInput.Input id="product" type="text" placeholder="Digite o produto..." />
-                                </TextInput.Root>
-                                <TextInput.Root labelFor="quantity" labelText="Quantidade">
-                                    <TextInput.Input id="quantity" type="number" min="0" placeholder="Digite a quantidade..." />
-                                </TextInput.Root>
-                                <TextInput.Root labelFor="supplier" labelText="Fornecedor">
-                                    <TextInput.Input id="supplier" type="text" placeholder="Informe o fornecedor..." />
-                                </TextInput.Root>
-                                <TextInput.Root labelFor="price" labelText="Preço">
-                                    <TextInput.Input id="price" type="text" placeholder="Informe o preço..." />
-                                </TextInput.Root>
-                            </div>
-                        </CardModal>
+                    <div className="mt-10">
+                        <TableListProject data={projectsDTO} />
+                        
+                        <ProjectAddModal />
                     </div>
                 </div>
             </div>
