@@ -4,7 +4,6 @@ import { Heading } from "../../../components/Heading";
 import { Navbar } from "../../../components/Navbar";
 import { TextInput } from "../../../components/TextInput";
 import { MagnifyingGlass } from 'phosphor-react';
-import { CardModal } from "../../../components/CardModal";
 import { TableListAuthority } from "./TableListAuthority";
 import { AuthorityAddModal } from "./AuthorityAddModal";
 
