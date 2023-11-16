@@ -5,6 +5,7 @@ import { Text } from './Text';
 import { SidebarMenu } from './SidebarMenu';
 import { List } from 'phosphor-react'
 import { Button } from './Button';
+import { Logo } from './Logo';
 
 export interface NavbarProps {
     hasSide?: boolean;
@@ -37,8 +38,8 @@ export function Navbar({ hasSide = true }: NavbarProps) {
                     </Button>
                         <div className="flex items-center md:justify-start max-md:justify-center max-md:-translate-x-3 w-full">
                             <a href="/teste" className="flex items-center ml-2 md:mr-24 max-md:mr-10">
-                                <img src="/guara-logo.png" className="md:h-16 max-md:h-10 mr-3" alt="Guará Junior Logo" />
-                                <Heading size='lg'>GuaráRP</Heading>
+                                <Logo />
+                                <Heading className='ml-3' size='lg'>GuaráRP</Heading>
                             </a>
                         </div>
                         <Menu as="div" className="relative ml-auto mr-0 w-10">
