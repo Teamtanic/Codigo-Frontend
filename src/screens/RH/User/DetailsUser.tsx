@@ -16,9 +16,9 @@ export function DetailsUser() {
         telephone: "1334684219", cell_phone: "13997854230", email: "paulo@gmail.com",
         role: "Chefe", course: "Análise e Desenvolvimento de Sistemas",
         project: [
-            { id: "75b6a6f8-88fb-4642-bd79-60cd4865691c", description: "Análise e Desenvolvimento de Sistemas" },
-            { id: "ad24ccc1-efe2-4b17-8bbe-05a4e730b12a", description: "Turismo" },
-            { id: "f5537fec-16f2-452b-a6e4-4e60d36f5686", description: "Letras" },
+            { id: "75b6a6f8-88fb-4642-bd79-60cd4865691c", description: "Análise e Desenvolvimento de Sistemas", customer: "McDONALDS", type: "Serviço", status: "Em andamento" },
+            { id: "ad24ccc1-efe2-4b17-8bbe-05a4e730b12a", description: "Turismo", customer: "McDONALDS", type: "Serviço", status: "Em andamento" },
+            { id: "f5537fec-16f2-452b-a6e4-4e60d36f5686", description: "Letras", customer: "McDONALDS", type: "Serviço", status: "Em andamento" },
         ]
     };
 
