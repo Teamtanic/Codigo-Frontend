@@ -26,7 +26,7 @@ export function ListUser() {
 
                 <div className="w-full mt-3">
                     <Card className="w-full py-3 px-4">
-                        <TextInput.Root colorLabel="text-gray-900">
+                        <TextInput.Root labelStyle="text-gray-900">
                             <TextInput.Icon>
                                 <MagnifyingGlass />
                             </TextInput.Icon>
