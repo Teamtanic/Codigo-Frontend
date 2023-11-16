@@ -27,7 +27,9 @@ export function DetailsTransaction() {
             { id: "f5537fec-16f2-452b-a6e4-4e60d36f5686", product: "Computador", quantity: 11 }
         ],
         project: [{
-            id: "75b6a6f8-88fb-4642-bd79-60cd4865691c", description: "Análise e Desenvolvimento de Sistemas"
+            id: "75b6a6f8-88fb-4642-bd79-60cd4865691c", description: "Análise e Desenvolvimento de Sistemas",
+            customer: "McDonalds", status: true
+            
         }]
     };
 
@@ -35,9 +37,14 @@ export function DetailsTransaction() {
         ...transaction,
         products: transaction.products.map(item => ({
             ...item,
-            quantity: `${item.quantity} ${item.quantity === 1 ? ' unidade' : ' unidades'}`
+            quantity: `${item.quantity} ${item.quantity === 1 ? ' unidade' : ' unidades'}`,
+        })),
+        project: transaction.project.map(item => ({
+            ...item,
+            status: item.status === true ? 'Em aberto' : 'Fechado'
         }))
     }
+    
 
     return (
         <Container>
