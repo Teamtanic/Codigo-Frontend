@@ -16,7 +16,7 @@ export function TableListTransaction({ data }: {data : TransactionProps[]}) {
     var columns : Column<TransactionProps>[] = [
         { key: 'id', title: 'ID', render: ({id}) => 
         <CopiableText id={true} text={id}></CopiableText>,
-        width: '10'
+        width: 'w-10'
     },
         { key: 'description', title: 'Descrição' },
         { key: 'amount', title: 'Valor' },
@@ -34,6 +34,6 @@ export function TableListTransaction({ data }: {data : TransactionProps[]}) {
     ];
 
     return (
-        <Table data={data} columns={columns} />
+        <Table data={data} columns={columns} menu={false} />
     )
 }
