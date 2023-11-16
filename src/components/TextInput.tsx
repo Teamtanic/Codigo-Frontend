@@ -8,7 +8,6 @@ export interface TextInputRootProps {
   children: ReactNode;
   className?: string;
   labelStyle?: string;
-  colorLabel?: string;
 }
 
 function TextInputRoot({ children, labelFor, labelText, className = '', labelStyle = '' }: TextInputRootProps) {
