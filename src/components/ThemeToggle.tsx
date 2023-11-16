@@ -3,7 +3,7 @@ import { Button } from './Button';
 import { Moon, Sun } from 'phosphor-react';
 
 const ThemeToggle = () => {
-    const [theme, setTheme] = useState(localStorage.theme);
+    const [theme, setTheme] = useState(localStorage.theme || 'dark');
 
     // Atualiza a classe do documento quando o tema muda
     useEffect(() => {
