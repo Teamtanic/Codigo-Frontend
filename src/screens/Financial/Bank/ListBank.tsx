@@ -4,7 +4,6 @@ import { Heading } from "../../../components/Heading";
 import { Navbar } from "../../../components/Navbar";
 import { TextInput } from "../../../components/TextInput";
 import { MagnifyingGlass } from 'phosphor-react';
-import { CardModal } from "../../../components/CardModal";
 import { TableListBank } from "./TableListBank";
 import { amountMask } from "../../../utils";
 import { BankAddModal } from "./BankAddModal";
@@ -37,7 +36,7 @@ export function ListBank() {
 
                 <div className="w-full mt-3">
                     <Card className="w-full py-3 px-4">
-                        <TextInput.Root colorLabel="text-gray-900">
+                        <TextInput.Root labelStyle="text-gray-900">
                             <TextInput.Icon>
                                 <MagnifyingGlass />
                             </TextInput.Icon>
