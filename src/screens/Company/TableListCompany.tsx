@@ -3,9 +3,6 @@ import { Card } from '../../components/Card';
 import { Text } from '../../components/Text';
 import { CopiableText } from '../../components/CopiableText';
 import { ModalOptions } from "../../components/OptionsMenu";
-import { CardModal } from "../../components/CardModal";
-import { TextInput } from "../../components/TextInput";
-import { Checkbox } from "../../components/Checkbox";
 import { CompanyEditModal } from "./CompanyEditModal";
 
 export interface CompanyProps {
