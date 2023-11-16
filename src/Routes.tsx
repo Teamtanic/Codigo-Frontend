@@ -6,7 +6,6 @@ import {
 
 //#region Pages
 import Home from "./screens/Home/Home";
-import PasswordRecovery from "./screens/Home/RecoveryPassword";
 import { ListCompany } from "./screens/Company/ListCompany";
 import { DetailsCompany } from "./screens/Company/DetailsCompany";
 import { ListProductWarehouse } from "./screens/Warehouse/ListProductWarehouse";
@@ -27,13 +26,20 @@ import { DetailsBank } from "./screens/Financial/Bank/DetailsBank";
 import { DetailsTransaction } from "./screens/Financial/Transaction/DetailsTransaction";
 import { ListDocument } from "./screens/Documents/ListDocument";
 import { DetailsDocument } from "./screens/Documents/DetailsDocument";
+import { CreateUser } from "./screens/RH/User/CreateUser";
+import { DetailsProject } from "./screens/Project/DetailsProject";
+import { DetailsOffer } from "./screens/Offer/DetailsOffer";
+import { ListOffer } from "./screens/Offer/ListOffer";
+import { Login } from "./screens/RH/User/Login";
+import { RecoveryPassword } from "./screens/RH/User/RecoveryPassword";
 //#endregion
 
 function Routes() {
   return (
     <Router>
       <Switch>
-        <Route path="/" element={<PasswordRecovery />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/recuperar-senha" element={<RecoveryPassword />} />
         <Route path="/teste" element={<Home />} />
 
         <Route path="/empresas" element={<ListCompany />} />
@@ -42,7 +48,11 @@ function Routes() {
         <Route path="/almoxarifado" element={<ListProductWarehouse />} />
         <Route path="/produto" element={<DetailsProductWarehouse />} />
 
+        <Route path="/ofertas" element={<ListOffer />} />
+        <Route path="/oferta" element={<DetailsOffer />} />
+
         <Route path="/projetos" element={<ListProject />} />
+        <Route path="/projeto" element={<DetailsProject />} />
 
         <Route path="/transacoes" element={<ListTransaction />} />
         <Route path="/transacao" element={<DetailsTransaction />} />
@@ -63,6 +73,7 @@ function Routes() {
 
         <Route path="/privileges" element={<ListAuthority />} />
 
+        <Route path="/registro" element={<CreateUser />} />
         <Route path="/usuarios" element={<ListUser />} />
         <Route path="/usuario" element={<DetailsUser />} />
 
