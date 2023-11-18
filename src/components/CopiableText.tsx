@@ -13,7 +13,7 @@ interface CopiableTextProps {
 export function CopiableText({ text, id } : CopiableTextProps) {
     const [isOpen, setIsOpen] = useState(false);
 
-    const timeoutId = React.useRef<number | null>(null);
+    const timeoutId = React.useRef<NodeJS.Timeout | null>(null);
 
     function copyText(event: React.MouseEvent<HTMLElement>, id: string) {
         const { target } = event;
