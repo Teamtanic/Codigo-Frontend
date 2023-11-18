@@ -16,26 +16,20 @@ export function Navbar({ hasSide = true }: NavbarProps) {
 
     const toggleSidebar = () => {
         setSidebarVisible(!isSidebarVisible);
-      };
+    };
 
     var user = [
         { name: "teste", email: "Um teste" },
     ];
-
-    var acesso = [
-        { label: "RH", link: "/teste", notify: 3 },
-        { label: "Projetos", link: "/teste" }
-    ];
-
 
     return (
         <>
             <nav className="fixed top-0 z-50 w-full bg-gray-100 border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
                 <div className="px-3 py-3 lg:px-5 lg:pl-3">
                     <div className="flex items-center">
-                    <Button className='py-0 px-0 !w-fit bg-transparent md:hidden hover:!bg-gray-200 dark:hover:bg-gray-700' onClick={toggleSidebar}>
-                        <List size={32} className='text-gray-900 dark:text-gray-100' />
-                    </Button>
+                        <Button className='py-0 px-0 !w-fit bg-transparent md:hidden hover:!bg-gray-200 dark:hover:bg-gray-700' onClick={toggleSidebar}>
+                            <List size={32} className='text-gray-900 dark:text-gray-100' />
+                        </Button>
                         <div className="flex items-center md:justify-start max-md:justify-center max-md:-translate-x-3 w-full">
                             <a href="/teste" className="flex items-center ml-2 md:mr-24 max-md:mr-10">
                                 <Logo />
@@ -78,12 +72,12 @@ export function Navbar({ hasSide = true }: NavbarProps) {
                     </div>
                 </div>
             </nav>
-            
-        {hasSide?
-            <SidebarMenu menuItems={acesso} sideBarVisible={isSidebarVisible} />
-            :
-            ''
-        }
+
+            {hasSide ?
+                <SidebarMenu sideBarVisible={isSidebarVisible} />
+                :
+                ''
+            }
         </>
     )
 }
