@@ -24,7 +24,8 @@ export function Button({
   ...props
 }: ButtonProps) {
   const Component = asChild ? Slot : "button";
-
+  const iconSlot = icon && <span className="w-6 h-6 text-gray-900">{icon}</span>;
+  
   return (
     <Component
       className={clsx(
@@ -33,13 +34,9 @@ export function Button({
       )}
       {...props}
     >
-      {iconPosition === "left" && (
-          <Slot className="w-6 h-6 text-gray-900">{icon}</Slot>
-      )}
+      {iconPosition === "left" && iconSlot}
       <Text size={textSize} className={`text-center flex-1 ${icon && iconPosition === "left" ? "-translate-x-3" : iconPosition === "right" ? "translate-x-3" : ""} ${textStyle}`}>{children}</Text>
-      {iconPosition === "right" && (
-          <Slot className="w-6 h-6 text-gray-900">{icon}</Slot>
-      )}
+      {iconPosition === "right" && iconSlot}
     </Component>
   );
 }
