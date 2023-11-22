@@ -4,10 +4,9 @@ import { Heading } from "../../../components/Heading";
 import { Navbar } from "../../../components/Navbar";
 import { TextInput } from "../../../components/TextInput";
 import { MagnifyingGlass } from 'phosphor-react';
-import { CardModal } from "../../../components/CardModal";
 import { TableListTransaction, TransactionProps } from "./TableListTransaction";
 import { amountMask } from "../../../utils";
-import { TransactionAddModal } from "./TransactionAddModal";
+import { TransactionModal } from "./TransactionModal";
 
 
 
@@ -48,7 +47,7 @@ export function ListTransaction() {
                     <div className="mt-10">
                         <TableListTransaction data={transactionsDTO} />
 
-                        <TransactionAddModal />
+                        <TransactionModal title="Cadastro de Produto" action="Adicionar" />
                     </div>
                 </div>
             </div>

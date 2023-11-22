@@ -1,6 +1,6 @@
 import { ModalOptions } from "../../../components/OptionsMenu";
 import { Column, Table } from "../../../components/Table";
-import { CourseEditModal } from "./CourseEditModal";
+import { CourseModal } from "./CourseModal";
 
 export interface CourseProps {
     id: string,
@@ -17,7 +17,7 @@ export function TableListCourse({ data }: {data : CourseProps[]}) {
     var options: ModalOptions[] = [
         {
             key: 'Editar', children:
-                <CourseEditModal />
+                <CourseModal title="Editar Curso" action="Editar" />
         }
     ]
 

@@ -4,9 +4,8 @@ import { Heading } from "../../../components/Heading";
 import { Navbar } from "../../../components/Navbar";
 import { TextInput } from "../../../components/TextInput";
 import { MagnifyingGlass } from 'phosphor-react';
-import { CardModal } from "../../../components/CardModal";
 import { TableListCourse } from "./TableListCourse";
-import { CourseAddModal } from "./CourseAddModal";
+import { CourseModal } from "./CourseModal";
 
 export function ListCourse() {
     var courses = [
@@ -43,7 +42,7 @@ export function ListCourse() {
                     <div className="mt-10">
                        <TableListCourse data={coursesDTO} />
 
-                        <CourseAddModal />
+                        <CourseModal title="Cadastro de Curso" action="Adicionar" />
                     </div>
                 </div>
             </div>

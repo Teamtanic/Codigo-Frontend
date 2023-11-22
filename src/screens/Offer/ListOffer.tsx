@@ -5,7 +5,7 @@ import { Navbar } from "../../components/Navbar";
 import { TextInput } from "../../components/TextInput";
 import { MagnifyingGlass } from 'phosphor-react';
 import { TableListOffer } from "./TableListOffer";
-import { OfferAddModal } from "./OfferAddModal";
+import { OfferModal } from "./OfferModal";
 
 export function ListOffer() {
     var offer = [
@@ -40,7 +40,7 @@ export function ListOffer() {
                     <div className="mt-10">
                         <TableListOffer data={offer} />
 
-                        <OfferAddModal />
+                        <OfferModal title="Adicionar Oferta" action="Adicionar"/>
                     </div>
                 </div>
             </div>

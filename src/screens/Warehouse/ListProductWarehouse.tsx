@@ -5,7 +5,7 @@ import { Navbar } from "../../components/Navbar";
 import { TextInput } from "../../components/TextInput";
 import { MagnifyingGlass } from 'phosphor-react';
 import { TableListProductWarehouse } from "./TableListProductWarehouse";
-import { ProductAddModal } from "./ProductAddModal";
+import { ProductModal } from "./ProductModal";
 
 export function ListProductWarehouse() {
     var warehouse = [
@@ -42,7 +42,7 @@ export function ListProductWarehouse() {
                     <div className="mt-10">
                         <TableListProductWarehouse data={warehouseDTO} />
 
-                        <ProductAddModal />
+                        <ProductModal title="Cadastro de Produto" action="Adicionar" />
                     </div>
                 </div>
             </div>

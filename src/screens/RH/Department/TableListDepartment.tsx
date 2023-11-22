@@ -1,4 +1,6 @@
+import { ModalOptions } from "../../../components/OptionsMenu";
 import { Column, Table } from "../../../components/Table";
+import { DepartmentModal } from "./DepartmentModal";
 
 export interface DepartmentProps {
     id: string,
@@ -12,7 +14,15 @@ export function TableListDepartment({ data }: {data : DepartmentProps[]}) {
         { key: 'employees', title: 'Funcionários' },
     ];
 
+    var options: ModalOptions[] = [
+        {
+            key: 'Editar', children:
+                <DepartmentModal title="Editar Departamento" action="Editar" />
+        }
+    ]
+
+
     return (
-        <Table data={data} columns={columns} />
+        <Table data={data} columns={columns} options={options} />
     )
 }

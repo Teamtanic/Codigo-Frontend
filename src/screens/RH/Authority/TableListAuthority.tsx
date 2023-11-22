@@ -1,6 +1,6 @@
 import { ModalOptions } from "../../../components/OptionsMenu";
 import { Column, Table } from "../../../components/Table";
-import { AuthorityEditModal } from "./AuthorityEditModal";
+import { AuthorityModal } from "./AuthorityModal";
 
 export interface AuthorityProps {
     privilege: string,
@@ -18,7 +18,7 @@ export function TableListAuthority({data} : {data : AuthorityProps[]}) {
     var options: ModalOptions[] = [
         {
             key: 'Editar', children:
-                <AuthorityEditModal />
+                <AuthorityModal title="Editar Autoridade" action="Editar" />
         }
     ]
 

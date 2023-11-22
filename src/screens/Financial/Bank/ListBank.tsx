@@ -6,7 +6,7 @@ import { TextInput } from "../../../components/TextInput";
 import { MagnifyingGlass } from 'phosphor-react';
 import { TableListBank } from "./TableListBank";
 import { amountMask } from "../../../utils";
-import { BankAddModal } from "./BankAddModal";
+import { BankModal } from "./BankModal";
 
 interface BankProps {
     id: string;
@@ -47,7 +47,7 @@ export function ListBank() {
                     <div className="mt-10">
                         <TableListBank data={banksDTO} />
 
-                        <BankAddModal />
+                        <BankModal title="Cadastro de Banco" action="Adicionar" />
                     </div>
                 </div>
             </div>

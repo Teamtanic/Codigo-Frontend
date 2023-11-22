@@ -6,7 +6,7 @@ import { TextInput } from "../../components/TextInput";
 import { MagnifyingGlass } from 'phosphor-react';
 import { TableListCompany } from "./TableListCompany";
 import { codeMask } from "../../utils";
-import { CompanyAddModal } from "./CompanyAddModal";
+import { CompanyModal } from "./CompanyModal";
 
 
 
@@ -45,7 +45,7 @@ export function ListCompany() {
                     <div className="mt-10">
                         <TableListCompany data={empresas} />
 
-                        <CompanyAddModal />
+                        <CompanyModal action="Adicionar" title="Cadastro de Empresa" optionsTrigger={false} />
                     </div>
                 </div>
             </div>

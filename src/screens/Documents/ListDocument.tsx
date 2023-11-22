@@ -5,7 +5,7 @@ import { Navbar } from "../../components/Navbar";
 import { TextInput } from "../../components/TextInput";
 import { MagnifyingGlass } from 'phosphor-react';
 import { TableListDocument } from "./TableListDocument";
-import { DocumentAddModal } from "./DocumentAddModal";
+import { DocumentModal } from "./DocumentModal";
 
 export function ListDocument() {
     var documents = [
@@ -71,7 +71,7 @@ export function ListDocument() {
                     <div className="mt-10">
                         <TableListDocument data={documents} />
 
-                        <DocumentAddModal />
+                        <DocumentModal title="Cadastro Documento" action="Adicionar" />
                     </div>
                 </div>
             </div>

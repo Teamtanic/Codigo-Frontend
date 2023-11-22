@@ -1,6 +1,6 @@
 import { ModalOptions } from "../../../components/OptionsMenu";
 import { Column, Table } from "../../../components/Table";
-import { BankEditModal } from "./BankEditModal";
+import { BankModal } from "./BankModal";
 
 export interface BankProps {
     id: string,
@@ -17,7 +17,7 @@ export function TableListBank({ data }: {data : BankProps[]}) {
     var options: ModalOptions[] = [
         {
             key: 'Editar', children:
-                <BankEditModal />
+                <BankModal title="Editar Banco" action="Editar"  />
         }
     ]
 

@@ -1,6 +1,6 @@
 import { ModalOptions } from "../../components/OptionsMenu";
 import { Column, Table } from "../../components/Table";
-import { ProductEditModal } from "./ProductEditModal";
+import { ProductModal } from "./ProductModal";
 
 export interface ProductWarehouseProps {
     id: string,
@@ -17,7 +17,7 @@ export function TableListProductWarehouse({data} : {data : ProductWarehouseProps
     var options: ModalOptions[] = [
         {
             key: 'Editar', children:
-                <ProductEditModal />
+                <ProductModal title="Editar Produto" action="Editar" />
         }
     ]
 

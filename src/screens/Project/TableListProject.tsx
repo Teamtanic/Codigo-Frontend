@@ -1,7 +1,7 @@
 import { CopiableText } from "../../components/CopiableText";
 import { ModalOptions } from "../../components/OptionsMenu";
 import { Column, Table } from "../../components/Table";
-import { ProjectEditModal } from "./ProjectEditModal";
+import { ProjectModal } from "./ProjectModal";
 
 export interface ProjectProps {
     id: string,
@@ -29,7 +29,7 @@ export function TableListProject({ data, hasOptions = true }: {data: ProjectProp
     var options: ModalOptions[] = [
         {
             key: 'Editar', children:
-                <ProjectEditModal />
+                <ProjectModal title="Editar Produto" action="Editar" />
         }
     ]
 

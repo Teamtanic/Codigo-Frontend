@@ -5,7 +5,7 @@ import { Navbar } from "../../../components/Navbar";
 import { TextInput } from "../../../components/TextInput";
 import { MagnifyingGlass } from 'phosphor-react';
 import { TableListAuthority } from "./TableListAuthority";
-import { AuthorityAddModal } from "./AuthorityAddModal";
+import { AuthorityModal } from "./AuthorityModal";
 
 export function ListAuthority() {
     const authorities = [
@@ -40,7 +40,7 @@ export function ListAuthority() {
                     <div className="mt-10">
                         <TableListAuthority data={authorities} />
 
-                        <AuthorityAddModal />
+                        <AuthorityModal title="Adicionar Autoridade" action="Adicionar" />
                     </div>
                 </div>
             </div>

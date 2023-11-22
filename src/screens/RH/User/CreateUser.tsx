@@ -4,42 +4,90 @@ import { Heading } from "../../../components/Heading";
 import { Navbar } from "../../../components/Navbar";
 import { Text } from "../../../components/Text";
 import { TextInput } from "../../../components/TextInput";
+import { Form, Field } from 'react-final-form';
+import { object, string } from 'yup';
 
 export function CreateUser() {
+    const validationSchema = object({
+        name: string().required('Nome é obrigatório'),
+        email: string().email('Insira um e-mail válido').required('E-mail é obrigatório'),
+        login: string().required('Login é obrigatório'),
+        prontuary: string().required('Prontuário é obrigatório'),
+        password: string().required('Senha é obrigatório'),
+        'confirm-password': string().required('Necessário confirmar a senha')
+    });
+
+    const onSubmit = (values: any) => {
+        console.log(values);
+    };
+
     return (
         <Container>
             <Navbar />
             <div className="w-full flex py-6 items-center p-24 max-md:p-6 flex-col">
                 <Heading size="lg">Cadastro Usuário</Heading>
 
+                <Form
+                    onSubmit={onSubmit}
+                    validate={(values) => {
+                        try {
+                            validationSchema.validateSync(values, { abortEarly: false });
+                        } catch (err: any) {
+                            return err.inner.reduce((errors: any, error: any) => {
+                                return { ...errors, [error.path]: error.message };
+                            }, {});
+                        }
+                    }}
+                    render={({ handleSubmit, submitting }) => (
+                        <div className="mt-10 w-2/4">
+                                <form onSubmit={handleSubmit} className="gap-6 flex flex-col">
 
-                <div className="mt-10 gap-4 flex flex-col w-2/4">
-                    <TextInput.Root labelFor="email" labelText="Email">
-                        <TextInput.Input id="email" type="text" placeholder="Digite o email..." />
-                    </TextInput.Root>
-                    <TextInput.Root labelFor="login" labelText="Login">
-                        <TextInput.Input id="login" type="text" placeholder="Digite o login..." />
-                    </TextInput.Root>
-                    <TextInput.Root labelFor="name" labelText="Nome">
-                        <TextInput.Input id="name" type="text" placeholder="Digite o nome..." />
-                    </TextInput.Root>
-                    <TextInput.Root labelFor="prontuary" labelText="Prontuário">
-                        <TextInput.Input id="prontuary" type="text" placeholder="Digite o prontuário..." />
-                    </TextInput.Root>
-                    <TextInput.Root labelFor="password" labelText="Senha">
-                        <TextInput.Input id="password" type="text" placeholder="Digite a senha..." />
-                    </TextInput.Root>
-                    <TextInput.Root labelFor="confirm-password" labelText="Confirme a senha">
-                        <TextInput.Input id="confirm-password" type="text" placeholder="Confirme a senha..." />
-                    </TextInput.Root>
+                                <Field name="email" render={({ input, meta }) => (
+                                    <TextInput.Root labelFor="email" labelText="Email" error={meta.touched && meta.error ? meta.error : undefined}>
+                                        <TextInput.Input id="email" type="text" placeholder="Digite o email..." {...input} />
+                                    </TextInput.Root>
+                                )} />
 
-                    <Button className="mt-4 " >
-                        <Text className="text-gray-100">
-                            Cadastrar
-                        </Text>
-                    </Button>
-                </div>
+                                <Field name="login" render={({ input, meta }) => (
+                                    <TextInput.Root labelFor="login" labelText="Login" error={meta.touched && meta.error ? meta.error : undefined}>
+                                        <TextInput.Input id="login" type="text" placeholder="Digite o login..." {...input} />
+                                    </TextInput.Root>
+                                )} />
+
+                                <Field name="name" render={({ input, meta }) => (
+                                    <TextInput.Root labelFor="name" labelText="Nome" error={meta.touched && meta.error ? meta.error : undefined}>
+                                        <TextInput.Input id="name" type="text" placeholder="Digite o nome..." {...input} />
+                                    </TextInput.Root>
+                                )} />
+
+                                <Field name="prontuary" render={({ input, meta }) => (
+                                    <TextInput.Root labelFor="prontuary" labelText="Prontuário" error={meta.touched && meta.error ? meta.error : undefined}>
+                                        <TextInput.Input id="prontuary" type="text" placeholder="Digite o prontuário..." {...input} />
+                                    </TextInput.Root>
+                                )} />
+
+                                <Field name="password" render={({ input, meta }) => (
+                                    <TextInput.Root labelFor="password" labelText="Senha" error={meta.touched && meta.error ? meta.error : undefined}>
+                                        <TextInput.Input id="password" type="text" placeholder="Digite a senha..." {...input} />
+                                    </TextInput.Root>
+                                )} />
+
+                                <Field name="confirm-password" render={({ input, meta }) => (
+                                    <TextInput.Root labelFor="confirm-password" labelText="Confirme a senha" error={meta.touched && meta.error ? meta.error : undefined}>
+                                        <TextInput.Input id="confirm-password" type="text" placeholder="Confirme a senha..." {...input} />
+                                    </TextInput.Root>
+                                )} />
+
+                                <Button className="mt-4 " >
+                                    <Text className="text-gray-100">
+                                    {submitting ? "Enviando..." : "Cadastrar"}
+                                    </Text>
+                                </Button>
+                        </form>
+                            </div>
+                    )} />
             </div>
         </Container>
-    );
+
+    )
 }

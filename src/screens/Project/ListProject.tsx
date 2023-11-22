@@ -4,9 +4,8 @@ import { Heading } from "../../components/Heading";
 import { Navbar } from "../../components/Navbar";
 import { TextInput } from "../../components/TextInput";
 import { MagnifyingGlass } from 'phosphor-react';
-import { CardModal } from "../../components/CardModal";
 import { ProjectProps, TableListProject } from "./TableListProject"
-import { ProjectAddModal } from "./ProjectAddModal";
+import { ProjectModal } from "./ProjectModal";
 
 export function ListProject() {
     var projects = [
@@ -50,7 +49,7 @@ export function ListProject() {
                     <div className="mt-10">
                         <TableListProject data={projectsDTO} />
                         
-                        <ProjectAddModal />
+                        <ProjectModal title="Cadastro de Projeto" action="Adicionar" />
                     </div>
                 </div>
             </div>

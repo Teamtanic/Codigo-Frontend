@@ -3,7 +3,7 @@ import { Card } from '../../components/Card';
 import { Text } from '../../components/Text';
 import { CopiableText } from '../../components/CopiableText';
 import { ModalOptions } from "../../components/OptionsMenu";
-import { CompanyEditModal } from "./CompanyEditModal";
+import { CompanyModal } from "./CompanyModal";
 
 export interface CompanyProps {
     id: string,
@@ -49,11 +49,11 @@ export function TableListCompany({ data }: { data: CompanyProps[] }) {
     var options: ModalOptions[] = [
         {
             key: 'Editar', children:
-                <CompanyEditModal />
+                <CompanyModal optionsTrigger title="Edição de Empresa" action="Editar" />
         }
     ]
 
     return (
-        <Table data={data} columns={columns} options={options} />
+        <Table link="empresa" data={data} columns={columns} options={options} />
     )
 }

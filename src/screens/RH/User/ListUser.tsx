@@ -5,7 +5,7 @@ import { Navbar } from "../../../components/Navbar";
 import { TextInput } from "../../../components/TextInput";
 import { MagnifyingGlass } from 'phosphor-react';
 import { TableListUser } from "./TableListUser";
-import { UserAddModal } from "./UserAddModal";
+import { UserModal } from "./UserModal";
 
 export function ListUser() {
     var users = [
@@ -37,7 +37,7 @@ export function ListUser() {
                     <div className="mt-10">
                         <TableListUser data={users} />
 
-                        <UserAddModal />
+                        <UserModal title="Enviar Token de Cadastro"  action="Adicionar" />
                     </div>
                 </div>
             </div>
