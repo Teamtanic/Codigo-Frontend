@@ -8,12 +8,16 @@ export interface TextInputRootProps {
   children: ReactNode;
   className?: string;
   labelStyle?: string;
+  error?: string | undefined;
 }
 
-function TextInputRoot({ children, labelFor, labelText, className = '', labelStyle = '' }: TextInputRootProps) {
+function TextInputRoot({ children, labelFor, labelText, error, className = '', labelStyle = '' }: TextInputRootProps) {
   return (
     <label htmlFor={labelFor} className="flex flex-col w-full">
-      <Text className={`${labelStyle}`}>{labelText}</Text>
+      <div className="flex gap-4">
+        <Text className={`${labelStyle}`}>{labelText}</Text>
+        <Text size="xm" className="text-red-600">{error}</Text>
+      </div>
       <div className={`font-poppins ${className} py-4 px-3 h-12 rounded bg-gray-200  w-full focus-within:ring-2 ring-emerald-800 flex items-center gap-3`}>
         {children}
       </div>
@@ -38,7 +42,7 @@ function TextInputIcon({ children }: TextInputIconProps) {
 TextInputIcon.displayName = "TextInput.Icon";
 
 export interface TextInputInputProps
-  extends InputHTMLAttributes<HTMLInputElement> {}
+  extends InputHTMLAttributes<HTMLInputElement> { }
 
 function TextInputInput(props: TextInputInputProps) {
   return (

@@ -1,14 +1,18 @@
 import { Text } from "./Text";
 
-export interface DropFileProps {
+export interface DropFileProps extends React.InputHTMLAttributes<HTMLInputElement> {
     labelText?: string;
     labelStyle?: string;
-  }
+    error?: string | undefined;
+}
 
-export function DropFile({ labelStyle, labelText } : DropFileProps) {
+export function DropFile({ labelStyle, labelText, error }: DropFileProps) {
     return (
         <label htmlFor="file_upload">
-            <Text className={`${labelStyle}`}>{labelText}</Text>
+            <div className="flex gap-4">
+                <Text className={`${labelStyle}`}>{labelText}</Text>
+                <Text size="xm" className="text-red-600">{error}</Text>
+            </div>
             <label
                 className="flex justify-center w-full h-32 px-4 transition bg-white border-2 border-gray-300 border-dashed rounded-md appearance-none cursor-pointer hover:border-gray-400 focus:outline-none">
                 <span className="flex items-center space-x-2">
