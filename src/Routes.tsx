@@ -43,31 +43,31 @@ function Routes() {
         <Route path="/teste" element={<Home />} />
 
         <Route path="/empresas" element={<ListCompany />} />
-        <Route path="/empresa" element={<DetailsCompany />} />
+        <Route path="/empresa/:id" element={<DetailsCompany />} />
 
         <Route path="/almoxarifado" element={<ListProductWarehouse />} />
-        <Route path="/produto" element={<DetailsProductWarehouse />} />
+        <Route path="/produto/:id" element={<DetailsProductWarehouse />} />
 
         <Route path="/ofertas" element={<ListOffer />} />
-        <Route path="/oferta" element={<DetailsOffer />} />
+        <Route path="/oferta/:id" element={<DetailsOffer />} />
 
         <Route path="/projetos" element={<ListProject />} />
-        <Route path="/projeto" element={<DetailsProject />} />
+        <Route path="/projeto/:id" element={<DetailsProject />} />
 
         <Route path="/transacoes" element={<ListTransaction />} />
-        <Route path="/transacao" element={<DetailsTransaction />} />
+        <Route path="/transacao/:id" element={<DetailsTransaction />} />
 
         <Route path="/bancos" element={<ListBank />} />
-        <Route path="/banco" element={<DetailsBank />} />
+        <Route path="/banco/:id" element={<DetailsBank />} />
 
         <Route path="/cursos" element={<ListCourse />} />
-        <Route path="/curso" element={<DetailsCourse />} />
+        <Route path="/curso/:id" element={<DetailsCourse />} />
 
         <Route path="/cargos" element={<ListRoles />} />
-        <Route path="/cargo" element={<DetailsRole />} />
+        <Route path="/cargo/:id" element={<DetailsRole />} />
 
         <Route path="/departamentos" element={<ListDepartment />} />
-        <Route path="/departamento" element={<DetailsDepartment />} />
+        <Route path="/departamento/:id" element={<DetailsDepartment />} />
 
         <Route path="/autoridades" element={<ListAuthority />} />
 
@@ -75,10 +75,10 @@ function Routes() {
 
         <Route path="/registro" element={<CreateUser />} />
         <Route path="/usuarios" element={<ListUser />} />
-        <Route path="/usuario" element={<DetailsUser />} />
+        <Route path="/usuario/:id" element={<DetailsUser />} />
 
         <Route path="/documentos" element={<ListDocument />} />
-        <Route path="/documento" element={<DetailsDocument />} />
+        <Route path="/documento/:id" element={<DetailsDocument />} />
 
       </Switch>
     </Router>

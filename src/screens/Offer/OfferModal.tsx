@@ -6,7 +6,7 @@ import { TextInput } from "../../components/TextInput";
 import { Form, Field } from 'react-final-form';
 import { boolean, object, string } from 'yup';
 
-export function OfferModal({ action, title }: ModelModalProp) {
+export function OfferModal({ action, optionsTrigger, title }: ModelModalProp) {
     const validationSchema = object({
         offer: string().required('Descrição da oferta é obrigatória'),
         checkService: boolean(),
@@ -30,7 +30,7 @@ export function OfferModal({ action, title }: ModelModalProp) {
                 }
             }}
             render={({ handleSubmit, submitting }) => (
-                <CardModal title={title} action={action} >
+                <CardModal title={title} action={action} optionsTrigger={optionsTrigger}>
                     <form onSubmit={handleSubmit}>
                         <div className="flex flex-col w-full max-md:px-12 md:px-24 gap-4">
 

@@ -7,43 +7,12 @@ import { amountMask } from "../../../utils";
 import * as Tabs from '@radix-ui/react-tabs';
 import { TableListProductWarehouse } from "../../Warehouse/TableListProductWarehouse";
 import { TableListProject } from "../../Project/TableListProject";
+import { useLocation } from "react-router-dom";
 
 export function DetailsTransaction() {
-    var transaction =
-    {
-        id: "75b6a6f8-88fb-4642-bd79-60cd4865691c",
-        description: "Pagamento de projeto",
-        amount: 1200.25, type: "ENTRADA",
-        dt_cashflow: "10/11/2023",
-        payment_method: "Débito",
-        installments: 1200.25,
-        qty_installments: 1,
-        bank_account: {
-            id: "d5d6be6e-d332-41be-b601-8bd2ae4e6935", name: "Itaú", balance: 12450.45, location: 'Rua Barão de Maua, 721'
-        },
-        products: [
-            { id: "75b6a6f8-88fb-4642-bd79-60cd4865691c", product: "Cadeira", quantity: 12 },
-            { id: "ad24ccc1-efe2-4b17-8bbe-05a4e730b12a", product: "Mesa", quantity: 9 },
-            { id: "f5537fec-16f2-452b-a6e4-4e60d36f5686", product: "Computador", quantity: 11 }
-        ],
-        project: [{
-            id: "75b6a6f8-88fb-4642-bd79-60cd4865691c", description: "Análise e Desenvolvimento de Sistemas",
-            customer: "McDonalds", status: true
-            
-        }]
-    };
-
-    var transactionDTO = {
-        ...transaction,
-        products: transaction.products.map(item => ({
-            ...item,
-            quantity: `${item.quantity} ${item.quantity === 1 ? ' unidade' : ' unidades'}`,
-        })),
-        project: transaction.project.map(item => ({
-            ...item,
-            status: item.status === true ? 'Em aberto' : 'Fechado'
-        }))
-    }
+    const location = useLocation();
+    const { state } = location;
+    const transaction = state.record;
     
 
     return (
@@ -102,13 +71,13 @@ export function DetailsTransaction() {
                             className="grow p-5 bg-gray-100 rounded-b-md outline-none "
                             value="tab1"
                         >
-                            <TableListProductWarehouse data={transactionDTO.products} />
+                            <TableListProductWarehouse data={transaction.products} />
                         </Tabs.Content>
                         <Tabs.Content
                             className="grow p-5 bg-gray-100 rounded-b-md outline-none "
                             value="tab2"
                         >
-                            <TableListProject data={transactionDTO.project} />
+                            <TableListProject data={transaction.project} />
                         </Tabs.Content>
                     </Tabs.Root>
                 </div>

@@ -7,20 +7,15 @@ import { formatPhoneNumber } from "../../../utils";
 import * as Tabs from '@radix-ui/react-tabs';
 
 import { TableListProject } from "../../Project/TableListProject";
+import { useLocation } from "react-router-dom";
+import { TableListDocument } from "../../Documents/TableListDocument";
 
 
 export function DetailsUser() {
-    var user =
-    {
-        id: "d5d6be6e-d332-41be-b601-8bd2ae4e6935", name: 'Paulo Galvao', prontuary: 'CB3046874', department: "Financeiro",
-        telephone: "1334684219", cell_phone: "13997854230", email: "paulo@gmail.com",
-        role: "Chefe", course: "Análise e Desenvolvimento de Sistemas",
-        project: [
-            { id: "75b6a6f8-88fb-4642-bd79-60cd4865691c", description: "Análise e Desenvolvimento de Sistemas", customer: "McDONALDS", type: "Serviço", status: "Em andamento" },
-            { id: "ad24ccc1-efe2-4b17-8bbe-05a4e730b12a", description: "Turismo", customer: "McDONALDS", type: "Serviço", status: "Em andamento" },
-            { id: "f5537fec-16f2-452b-a6e4-4e60d36f5686", description: "Letras", customer: "McDONALDS", type: "Serviço", status: "Em andamento" },
-        ]
-    };
+    const location = useLocation();
+    const { state } = location;
+    const user = state.record;
+
 
     return (
         <Container>
@@ -29,12 +24,9 @@ export function DetailsUser() {
                 <Heading size="lg">Detalhes Usuário</Heading>
                 <Card className="w-full !p-0">
                     <div className="flex h-36 max-sm:flex-col max-sm:h-fit">
-                        <div className="flex flex-col md:w-4/5 p-4 justify-evenly">
-                            <div className="w-full flex items-center justify-between">
-                                <Text className="!text-gray-900 font-semibold">{user.name}</Text>
-                                <Card className={` w-fit flex items-center justify-center md:hidden`}>
-                                    <Text className="" size="xm">{user.prontuary}</Text>
-                                </Card>
+                        <div className="flex flex-col min-w-[50%] max-w-[50%] md:w-4/5 p-4 justify-evenly">
+                            <div className="max-w-full flex items-center justify-between">
+                                <Text className="!text-gray-900 font-semibold truncate">{user.name}</Text>
                             </div>
                             <Text className="!text-gray-500 font-semibold">{user.role}, {user.department}</Text>
                             <Text className="!text-gray-500 font-semibold">Curso: {user.course}</Text>
@@ -79,14 +71,13 @@ export function DetailsUser() {
                         className="grow p-5 bg-gray-100 rounded-b-md outline-none "
                         value="tab1"
                     >
-                        <div className="">
-                        </div>
+                        {user.document? <TableListDocument data={user.document} /> : ''}
                     </Tabs.Content>
                     <Tabs.Content
                         className="grow p-5 bg-gray-100 rounded-b-md outline-none "
                         value="tab2"
                     >
-                        <TableListProject data={user.project} />
+                        {user.project? <TableListProject data={user.project} /> : ''}
                     </Tabs.Content>
                 </Tabs.Root>
             </div>

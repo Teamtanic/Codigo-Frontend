@@ -1,6 +1,5 @@
 import { ModalOptions } from "../../components/OptionsMenu";
 import { Column, Table } from "../../components/Table";
-import { OfferEditModal } from "./OfferEditModal";
 import { OfferModal } from "./OfferModal";
 
 export interface BankProps {
@@ -18,11 +17,11 @@ export function TableListOffer({ data }: {data : BankProps[]}) {
     var options: ModalOptions[] = [
         {
             key: 'Editar', children:
-                <OfferModal title="Editar Oferta" action="Editar" />
+                <OfferModal title="Editar Oferta" action="Editar" optionsTrigger />
         }
     ]
 
     return (
-        <Table data={data} columns={columns} options={options} />
+        <Table link="oferta" data={data} columns={columns} options={options} />
     )
 }

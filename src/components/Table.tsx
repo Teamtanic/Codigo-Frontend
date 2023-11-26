@@ -3,6 +3,7 @@ import { Text } from './Text';
 import { Heading } from './Heading';
 import { ModalOptions, OptionsMenu } from './OptionsMenu';
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export interface Column<Data> {
     key: string;
@@ -12,7 +13,7 @@ export interface Column<Data> {
     width?: string;
 }
 
-interface TableProps<Data> {
+interface TableProps<Data extends { id: string }> {
     columns: Column<Data>[];
     data: Data[];
     menu?: boolean;
@@ -20,7 +21,17 @@ interface TableProps<Data> {
     link?: string;
 }
 
-export function Table<Data>({ data, columns, menu = true, options, link }: TableProps<Data>) {
+export function Table<Data extends { id: string }>({ data, columns, menu = true, options, link }: TableProps<Data>) {
+    let navigate = useNavigate();
+
+    const handleNavigation = (record: Data) => {
+        if (link) {
+
+            window.scrollTo(0, 0);
+
+            navigate(`/${link}/${record.id}`, { state: { record } });
+        }
+    };
 
     return (
         <div className="overflow-x-auto">
@@ -47,18 +58,18 @@ export function Table<Data>({ data, columns, menu = true, options, link }: Table
 
                 <tbody>
                     {data.map((record, index) => (
-                        <Card asChild key={index} className="cursor-pointer hover:bg-gray-400 
-                        shadow-[rgba(0,_0,_0,_0.24)_0px_3px_8px]">
-                            <tr className="h-16 dark:border-gray-700 " onClick={(e) => {
-                                window.location.href = `${link}/${record.id}`;
+                        <Card asChild key={index} className={`${link ? 'cursor-pointer' : ''} hover:bg-gray-400 
+                        shadow-[rgba(0,_0,_0,_0.24)_0px_3px_8px]`}>
+                            <tr className="h-16 dark:border-gray-700 " onClick={() => {
+                                handleNavigation(record);
                             }}>
                                 {columns.map((column, index) => {
                                     return (
                                         <td
                                             key={column.key}
                                             className={`px-6 max-w-[220px] ${column.width ? column.width : ''} truncate py-2 ${index === 0 ? 'rounded-l-xl' : ''} }
-                                                ${index === columns.length - 1 && menu === false ? 'rounded-r-xl' : ''}`}>
-                                            <div className='w-fit cursor-auto' onClick={(e) => {e.stopPropagation();}}>
+                                        ${index === columns.length - 1 && menu === false ? 'rounded-r-xl' : ''}`}>
+                                            <div className='w-fit cursor-auto' onClick={(e) => { e.stopPropagation(); }}>
 
                                                 {column.render ? column.render(record)
                                                     : column.dataIndex ? (record[column.dataIndex] as React.ReactNode)
@@ -68,8 +79,10 @@ export function Table<Data>({ data, columns, menu = true, options, link }: Table
                                     );
                                 })}
                                 {menu ?
-                                    <td className="px-6 max-md:hidden rounded-r-xl " onClick={(e) => {e.stopPropagation();}}>
-                                        {options ? <OptionsMenu options={options} /> : ''}
+                                    <td className="px-6 max-md:hidden rounded-r-xl " onClick={(e) => { e.stopPropagation(); }}>
+                                        <div className='flex w-full items-center justify-end'>
+                                            {options ? <OptionsMenu options={options} /> : ''}
+                                        </div>
                                     </td>
                                     : ''
                                 }

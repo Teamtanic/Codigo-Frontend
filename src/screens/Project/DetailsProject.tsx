@@ -1,24 +1,20 @@
+import { useLocation } from "react-router-dom";
 import { Card } from "../../components/Card";
 import { Container } from "../../components/Container";
 import { Heading } from "../../components/Heading";
 import { Navbar } from "../../components/Navbar";
 import { Text } from "../../components/Text";
 import { TableListUser } from "../RH/User/TableListUser";
+import * as Tabs from '@radix-ui/react-tabs';
+import { TableListCompany } from "../Company/TableListCompany";
+import { TableListOffer } from "../Offer/TableListOffer";
+import { TableListDocument } from "../Documents/TableListDocument";
 
 export function DetailsProject() {
-    var project =
-    {
-        id: "d5d6be6e-d332-41be-b601-8bd2ae4e6935", name: 'Análise e Desenvolvimento de Sistemas',
-        employees: [
-            { id: "75b6a6f8-88fb-4642-bd79-60cd4865691c", name: "Paulo AndradePaulo AndradePaulo AndradePaulo AndradePaulo AndradePaulo AndradePaulo AndradePaulo AndradePaulo AndradePaulo AndradePaulo AndradePaulo AndradePaulo AndradePaulo AndradePaulo AndradePaulo AndradePaulo AndradePaulo AndradePaulo AndradePaulo AndradePaulo AndradePaulo AndradePaulo AndradePaulo AndradePaulo AndradePaulo AndradePaulo AndradePaulo AndradePaulo AndradePaulo AndradePaulo AndradePaulo AndradePaulo AndradePaulo AndradePaulo Andrade", role: "Funcionario", department: "RH" },
-            { id: "ad24ccc1-efe2-4b17-8bbe-05a4e730b12a", name: "Marcelo Cabelinho", role: "Funcionario", department: "Financeiro" },
-            { id: "f5537fec-16f2-452b-a6e4-4e60d36f5686", name: "Marcos ", role: "Chefe", department: "Financeiro" },
-            { id: "3f506407-4638-4bd0-abb9-d2bcf415239c", name: "Maria Marieta", role: "Chefe", department: "ADM" },
-            { id: "78e1efba-f2d1-473c-b656-8f70c9e8a94c", name: "Laura ", role: "Funcionario", department: "Almoxarifado" },
-            { id: "277dc916-e89e-444d-ac02-3bab065e488d", name: "Luan ", role: "Supervisor", department: "ADM" },
-            { id: "7ab0ac84-4500-4d68-907c-1ef5ed21d9ad", name: "Franciele ", role: "Supervisor", department: "RH" },
-        ]
-    };
+
+    const location = useLocation();
+    const { state } = location;
+    const project = state.record;
 
     return (
         <Container>
@@ -28,24 +24,78 @@ export function DetailsProject() {
                 <Card className="w-full !p-0">
                     <div className="flex h-36 max-sm:flex-col max-sm:h-fit">
                         <div className="flex flex-col md:w-4/5 p-4 justify-evenly">
-                            <div className="w-full flex items-center justify-between">
-                                <Text className="!text-gray-900 font-semibold">{project.name}</Text>
-                            </div>
+                            <Heading size="md" className="!text-gray-900 font-semibold">{project.title}</Heading>
+
+                            <Card className={`${project.status == "Em aberto" ? "!bg-blue-400 " : "!bg-zinc-500"} w-fit flex items-center justify-center max-sm:hidden`}>
+                                <Text className="!text-gray-100" size="xm">{project.status}</Text>
+                            </Card>
 
                         </div>
-                        <div className="bg-gray-300 w-full flex flex-col justify-evenly p-4">
-                            <div>
-                                <Text className="!text-gray-900 font-semibold">Total de funcionários: </Text>
-                                <Text className="!text-gray-900">{project.employees.length}</Text>
-                            </div>
-
+                        <div className="bg-gray-300 w-full p-4 overflow-y-auto">
+                            <Text className="!text-gray-900 font-semibold">{project.description}</Text>
                         </div>
                     </div>
                 </Card>
 
                 <div className="mt-10">
-                    <Heading>Funcionários nesse Curso</Heading>
-                    <TableListUser data={project.employees} />
+
+                    <Tabs.Root
+                        className="flex flex-col w-full mt-6"
+                        defaultValue="tab1"
+                    >
+                        <Tabs.List className="shrink-0 flex border-b" aria-label="Dados da empresa">
+                            <Tabs.Trigger
+                                className="bg-gray-100 px-5 h-[45px] flex-1 flex items-center justify-center text-[15px] leading-none select-none first:rounded-tl-md last:rounded-tr-md data-[state=active]:shadow-[inset_0_-1px_0_0,0_1px_0_0] data-[state=active]:shadow-current data-[state=active]:focus:relative data-[state=inactive]:bg-gray-200 outline-none cursor-default"
+                                value="tab1"
+                            >
+                                Ofertas
+                            </Tabs.Trigger>
+                            <Tabs.Trigger
+                                className="bg-gray-100 px-5 h-[45px] flex-1 flex items-center justify-center text-[15px] leading-none select-none first:rounded-tl-md last:rounded-tr-md data-[state=active]:shadow-[inset_0_-1px_0_0,0_1px_0_0] data-[state=active]:shadow-current data-[state=active]:focus:relative data-[state=inactive]:bg-gray-200 outline-none cursor-default"
+                                value="tab2"
+                            >
+                                Empresas
+                            </Tabs.Trigger>
+                            <Tabs.Trigger
+                                className="bg-gray-100 px-5 h-[45px] flex-1 flex items-center justify-center text-[15px] leading-none select-none first:rounded-tl-md last:rounded-tr-md data-[state=active]:shadow-[inset_0_-1px_0_0,0_1px_0_0] data-[state=active]:shadow-current data-[state=active]:focus:relative data-[state=inactive]:bg-gray-200 outline-none cursor-default"
+                                value="tab3"
+                            >
+                                Usuários
+                            </Tabs.Trigger>
+                            <Tabs.Trigger
+                                className="bg-gray-100 px-5 h-[45px] flex-1 flex items-center justify-center text-[15px] leading-none select-none first:rounded-tl-md last:rounded-tr-md data-[state=active]:shadow-[inset_0_-1px_0_0,0_1px_0_0] data-[state=active]:shadow-current data-[state=active]:focus:relative data-[state=inactive]:bg-gray-200 outline-none cursor-default"
+                                value="tab4"
+                            >
+                                Documentos
+                            </Tabs.Trigger>
+                        </Tabs.List>
+                        <Tabs.Content
+                            className="grow p-5 bg-gray-100 rounded-b-md outline-none "
+                            value="tab1"
+                        >
+                            {project.offer? <TableListOffer data={project.offer} /> : ''}
+                        </Tabs.Content>
+                        <Tabs.Content
+                            className="grow p-5 bg-gray-100 rounded-b-md outline-none "
+                            value="tab2"
+                        >
+                            {project.company? <TableListCompany data={project.company} /> : ''}
+                        </Tabs.Content>
+                        <Tabs.Content
+                            className="grow p-5 bg-gray-100 rounded-b-md outline-none "
+                            value="tab3"
+                        >
+                            {project.employees? <TableListUser data={project.employees} /> : ''}
+
+                        </Tabs.Content>
+                        <Tabs.Content
+                            className="grow p-5 bg-gray-100 rounded-b-md outline-none "
+                            value="tab4"
+                        >
+                            {project.document? <TableListDocument data={project.document} /> : ''}
+                        </Tabs.Content>
+                    </Tabs.Root>
+
                 </div>
             </div>
         </Container>

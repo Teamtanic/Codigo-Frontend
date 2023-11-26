@@ -29,11 +29,11 @@ export function TableListProject({ data, hasOptions = true }: {data: ProjectProp
     var options: ModalOptions[] = [
         {
             key: 'Editar', children:
-                <ProjectModal title="Editar Produto" action="Editar" />
+                <ProjectModal title="Editar Produto" action="Editar" optionsTrigger />
         }
     ]
 
     return (
-        <Table data={data} columns={columns} menu={hasOptions} options={options}/>
+        <Table link="projeto" data={data} columns={columns} menu={hasOptions} options={options}/>
     )
 }

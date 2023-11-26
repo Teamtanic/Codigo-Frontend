@@ -17,11 +17,11 @@ export function TableListBank({ data }: {data : BankProps[]}) {
     var options: ModalOptions[] = [
         {
             key: 'Editar', children:
-                <BankModal title="Editar Banco" action="Editar"  />
+                <BankModal optionsTrigger title="Editar Banco" action="Editar"  />
         }
     ]
 
     return (
-        <Table data={data} columns={columns} options={options} />
+        <Table link="banco" data={data} columns={columns} options={options} />
     )
 }

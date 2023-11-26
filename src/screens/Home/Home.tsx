@@ -30,7 +30,7 @@ function Home() {
     return (
         <Container>
             <Navbar />
-            <SidebarMenu menuItems={acesso} />
+            <SidebarMenu />
 
             <Card className="bg-blue-300">
                 <div >

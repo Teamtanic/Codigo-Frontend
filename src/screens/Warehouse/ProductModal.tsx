@@ -4,7 +4,7 @@ import { TextInput } from "../../components/TextInput";
 import { Form, Field } from 'react-final-form';
 import { number, object, string } from 'yup';
 
-export function ProductModal({ action, title }: ModelModalProp) {
+export function ProductModal({ action, optionsTrigger, title }: ModelModalProp) {
     const validationSchema = object({
         product: string().required('Nome é obrigatório'),
         quantity: number().required('Quantidade é obrigatório'),
@@ -29,7 +29,7 @@ export function ProductModal({ action, title }: ModelModalProp) {
                 }
             }}
             render={({ handleSubmit, submitting }) => (
-                <CardModal title={title} action={action} >
+                <CardModal title={title} action={action} optionsTrigger={optionsTrigger} >
                     <form onSubmit={handleSubmit}>
                         <div className="flex flex-col w-full max-md:px-12 md:px-24 gap-4">
 

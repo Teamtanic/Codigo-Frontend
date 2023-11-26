@@ -10,17 +10,32 @@ import { RoleModal } from "./RoleModal";
 
 export function ListRoles() {
     var roles = [
-        { id: "75b6a6f8-88fb-4642-bd79-60cd4865691c", name: "Chefe", employees: 12 },
-        { id: "ad24ccc1-efe2-4b17-8bbe-05a4e730b12a", name: "Funcionário", employees: 9 },
-        { id: "f5537fec-16f2-452b-a6e4-4e60d36f5686", name: "Supervisor", employees: 11 },
-        { id: "3f506407-4638-4bd0-abb9-d2bcf415239c", name: "Gerente", employees: 15 },
-        { id: "78e1efba-f2d1-473c-b656-8f70c9e8a94c", name: "Estagiario", employees: 5 },
+        { id: "75b6a6f8-88fb-4642-bd79-60cd4865691c", name: "Chefe",
+        employees: [
+            { id: "f5537fec-16f2-452b-a6e4-4e60d36f5686", name: "Marcos ", role: "Chefe", department: "Financeiro" },
+            { id: "3f506407-4638-4bd0-abb9-d2bcf415239c", name: "Maria Marieta", role: "Chefe", department: "ADM" },
+        ]  },
+        { id: "ad24ccc1-efe2-4b17-8bbe-05a4e730b12a", name: "Funcionário",
+        employees: [
+            { id: "f5537fec-16f2-452b-a6e4-4e60d36f5686", name: "Marcos ", role: "Chefe", department: "Financeiro" },
+            { id: "3f506407-4638-4bd0-abb9-d2bcf415239c", name: "Maria Marieta", role: "Chefe", department: "ADM" },
+        ]  },
+        { id: "f5537fec-16f2-452b-a6e4-4e60d36f5686", name: "Supervisor",
+        employees: [
+            { id: "f5537fec-16f2-452b-a6e4-4e60d36f5686", name: "Marcos ", role: "Chefe", department: "Financeiro" },
+            { id: "3f506407-4638-4bd0-abb9-d2bcf415239c", name: "Maria Marieta", role: "Chefe", department: "ADM" },
+        ] },
+        { id: "3f506407-4638-4bd0-abb9-d2bcf415239c", name: "Gerente",
+        employees: [
+            { id: "f5537fec-16f2-452b-a6e4-4e60d36f5686", name: "Marcos ", role: "Chefe", department: "Financeiro" },
+            { id: "3f506407-4638-4bd0-abb9-d2bcf415239c", name: "Maria Marieta", role: "Chefe", department: "ADM" },
+        ]  },
+        { id: "78e1efba-f2d1-473c-b656-8f70c9e8a94c", name: "Estagiario",
+        employees: [
+            { id: "f5537fec-16f2-452b-a6e4-4e60d36f5686", name: "Marcos ", role: "Chefe", department: "Financeiro" },
+            { id: "3f506407-4638-4bd0-abb9-d2bcf415239c", name: "Maria Marieta", role: "Chefe", department: "ADM" },
+        ]  },
     ];
-
-    var rolesDTO = roles.map(role => ({
-        ...role,
-        employees: `${role.employees} ${role.employees === 1 ? ' funcionário' : ' funcionários'}`
-    }))
 
     return (
         <Container>
@@ -39,7 +54,7 @@ export function ListRoles() {
                     </Card>
 
                     <div className="mt-10">
-                        <TableListRole data={rolesDTO} />
+                        <TableListRole data={roles} />
 
                         <RoleModal title="Cadastro de Cargo" action="Adicionar" />
                     </div>

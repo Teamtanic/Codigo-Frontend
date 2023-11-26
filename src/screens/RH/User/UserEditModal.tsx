@@ -3,7 +3,7 @@ import { TextInput } from "../../../components/TextInput";
 
 export function UserEditModal() {
     return (
-        <CardModal title="Enviar Token de Cadastro" action="Adicionar" triggerStyle="!w-full !bg-transparent !shadow-none hover:!bg-gray-200 hover:dark:!bg-gray-600 bottom-3 !font-normal">
+        <CardModal title="Editar Usuário" action="Adicionar" triggerStyle="!w-full !bg-transparent !shadow-none hover:!bg-gray-200 hover:dark:!bg-gray-600 bottom-3 !font-normal">
             <div className="flex flex-col w-full max-md:px-12 md:px-24 mb-12 gap-4">
                 <form>
                     <TextInput.Root labelFor="email" labelText="Email">

@@ -6,29 +6,12 @@ import { Text } from "../../components/Text";
 import * as Tabs from '@radix-ui/react-tabs';
 import { TableListProject } from "../Project/TableListProject";
 import { TableListUser } from "../RH/User/TableListUser";
+import { useLocation } from "react-router-dom";
 
 export function DetailsDocument() {
-    var document =
-    {
-        id: "75b6a6f8-88fb-4642-bd79-60cd4865691c",
-        name: "dOC_3245_Mc",
-        dt_doc: "20/10/2023",
-        size: "103MB",
-        type: "PDF",
-        doc_type: "Contrato",
-        project: [{
-            id: "4d19e455-9725-435f-96f4-c0d0a684a202",
-            description: "Projeto relacionado",
-            customer: 'McDonalds',
-            status: "Em andamento"
-        }],
-        user: [{
-            id: "7ba0b55a-0c52-4d13-bb0f-841121582f35",
-            name: "Usuario relacionado",
-            role: "Funcionário",
-            department: "Financeiro"
-        }]
-    };
+    const location = useLocation();
+    const { state } = location;
+    const document = state.record;
 
     return (
         <Container>

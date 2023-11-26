@@ -9,16 +9,16 @@ import { AuthorityModal } from "./AuthorityModal";
 
 export function ListAuthority() {
     const authorities = [
-        { role: "Funcionario", department: "RH", privilege: "Pode ler"},
-        { role: "Chefe", department: "RH", privilege: "Pode ler"},
-        { role: "Funcionario", department: "ALMOXARIFADO", privilege: "Pode ler"},
-        { role: "Supervisor", department: "FINANCEIRO", privilege: "Pode ler"},
-        { role: "Supervisor", department: "ALMOXARIFADO", privilege: "Pode ler"},
-        { role: "Chefe", department: "ALMOXARIFADO", privilege: "Pode ler"},
-        { role: "Supervisor", department: "ALMOXARIFADO", privilege: "Pode ler"},
-        { role: "Funcionario", department: "ALMOXARIFADO", privilege: "Pode ler"},
-        { role: "Funcionario", department: "ALMOXARIFADO", privilege: "Pode ler"},
-        { role: "Funcionario", department: "OPERAÇÃO", privilege: "Pode ler"},
+        { id: "123", role: "Funcionario", department: "RH", privilege: "Pode ler"},
+        { id: "1234", role: "Chefe", department: "RH", privilege: "Pode ler"},
+        { id: "1235", role: "Funcionario", department: "ALMOXARIFADO", privilege: "Pode ler"},
+        { id: "1236", role: "Supervisor", department: "FINANCEIRO", privilege: "Pode ler"},
+        { id: "1237", role: "Supervisor", department: "ALMOXARIFADO", privilege: "Pode ler"},
+        { id: "1238", role: "Chefe", department: "ALMOXARIFADO", privilege: "Pode ler"},
+        { id: "1239", role: "Supervisor", department: "ALMOXARIFADO", privilege: "Pode ler"},
+        { id: "12312", role: "Funcionario", department: "ALMOXARIFADO", privilege: "Pode ler"},
+        { id: "12313", role: "Funcionario", department: "ALMOXARIFADO", privilege: "Pode ler"},
+        { id: "12314", role: "Funcionario", department: "OPERAÇÃO", privilege: "Pode ler"},
     ]
 
     return(

@@ -34,6 +34,6 @@ export function TableListTransaction({ data }: {data : TransactionProps[]}) {
     ];
 
     return (
-        <Table data={data} columns={columns} menu={false} />
+        <Table link="transacao" data={data} columns={columns} menu={false} />
     )
 }

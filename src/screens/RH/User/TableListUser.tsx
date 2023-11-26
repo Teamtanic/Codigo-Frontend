@@ -15,6 +15,6 @@ export function TableListUser({data} : {data : UserProps[]}) {
     ];
 
     return (
-        <Table data={data} columns={columns} />
+        <Table link="usuario" data={data} columns={columns} />
     )
 }

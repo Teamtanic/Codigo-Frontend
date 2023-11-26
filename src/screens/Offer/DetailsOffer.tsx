@@ -1,3 +1,4 @@
+import { useLocation } from "react-router-dom";
 import { Card } from "../../components/Card";
 import { Container } from "../../components/Container";
 import { Heading } from "../../components/Heading";
@@ -6,15 +7,9 @@ import { Text } from "../../components/Text";
 import { TableListProject } from "../Project/TableListProject";
 
 export function DetailsOffer() {
-    var offer =
-    {
-        id: "d5d6be6e-d332-41be-b601-8bd2ae4e6935", description: "Desenvolvimento de sistema web", type: "PRODUTO",
-        projects: [
-            { id: "75b6a6f8-88fb-4642-bd79-60cd4865691c", description: "Pagamento de projeto", customer: "McDonalds", status: "Em andamento" },
-            { id: "ad24ccc1-efe2-4b17-8bbe-05a4e730b12a", description: "Compra de serviço", customer: "BOPE", status: "Fechado" },
-            { id: "f5537fec-16f2-452b-a6e4-4e60d36f5686", description: "Venda de produto", customer: "Burger King", status: "Fechado" },
-        ]
-    };
+    const location = useLocation();
+    const { state } = location;
+    const offer = state.record;
 
     return (
         <Container>

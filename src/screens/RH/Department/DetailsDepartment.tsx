@@ -1,3 +1,4 @@
+import { useLocation } from "react-router-dom";
 import { Card } from "../../../components/Card";
 import { Container } from "../../../components/Container";
 import { Heading } from "../../../components/Heading";
@@ -6,14 +7,9 @@ import { Text } from "../../../components/Text";
 import { TableListUser } from "../User/TableListUser";
 
 export function DetailsDepartment() {
-    var department =
-    {
-        id: "d5d6be6e-d332-41be-b601-8bd2ae4e6935", name: 'Financeiro',
-        employees: [
-            { id: "ad24ccc1-efe2-4b17-8bbe-05a4e730b12a", name: "Marcelo Cabelinho", role: "Funcionario", department: "Financeiro" },
-            { id: "f5537fec-16f2-452b-a6e4-4e60d36f5686", name: "Marcos ", role: "Chefe", department: "Financeiro" },
-        ]
-    };
+    const location = useLocation();
+    const { state } = location;
+    const department = state.record;
 
     return (
         <Container>

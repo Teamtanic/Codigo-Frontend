@@ -3,6 +3,7 @@ import { Column, Table } from "../../../components/Table";
 import { AuthorityModal } from "./AuthorityModal";
 
 export interface AuthorityProps {
+    id: string,
     privilege: string,
     role: string,
     department: string
@@ -18,7 +19,7 @@ export function TableListAuthority({data} : {data : AuthorityProps[]}) {
     var options: ModalOptions[] = [
         {
             key: 'Editar', children:
-                <AuthorityModal title="Editar Autoridade" action="Editar" />
+                <AuthorityModal title="Editar Autoridade" action="Editar" optionsTrigger />
         }
     ]
 

@@ -4,7 +4,7 @@ import { TextInput } from "../../../components/TextInput";
 import { Form, Field } from 'react-final-form';
 import { object, string } from 'yup';
 
-export function CourseModal({ action, title }: ModelModalProp) {
+export function CourseModal({ action, optionsTrigger, title }: ModelModalProp) {
     const validationSchema = object({
         name: string().required('Nome é obrigatório'),
     });
@@ -26,7 +26,7 @@ export function CourseModal({ action, title }: ModelModalProp) {
                 }
             }}
             render={({ handleSubmit, submitting }) => (
-                <CardModal title={title} action={action} >
+                <CardModal title={title} action={action} optionsTrigger={optionsTrigger} >
                     <form onSubmit={handleSubmit}>
                         <div className="flex flex-col w-full max-md:px-12 md:px-24 gap-4">
                             <Field name="name" render={({ input, meta }) => (

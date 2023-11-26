@@ -1,3 +1,4 @@
+import { useLocation } from "react-router-dom";
 import { Card } from "../../../components/Card";
 import { Container } from "../../../components/Container";
 import { Heading } from "../../../components/Heading";
@@ -6,15 +7,9 @@ import { Text } from "../../../components/Text";
 import { TableListUser } from "../User/TableListUser";
 
 export function DetailsRole() {
-    var role =
-    {
-        id: "d5d6be6e-d332-41be-b601-8bd2ae4e6935", name: 'Chefe',
-        employees: [
-            { id: "f5537fec-16f2-452b-a6e4-4e60d36f5686", name: "Marcos ", role: "Chefe", department: "Financeiro" },
-            { id: "3f506407-4638-4bd0-abb9-d2bcf415239c", name: "Maria Marieta", role: "Chefe", department: "ADM" },
-
-        ]
-    };
+    const location = useLocation();
+    const { state } = location;
+    const role = state.record;
 
     return (
         <Container>

@@ -20,6 +20,6 @@ export function TableListDocument({ data }: {data: DocumentProps[]}, { hasOption
     ];
     
     return (
-        <Table data={data} menu={hasOptions} columns={columns} />
+        <Table link="documento" data={data} menu={hasOptions} columns={columns} />
     )
 }

@@ -1,3 +1,4 @@
+import { useLocation } from "react-router-dom";
 import { Card } from "../../../components/Card";
 import { Container } from "../../../components/Container";
 import { Heading } from "../../../components/Heading";
@@ -7,15 +8,9 @@ import { amountMask } from "../../../utils";
 import { TableListTransaction } from "../Transaction/TableListTransaction";
 
 export function DetailsBank() {
-    var bank =
-    {
-        id: "d5d6be6e-d332-41be-b601-8bd2ae4e6935", name: "Itaú", balance: 12450.45, location: 'Rua Barão de Maua, 721',
-        transactions: [
-            { id: "75b6a6f8-88fb-4642-bd79-60cd4865691c", description: "Pagamento de projeto", amount: 1200.25, type: "ENTRADA", dt_cashflow: "10/11/2023" },
-            { id: "ad24ccc1-efe2-4b17-8bbe-05a4e730b12a", description: "Compra de serviço", amount: 90.34, type: "SAIDA", dt_cashflow: "04/11/2023" },
-            { id: "f5537fec-16f2-452b-a6e4-4e60d36f5686", description: "Venda de produto", amount: 114.99, type: "ENTRADA", dt_cashflow: "27/10/2023" },
-        ]
-    };
+    const location = useLocation();
+    const { state } = location;
+    const bank = state.record;
 
     return (
         <Container>

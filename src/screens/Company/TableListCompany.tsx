@@ -4,6 +4,7 @@ import { Text } from '../../components/Text';
 import { CopiableText } from '../../components/CopiableText';
 import { ModalOptions } from "../../components/OptionsMenu";
 import { CompanyModal } from "./CompanyModal";
+import { codeMask } from "../../utils";
 
 export interface CompanyProps {
     id: string,
@@ -40,7 +41,7 @@ export function TableListCompany({ data }: { data: CompanyProps[] }) {
                     `!bg-sky-600`
                 }>
                     <Text className={`!text-gray-100 text-sm max-h-10 truncate font-semibold`}>
-                        {code}
+                     {codeMask(code)}
                     </Text>
                 </Card>
         },
