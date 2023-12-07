@@ -6,6 +6,8 @@ import { Text } from "../../../components/Text";
 import { TextInput } from "../../../components/TextInput";
 import { Form, Field } from 'react-final-form';
 import { object, string } from 'yup';
+import { UserRegisterRequest } from "../../../services/User/types";
+import { createUser } from "../../../services/User/apiService";
 
 export function CreateUser() {
     const validationSchema = object({
@@ -17,8 +19,24 @@ export function CreateUser() {
         'confirm-password': string().required('Necessário confirmar a senha')
     });
 
-    const onSubmit = (values: any) => {
-        console.log(values);
+    const onSubmit = async (values: any) => {
+        try {
+            const userData: UserRegisterRequest = {
+                name: values.name,
+                email: values.email,
+                login: values.login,
+                prontuary: values.prontuary,
+                password: values.password,
+                telephone: "",
+                cell_phone: "" 
+            };
+            
+            await createUser(userData);
+
+            console.log(userData);
+        } catch (error){
+            console.error(error);
+        }
     };
 
     return (
