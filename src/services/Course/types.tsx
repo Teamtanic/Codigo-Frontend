@@ -1,16 +1,16 @@
-import { UserResponse } from "../User/types";
+import { UserResponse } from '../User/types'
 
 export interface CourseCreateRequest {
-    name: string;
+  name: string
 }
 
 export interface CourseResponse {
-    id: number;
-    name: string;
+  id: string
+  name: string
 }
-  
+
 export interface CourseWithUsersResponse {
-    id: string;
-    name: string;
-    users: UserResponse[];
+  id: string
+  name: string
+  users: UserResponse[]
 }

@@ -1,20 +1,12 @@
-import { Column, Table } from "../../../components/Table";
+import { Column, Table } from '../../../components/Table'
+import { UserResponse } from '../../../services/User/types'
 
-export interface UserProps {
-    id: string,
-    name: string,
-    role: string,
-    department: string
-}
+export function TableListUser({ data }: { data: UserResponse[] }) {
+  var columns: Column<UserResponse>[] = [
+    { key: 'name', title: 'Nome' },
+    //{ key: 'role', title: 'Cargo' },
+    { key: 'department', subkey: 'name', title: 'Departamento' }
+  ]
 
-export function TableListUser({data} : {data : UserProps[]}) {
-    var columns : Column<UserProps>[] = [
-        { key: 'name', title: 'Nome' },
-        { key: 'role', title: 'Cargo' },
-        { key: 'department', title: 'Departamento' },
-    ];
-
-    return (
-        <Table link="usuario" data={data} columns={columns} />
-    )
+  return <Table link="usuario" data={data} columns={columns} />
 }

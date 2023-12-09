@@ -1,66 +1,272 @@
-import { Button } from "../../../components/Button";
-import { CardModal, ModelModalProp } from "../../../components/CardModal";
-import { TextInput } from "../../../components/TextInput";
-import { Form, Field } from 'react-final-form';
-import { object, string } from 'yup';
+import { Button } from '../../../components/Button'
+import { CardModal, ModelModalProp } from '../../../components/CardModal'
+import { TextInput } from '../../../components/TextInput'
+import { Form, Field } from 'react-final-form'
+import { object, string } from 'yup'
+import {
+  TransactionCreateRequest,
+  TransactionType
+} from '../../../services/Transaction/type'
+import { createTransaction } from '../../../services/Transaction/apiService'
+import { Select, SelectOption } from '../../../components/Select'
+import { Text } from '../../../components/Text'
 
 export function TransactionModal({ action, title }: ModelModalProp) {
-    const validationSchema = object({
-        name: string().required('Nome do banco é obrigatória'),
-        location: string().required('A localização é obrigatória'),
-        balance: string().required('O saldo é obrigatório'),
-    });
+  const validationSchema = object({
+    description: string().required('Nome do banco é obrigatória'),
+    location: string().required('A localização é obrigatória'),
+    balance: string().required('O saldo é obrigatório')
+  })
 
-    const onSubmit = (values: any) => {
-        console.log(values);
-    };
+  const onSubmit = (values: any) => {
+    console.log(values)
+  }
 
-    return (
-        <Form
-            onSubmit={onSubmit}
-            validate={(values) => {
-                try {
-                    validationSchema.validateSync(values, { abortEarly: false });
-                } catch (err: any) {
-                    return err.inner.reduce((errors: any, error: any) => {
-                        return { ...errors, [error.path]: error.message };
-                    }, {});
-                }
-            }}
-            render={({ handleSubmit, submitting }) => (
-                <CardModal title={title} action={ action }>
-                    <form onSubmit={handleSubmit}>
-                        <div className="flex flex-col w-full max-md:px-12 md:px-24 gap-4">
-                            <Field name="product" render={({ input, meta }) => (
-                                <TextInput.Root labelFor="product" labelText="Produto" error={meta.touched && meta.error ? meta.error : undefined}>
-                                    <TextInput.Input id="product" type="text" placeholder="Digite o produto..." {...input} />
-                                </TextInput.Root>
-                            )} />
+  const enumOptions: SelectOption[] = Object.entries(TransactionType).map(
+    ([value, label]) => ({
+      value,
+      label
+    })
+  )
 
-                            <Field name="quantity" render={({ input, meta }) => (
-                                <TextInput.Root labelFor="quantity" labelText="Quantidade" error={meta.touched && meta.error ? meta.error : undefined}>
-                                    <TextInput.Input id="quantity" type="number" min="0" placeholder="Digite a quantidade..." {...input} />
-                                </TextInput.Root>
-                            )} />
+  return (
+    <Form
+      onSubmit={onSubmit}
+      validate={values => {
+        try {
+          validationSchema.validateSync(values, { abortEarly: false })
+        } catch (err: any) {
+          return err.inner.reduce((errors: any, error: any) => {
+            return { ...errors, [error.path]: error.message }
+          }, {})
+        }
+      }}
+      render={({ handleSubmit, submitting }) => (
+        <CardModal title={title} action={action}>
+          <form onSubmit={handleSubmit}>
+            <div className="flex flex-col w-full max-md:px-12 md:px-24 gap-4">
+              <Field
+                name="description"
+                render={({ input, meta }) => (
+                  <TextInput.Root
+                    labelFor="description"
+                    labelText="Descrição"
+                    error={meta.touched && meta.error ? meta.error : undefined}
+                  >
+                    <TextInput.Input
+                      id="description"
+                      type="text"
+                      placeholder="Descreva o motivo da transação..."
+                      {...input}
+                    />
+                  </TextInput.Root>
+                )}
+              />
 
-                            <Field name="supplier" render={({ input, meta }) => (
-                                <TextInput.Root labelFor="supplier" labelText="Fornecedor" error={meta.touched && meta.error ? meta.error : undefined}>
-                                    <TextInput.Input id="supplier" type="text" placeholder="Informe o fornecedor..." {...input} />
-                                </TextInput.Root>
-                            )} />
+              <div className="flex flex-col lg:flex-row lg:space-x-6">
+                <div className="flex-1 mb-4 lg:mb-0">
+                  <Field
+                    name="amount"
+                    render={({ input, meta }) => (
+                      <TextInput.Root
+                        labelFor="amount"
+                        labelText="Valor"
+                        error={
+                          meta.touched && meta.error ? meta.error : undefined
+                        }
+                      >
+                        <TextInput.Icon>
+                          <Text>R$</Text>
+                        </TextInput.Icon>
+                        <TextInput.Input
+                          id="amount"
+                          type="text"
+                          placeholder="Informe o valor da transação..."
+                          {...input}
+                        />
+                      </TextInput.Root>
+                    )}
+                  />
+                </div>
 
-                            <Field name="price" render={({ input, meta }) => (
-                                <TextInput.Root labelFor="price" labelText="Preço" error={meta.touched && meta.error ? meta.error : undefined}>
-                                    <TextInput.Input id="price" type="text" placeholder="Informe o preço..." {...input} />
-                                </TextInput.Root>
-                            )} />
+                <div className="flex-1 mb-4 lg:mb-0">
+                  <Field
+                    name="type"
+                    render={({ input, meta }) => (
+                      <Select
+                        labelFor="amount"
+                        labelText="Tipo da Transação"
+                        placeHolder="Informe o tipo"
+                        options={enumOptions}
+                        error={
+                          meta.touched && meta.error ? meta.error : undefined
+                        }
+                        {...input}
+                      />
+                    )}
+                  />
+                </div>
 
-                            <Button className={`rounded-md z-50 !w-fit h-12 translate-y-10 ml-auto mr-0`} textSize="sm" textStyle="text-gray-100" disabled={submitting}>
-                                {submitting ? "Enviando..." : action}
-                            </Button>
-                        </div>
-                    </form>
-                </CardModal>
-            )} />
-    );
+                <div className="flex-1 mb-4 lg:mb-0">
+                  <Field
+                    name="dtCashflow"
+                    render={({ input, meta }) => (
+                      <TextInput.Root
+                        labelFor="dtCashflow"
+                        labelText="Data"
+                        error={
+                          meta.touched && meta.error ? meta.error : undefined
+                        }
+                      >
+                        <TextInput.Input
+                          id="dtCashflow"
+                          type="date"
+                          placeholder="Informe o valor da transação..."
+                          {...input}
+                        />
+                      </TextInput.Root>
+                    )}
+                  />
+                </div>
+              </div>
+
+              <div className="flex flex-col lg:flex-row lg:space-x-4">
+                <div className="flex-1 mb-4 lg:mb-0">
+                  <Field
+                    name="paymentMethod"
+                    render={({ input, meta }) => (
+                      <TextInput.Root
+                        labelFor="paymentMethod"
+                        labelText="Método de pagamento"
+                        error={
+                          meta.touched && meta.error ? meta.error : undefined
+                        }
+                      >
+                        <TextInput.Input
+                          id="paymentMethod"
+                          type="text"
+                          placeholder="Informe o método de pagamento..."
+                          {...input}
+                        />
+                      </TextInput.Root>
+                    )}
+                  />
+                </div>
+
+                <div className="flex-1 mb-4 lg:mb-0">
+                  <Field
+                    name="installments"
+                    render={({ input, meta }) => (
+                      <TextInput.Root
+                        labelFor="installments"
+                        labelText="Valor da parcela"
+                        error={
+                          meta.touched && meta.error ? meta.error : undefined
+                        }
+                      >
+                        <TextInput.Icon>
+                          <Text>R$</Text>
+                        </TextInput.Icon>
+                        <TextInput.Input
+                          id="installments"
+                          type="text"
+                          placeholder="Informe o valor da parcela..."
+                          {...input}
+                        />
+                      </TextInput.Root>
+                    )}
+                  />
+                </div>
+
+                <div className="flex-1 mb-4 lg:mb-0">
+                  <Field
+                    name="qtyInstallments"
+                    render={({ input, meta }) => (
+                      <TextInput.Root
+                        labelFor="qtyInstallments"
+                        labelText="Quantidade de parcelas"
+                        error={
+                          meta.touched && meta.error ? meta.error : undefined
+                        }
+                      >
+                        <TextInput.Input
+                          id="qtyInstallments"
+                          type="text"
+                          placeholder="Informe a quantidade de parcelas..."
+                          {...input}
+                        />
+                      </TextInput.Root>
+                    )}
+                  />
+                </div>
+              </div>
+
+              <Field
+                name="projectId"
+                render={({ input, meta }) => (
+                  <TextInput.Root
+                    labelFor="projectId"
+                    labelText="Projeto relacionado"
+                    error={meta.touched && meta.error ? meta.error : undefined}
+                  >
+                    <TextInput.Input
+                      id="projectId"
+                      type="text"
+                      placeholder="Informe o projeto..."
+                      {...input}
+                    />
+                  </TextInput.Root>
+                )}
+              />
+
+              <Field
+                name="bankAccountId"
+                render={({ input, meta }) => (
+                  <TextInput.Root
+                    labelFor="bankAccountId"
+                    labelText="Banco da transação"
+                    error={meta.touched && meta.error ? meta.error : undefined}
+                  >
+                    <TextInput.Input
+                      id="bankAccountId"
+                      type="text"
+                      placeholder="Informe o banco..."
+                      {...input}
+                    />
+                  </TextInput.Root>
+                )}
+              />
+
+              <Field
+                name="productsWarehouse"
+                render={({ input, meta }) => (
+                  <TextInput.Root
+                    labelFor="productsWarehouse"
+                    labelText="Produtos da transação"
+                    error={meta.touched && meta.error ? meta.error : undefined}
+                  >
+                    <TextInput.Input
+                      id="productsWarehouse"
+                      type="text"
+                      placeholder="Informe os produtos..."
+                      {...input}
+                    />
+                  </TextInput.Root>
+                )}
+              />
+
+              <Button
+                className={`rounded-md z-50 !w-fit h-12 translate-y-10 ml-auto mr-0`}
+                textSize="sm"
+                textStyle="text-gray-100"
+                disabled={submitting}
+              >
+                {submitting ? 'Enviando...' : action}
+              </Button>
+            </div>
+          </form>
+        </CardModal>
+      )}
+    />
+  )
 }

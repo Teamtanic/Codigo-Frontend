@@ -1,8 +1,11 @@
-import axios from 'axios';
+import axios from 'axios'
+
+const token = localStorage.getItem('token')
 
 export const api = axios.create({
-  baseURL: 'https://silver-doodle-jpq5qp66rpvhjjv6-8081.app.github.dev/',
+  baseURL: 'http://localhost:8081',
   headers: {
     'Content-Type': 'application/json',
-  },
-});
+    Authorization: `Bearer ${token}`
+  }
+})
