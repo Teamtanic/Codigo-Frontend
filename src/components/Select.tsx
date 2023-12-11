@@ -1,5 +1,4 @@
-import { useState } from 'react'
-import { Fragment } from 'react'
+import { useState, useEffect, Fragment } from 'react'
 import { Menu, Transition } from '@headlessui/react'
 import { CaretDown } from 'phosphor-react'
 import { Text } from './Text'
@@ -29,14 +28,20 @@ export function Select({
   error,
   labelText,
   labelStyle,
-  selectedValue: propSelectedValue
+  selectedValue: propSelectedValue,
+  onChange
 }: SelectProps) {
-  // Estado local para controlar o valor selecionado
   const [selectedValue, setSelectedValue] = useState(propSelectedValue)
 
-  const handleSelectOption = (e: string) => {
-    const newValue = e
-    setSelectedValue(newValue)
+  useEffect(() => {
+    setSelectedValue(propSelectedValue)
+  }, [propSelectedValue])
+
+  function handleSelectOption(value: string) {
+    setSelectedValue(value)
+    if (onChange) {
+      onChange(value)
+    }
   }
 
   function classNames(...classes: any) {
@@ -82,7 +87,7 @@ export function Select({
                     active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
                     'block px-4 py-2 text-sm rounded-md'
                   )}
-                  onClick={() => handleSelectOption(option.label)}
+                  onClick={() => handleSelectOption(option.value)}
                 >
                   {option.label}
                 </a>
