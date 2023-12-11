@@ -4,12 +4,14 @@ interface PaginationProps {
   totalPages: number
   currentPage: number
   onPageChange: (pageNumber: number) => void
+  numberOfElements: number
 }
 
 export const Pagination = ({
   totalPages,
   currentPage,
-  onPageChange
+  onPageChange,
+  numberOfElements
 }: PaginationProps) => {
   const MAX_VISIBLE_PAGES = 4
 
@@ -42,7 +44,7 @@ export const Pagination = ({
       {currentPage > 2 && (
         <Button
           textSize="xm"
-          className="w-7 h-7 bg-gray-100 hover:bg-gray-300"
+          className="!w-7 !h-7 bg-gray-100 hover:bg-gray-300"
           onClick={() => onPageChange(1)}
         >
           1
@@ -54,18 +56,20 @@ export const Pagination = ({
           <span className="text-gray-500">...</span>
         )}
 
-      {getPageNumbers().map(pageNumber => (
-        <Button
-          textSize="xm"
-          className={`w-7 h-7 bg-gray-100 hover:bg-gray-300 ${
-            pageNumber === currentPage ? 'bg-gray-400' : ''
-          }`}
-          key={pageNumber}
-          onClick={() => onPageChange(pageNumber)}
-        >
-          {pageNumber}
-        </Button>
-      ))}
+      {numberOfElements > 0
+        ? getPageNumbers().map(pageNumber => (
+            <Button
+              textSize="xm"
+              className={`!w-7 !h-7 bg-gray-100 hover:bg-gray-300 ${
+                pageNumber === currentPage ? 'bg-gray-400' : ''
+              }`}
+              key={pageNumber}
+              onClick={() => onPageChange(pageNumber)}
+            >
+              {pageNumber}
+            </Button>
+          ))
+        : ''}
 
       {currentPage < totalPages - MAX_VISIBLE_PAGES / 2 - 1 &&
         totalPages > MAX_VISIBLE_PAGES && (
@@ -75,7 +79,7 @@ export const Pagination = ({
       {currentPage < totalPages - 1 && (
         <Button
           textSize="xm"
-          className="w-7 h-7 bg-gray-100 hover:bg-gray-300"
+          className="!w-7 !h-7 bg-gray-100 hover:bg-gray-300"
           onClick={() => onPageChange(totalPages)}
         >
           {totalPages}
