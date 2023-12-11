@@ -60,7 +60,17 @@ function Routes() {
         <Route path="/empresas" element={<ListCompany />} />
         <Route path="/empresa/:id" element={<DetailsCompany />} />
 
-        <Route element={<PrivateRoutes necessaryPermission="CAN_WRITE_ON_F" />}>
+        <Route
+          element={
+            <PrivateRoutes
+              necessaryPermissions={[
+                'CAN_WRITE_ON_F',
+                'CAN_VIEW_ON_GLOBAL',
+                'CAN_VIEW_ON_ADMINISTRATIVO'
+              ]}
+            />
+          }
+        >
           <Route path="/almoxarifado" element={<ListProductWarehouse />} />
         </Route>
         <Route path="/produto/:id" element={<DetailsProductWarehouse />} />

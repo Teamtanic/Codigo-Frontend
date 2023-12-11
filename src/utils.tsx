@@ -93,12 +93,16 @@ export interface tokenProps extends JwtPayload {
   permissions: string[]
 }
 
-export function hasPermission(requiredPermission: string): boolean {
-  let userPermissions: string[] | undefined = getUserPermissions()
+export function hasPermission(requiredPermissions: string[]): boolean {
+  const userPermissions: string[] | undefined = getUserPermissions()
+
   if (userPermissions === undefined) {
     return false
   }
-  return userPermissions.includes(requiredPermission)
+
+  return requiredPermissions.some(permission =>
+    userPermissions.includes(permission)
+  )
 }
 
 export function getUserIndex(): string {
@@ -107,6 +111,8 @@ export function getUserIndex(): string {
   }
 
   const decodedToken: tokenProps = jwtDecode(token)
+
+  console.log(decodedToken)
 
   const userPermissionString = decodedToken.permissions[0]
   const userPermissionEnum: ModulePermission | undefined =
