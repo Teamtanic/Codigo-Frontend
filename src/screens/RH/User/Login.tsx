@@ -11,13 +11,15 @@ import { authenticateUser } from '../../../services/User/apiService'
 import { UserAuthenticationRequest } from '../../../services/User/types'
 import { Field, Form } from 'react-final-form'
 import { useNavigate } from 'react-router-dom'
+import { getUserIndex } from '../../../utils'
 
 export function Login() {
-  let navigate = useNavigate()
   const validationSchema = object({
     login: string().required('Login é obrigatório'),
     password: string().required('Senha é obrigatório')
   })
+
+  const navigate = useNavigate()
 
   const onSubmit = async (values: any) => {
     try {
@@ -28,9 +30,12 @@ export function Login() {
 
       const response = await authenticateUser(userData)
 
+      console.log(response)
+
       localStorage.setItem('token', response.data.token)
 
-      navigate('/usuarios')
+      const userIndex = getUserIndex()
+      navigate(userIndex)
     } catch (error) {
       console.error(error)
     }
@@ -68,8 +73,8 @@ export function Login() {
               }
             }}
             render={({ handleSubmit, submitting }) => (
-              <div className="mt-4 gap-4 flex flex-col w-full">
-                <form onSubmit={handleSubmit}>
+              <form onSubmit={handleSubmit}>
+                <div className="mt-4 gap-6 flex flex-col w-full">
                   <Field
                     name="login"
                     render={({ input, meta }) => (
@@ -117,8 +122,8 @@ export function Login() {
                       {submitting ? 'Entrando...' : 'Entrar'}
                     </Text>
                   </Button>
-                </form>
-              </div>
+                </div>
+              </form>
             )}
           />
         </Card>
