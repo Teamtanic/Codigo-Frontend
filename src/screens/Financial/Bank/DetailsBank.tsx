@@ -26,6 +26,9 @@ export function DetailsBank() {
                   {bank.name}
                 </Text>
               </div>
+              <Text className="!text-gray-500 font-semibold">
+                Endereço: {bank.location}
+              </Text>
             </div>
             <div className="bg-gray-300 w-full flex flex-col justify-evenly p-4">
               <div>
