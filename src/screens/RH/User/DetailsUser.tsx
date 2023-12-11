@@ -30,10 +30,10 @@ export function DetailsUser() {
                 </Text>
               </div>
               <Text className="!text-gray-500 font-semibold">
-                {user.role}, {user.department}
+                {user.role.name}, {user.department.name}
               </Text>
               <Text className="!text-gray-500 font-semibold">
-                Curso: {user.course}
+                Curso: {user.course.name}
               </Text>
               <Text className="!text-gray-500 font-semibold">
                 Prontuário: {user.prontuary}
@@ -43,18 +43,28 @@ export function DetailsUser() {
               <div>
                 <Text className="!text-gray-900 font-semibold">Telefone: </Text>
                 <Text className="!text-gray-900">
-                  {formatPhoneNumber(user.telephone)}
+                  {user.contact
+                    ? user.contact.telephone
+                      ? formatPhoneNumber(user.contact.telephone)
+                      : 'Não informado'
+                    : 'Não informado'}
                 </Text>
               </div>
               <div>
                 <Text className="!text-gray-900 font-semibold">Celular: </Text>
                 <Text className="!text-gray-900">
-                  {formatPhoneNumber(user.cell_phone)}
+                  {user.contact
+                    ? user.contact.cell_phone
+                      ? formatPhoneNumber(user.contact.cell_phone)
+                      : 'Não informado'
+                    : 'Não informado'}
                 </Text>
               </div>
               <div>
                 <Text className="!text-gray-900 font-semibold">Email: </Text>
-                <Text className="!text-gray-900">{user.email}</Text>
+                <Text className="!text-gray-900">
+                  {user.contact ? user.contact.email : 'Não informado'}
+                </Text>
               </div>
             </div>
           </div>
@@ -82,13 +92,13 @@ export function DetailsUser() {
             className="grow p-5 bg-gray-100 rounded-b-md outline-none "
             value="tab1"
           >
-            {user.document ? <TableListDocument data={user.document} /> : ''}
+            {/*user.document ? <TableListDocument data={user.document} /> : ''*/}
           </Tabs.Content>
           <Tabs.Content
             className="grow p-5 bg-gray-100 rounded-b-md outline-none "
             value="tab2"
           >
-            {user.project ? <TableListProject data={user.project} /> : ''}
+            {/*user.project ? <TableListProject data={user.project} /> : ''*/}
           </Tabs.Content>
         </Tabs.Root>
       </div>
