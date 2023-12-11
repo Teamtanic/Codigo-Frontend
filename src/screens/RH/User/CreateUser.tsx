@@ -18,10 +18,12 @@ export function CreateUser() {
     login: string().required('Login é obrigatório'),
     prontuary: string().required('Prontuário é obrigatório'),
     password: string().required('Senha é obrigatório'),
-    'confirm-password': string().required('Necessário confirmar a senha')
+    'confirm-password': string().required('Necessário confirmar a senha'),
+    telephone: string(),
+    cell_phone: string()
   })
 
-  const onSubmit = async (values: any) => {
+  const onSubmit = async (values: UserRegisterRequest) => {
     try {
       const userData: UserRegisterRequest = {
         name: values.name,
@@ -29,8 +31,8 @@ export function CreateUser() {
         login: values.login,
         prontuary: values.prontuary,
         password: values.password,
-        telephone: '',
-        cell_phone: ''
+        telephone: values.telephone,
+        cell_phone: values.cell_phone
       }
 
       await createUser(userData)
@@ -61,6 +63,26 @@ export function CreateUser() {
           render={({ handleSubmit, submitting }) => (
             <div className="mt-10 w-2/4">
               <form onSubmit={handleSubmit} className="gap-6 flex flex-col">
+                <Field
+                  name="name"
+                  render={({ input, meta }) => (
+                    <TextInput.Root
+                      labelFor="name"
+                      labelText="Nome"
+                      error={
+                        meta.touched && meta.error ? meta.error : undefined
+                      }
+                    >
+                      <TextInput.Input
+                        id="name"
+                        type="text"
+                        placeholder="Digite o nome..."
+                        {...input}
+                      />
+                    </TextInput.Root>
+                  )}
+                />
+
                 <Field
                   name="email"
                   render={({ input, meta }) => (
@@ -102,26 +124,6 @@ export function CreateUser() {
                 />
 
                 <Field
-                  name="name"
-                  render={({ input, meta }) => (
-                    <TextInput.Root
-                      labelFor="name"
-                      labelText="Nome"
-                      error={
-                        meta.touched && meta.error ? meta.error : undefined
-                      }
-                    >
-                      <TextInput.Input
-                        id="name"
-                        type="text"
-                        placeholder="Digite o nome..."
-                        {...input}
-                      />
-                    </TextInput.Root>
-                  )}
-                />
-
-                <Field
                   name="prontuary"
                   render={({ input, meta }) => (
                     <TextInput.Root
@@ -135,6 +137,48 @@ export function CreateUser() {
                         id="prontuary"
                         type="text"
                         placeholder="Digite o prontuário..."
+                        {...input}
+                      />
+                    </TextInput.Root>
+                  )}
+                />
+
+                <Field
+                  name="telephone"
+                  render={({ input, meta }) => (
+                    <TextInput.Root
+                      labelFor="telephone"
+                      labelText="Telefone"
+                      error={
+                        meta.touched && meta.error ? meta.error : undefined
+                      }
+                    >
+                      <TextInput.Input
+                        id="telephone"
+                        type="text"
+                        mask="(99) 9999-9999"
+                        placeholder="(99) 9999-9999"
+                        {...input}
+                      />
+                    </TextInput.Root>
+                  )}
+                />
+
+                <Field
+                  name="cell_phone"
+                  render={({ input, meta }) => (
+                    <TextInput.Root
+                      labelFor="cell_phone"
+                      labelText="Celular"
+                      error={
+                        meta.touched && meta.error ? meta.error : undefined
+                      }
+                    >
+                      <TextInput.Input
+                        id="cell_phone"
+                        type="text"
+                        mask="(99) 99999-9999"
+                        placeholder="(99) 99999-9999"
                         {...input}
                       />
                     </TextInput.Root>

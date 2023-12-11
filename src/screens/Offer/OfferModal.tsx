@@ -1,101 +1,129 @@
-import { Button } from "../../components/Button";
-import { CardModal, ModelModalProp } from "../../components/CardModal";
-import { Checkbox } from "../../components/Checkbox";
-import { Text } from "../../components/Text";
-import { TextInput } from "../../components/TextInput";
-import { Form, Field } from 'react-final-form';
-import { boolean, object, string } from 'yup';
+import { Button } from '../../components/Button'
+import { CardModal, ModelModalProp } from '../../components/CardModal'
+import { RadioGroup } from '../../components/RadioGroup'
+import { Text } from '../../components/Text'
+import { TextInput } from '../../components/TextInput'
+import { Form, Field } from 'react-final-form'
+import { object, string } from 'yup'
+import {
+  OfferingCreateRequest,
+  OfferingType
+} from '../../services/Offering/types'
+import { createOffer } from '../../services/Offering/apiService'
+
+interface OfferingTypeOption {
+  value: string
+  label: string
+}
 
 export function OfferModal({ action, optionsTrigger, title }: ModelModalProp) {
-    const validationSchema = object({
-        offer: string().required('Descrição da oferta é obrigatória'),
-        checkService: boolean(),
-        checkProduct: boolean(),
-    });
+  const validationSchema = object({
+    description: string().required('Descrição da oferta é obrigatória'),
+    type: string().required('É necessário escolher um tipo')
+  })
 
-    const onSubmit = (values: any) => {
-        console.log(values);
-    };
+  const onSubmit = async (values: OfferingCreateRequest) => {
+    try {
+      const offerData: OfferingCreateRequest = {
+        description: values.description,
+        type: values.type
+      }
 
-    return (
-        <Form
-            onSubmit={onSubmit}
-            validate={(values) => {
-                try {
-                    validationSchema.validateSync(values, { abortEarly: false });
-                } catch (err: any) {
-                    return err.inner.reduce((errors: any, error: any) => {
-                        return { ...errors, [error.path]: error.message };
-                    }, {});
-                }
-            }}
-            render={({ handleSubmit, submitting }) => (
-                <CardModal title={title} action={action} optionsTrigger={optionsTrigger}>
-                    <form onSubmit={handleSubmit}>
-                        <div className="flex flex-col w-full max-md:px-12 md:px-24 gap-4">
+      await createOffer(offerData)
 
-                            <Field name="offer" render={({ input, meta }) => (
-                                <TextInput.Root labelFor="offer" labelText="Descrição" error={meta.touched && meta.error ? meta.error : undefined}>
-                                    <TextInput.Input id="offer" type="text" placeholder="Descreva essa oferta..." {...input} />
-                                </TextInput.Root>
-                            )} />
+      console.log(offerData)
+    } catch (error) {
+      console.error(error)
+    }
+  }
 
-                            <div>
-                                <Text>Tipo de Oferta</Text>
-                                <div className="flex w-full gap-12">
-                                    <Field
-                                        name="checkService"
-                                        type="checkbox"
-                                        render={({ input: { value, onChange, type, ...input }, meta }) => (
-                                            <>
-                                                <label htmlFor="checkService" className="flex items-center gap-2 my-2">
-                                                    <Checkbox
-                                                        id="checkService"
-                                                        checked={!!value}
-                                                        onCheckedChange={checked => onChange(checked)}
-                                                        {...input}
-                                                    />
-                                                    {meta.touched && meta.error && <Text className="h-12 w-full !text-red-900" size="sm">{meta.error}</Text>}
-                                                    <Text size="sm">
-                                                        Serviço
-                                                    </Text>
-                                                </label>
-                                            </>
-                                        )}
-                                    />
+  const getOfferingTypeOptions = (): OfferingTypeOption[] => {
+    return Object.keys(OfferingType).map(key => ({
+      value: key,
+      label: OfferingType[key as keyof typeof OfferingType]
+    }))
+  }
 
+  const offeringTypeOptions = getOfferingTypeOptions()
 
-                                    <Field
-                                        name="checkProduct"
-                                        type="checkbox"
-                                        render={({ input: { value, onChange, type, ...input }, meta }) => (
-                                            <>
-                                                <label htmlFor="checkProduct" className="flex items-center gap-2 my-2">
-                                                    <Checkbox
-                                                        id="checkProduct"
-                                                        checked={!!value}
-                                                        onCheckedChange={checked => onChange(checked)}
-                                                        {...input}
-                                                    />
-                                                    {meta.touched && meta.error && <Text className="h-12 w-full !text-red-900" size="sm">{meta.error}</Text>}
-                                                    <Text size="sm">
-                                                        Produto
-                                                    </Text>
-                                                </label>
-                                            </>
-                                        )}
-                                    />
+  return (
+    <Form
+      onSubmit={onSubmit}
+      validate={values => {
+        try {
+          validationSchema.validateSync(values, { abortEarly: false })
+        } catch (err: any) {
+          return err.inner.reduce((errors: any, error: any) => {
+            return { ...errors, [error.path]: error.message }
+          }, {})
+        }
+      }}
+      render={({ handleSubmit, submitting }) => (
+        <CardModal
+          title={title}
+          action={action}
+          optionsTrigger={optionsTrigger}
+        >
+          <form onSubmit={handleSubmit}>
+            <div className="flex flex-col w-full max-md:px-12 md:px-24 gap-4">
+              <Field
+                name="description"
+                render={({ input, meta }) => (
+                  <TextInput.Root
+                    labelFor="description"
+                    labelText="Descrição"
+                    error={meta.touched && meta.error ? meta.error : undefined}
+                  >
+                    <TextInput.Input
+                      id="description"
+                      type="text"
+                      placeholder="Descreva essa oferta..."
+                      {...input}
+                    />
+                  </TextInput.Root>
+                )}
+              />
 
-                                </div>
-                            </div>
+              <div>
+                <Text>Tipo de Oferta</Text>
+                <div className="flex w-full gap-12">
+                  <Field
+                    name="type"
+                    type="radio"
+                    render={({
+                      input: { value, onChange, type, ...input },
+                      meta
+                    }) => (
+                      <>
+                        <RadioGroup
+                          direction="row"
+                          options={offeringTypeOptions}
+                          onChange={checked => onChange(checked)}
+                          {...input}
+                        />
+                        {meta.touched && meta.error && (
+                          <Text className="h-12 w-full !text-red-900" size="sm">
+                            {meta.error}
+                          </Text>
+                        )}
+                      </>
+                    )}
+                  />
+                </div>
+              </div>
 
-                            <Button className={`rounded-md z-50 !w-fit h-12 translate-y-10 ml-auto mr-0`} textSize="sm" textStyle="text-gray-100" disabled={submitting}>
-                                {submitting ? "Enviando..." : action}
-                            </Button>
-
-                        </div>
-                    </form>
-                </CardModal>
-            )} />
-    )
+              <Button
+                className={`rounded-md z-50 !w-fit h-12 translate-y-10 ml-auto mr-0`}
+                textSize="sm"
+                textStyle="text-gray-100"
+                disabled={submitting}
+              >
+                {submitting ? 'Enviando...' : action}
+              </Button>
+            </div>
+          </form>
+        </CardModal>
+      )}
+    />
+  )
 }

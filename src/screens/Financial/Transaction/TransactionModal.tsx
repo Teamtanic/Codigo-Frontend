@@ -3,13 +3,10 @@ import { CardModal, ModelModalProp } from '../../../components/CardModal'
 import { TextInput } from '../../../components/TextInput'
 import { Form, Field } from 'react-final-form'
 import { object, string } from 'yup'
-import {
-  TransactionCreateRequest,
-  TransactionType
-} from '../../../services/Transaction/type'
-import { createTransaction } from '../../../services/Transaction/apiService'
+import { TransactionType } from '../../../services/Transaction/type'
 import { Select, SelectOption } from '../../../components/Select'
 import { Text } from '../../../components/Text'
+import DropdownInput from '../../../components/DropdownInput'
 
 export function TransactionModal({ action, title }: ModelModalProp) {
   const validationSchema = object({
@@ -217,6 +214,13 @@ export function TransactionModal({ action, title }: ModelModalProp) {
                     />
                   </TextInput.Root>
                 )}
+              />
+
+              <DropdownInput
+                labelText="Buscar Dados"
+                labelFor="searchInput"
+                className="seu-estilo-customizado"
+                labelStyle="seu-estilo-de-label"
               />
 
               <Field

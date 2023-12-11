@@ -63,11 +63,7 @@ export function Table<Data extends { id: string }>({
                   <Heading className="!text-gray-800">{column.title}</Heading>
                 </th>
               ))}
-              {menu ? (
-                <td className="px-6 max-md:hidden rounded-r-xl"></td>
-              ) : (
-                ''
-              )}
+              {menu ? <td className="px-6 rounded-r-xl"></td> : ''}
             </tr>
           </Card>
         </thead>
@@ -127,7 +123,7 @@ export function Table<Data extends { id: string }>({
                 })}
                 {menu ? (
                   <td
-                    className="px-6 max-md:hidden rounded-r-xl "
+                    className="px-6 rounded-r-xl "
                     onClick={e => {
                       e.stopPropagation()
                     }}

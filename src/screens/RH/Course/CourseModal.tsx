@@ -11,7 +11,7 @@ export function CourseModal({ action, optionsTrigger, title }: ModelModalProp) {
     name: string().required('Nome é obrigatório')
   })
 
-  const onSubmit = async (values: any) => {
+  const onSubmit = async (values: CourseCreateRequest) => {
     try {
       const courseData: CourseCreateRequest = {
         name: values.name
