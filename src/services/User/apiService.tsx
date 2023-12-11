@@ -6,10 +6,11 @@ import {
   UserPasswordRequest,
   UserRegisterRequest,
   UserUpdateRequest,
-  UserResponse
+  UserResponse,
+  UserResponsePaginate
 } from './types'
 
-export const getAllUsers = () => api.get<UserResponse[]>('/usuarios')
+export const getAllUsers = () => api.get<UserResponsePaginate>('/usuarios')
 
 export const getUserById = (userId: number) =>
   api.get<UserResponse>(`/usuarios/${userId}`)

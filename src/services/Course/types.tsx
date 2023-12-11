@@ -9,6 +9,8 @@ export interface CourseResponse {
   name: string
 }
 
+export interface CourseResponsePaginate extends Paginate<CourseResponse> {}
+
 export interface CourseWithUsersResponse {
   id: string
   name: string

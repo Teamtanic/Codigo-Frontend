@@ -43,3 +43,5 @@ export interface UserResponse {
   department: DepartmentResponse
   contact: ContactResponse
 }
+
+export interface UserResponsePaginate extends Paginate<UserResponse> {}

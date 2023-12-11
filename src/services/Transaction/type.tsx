@@ -29,6 +29,9 @@ export interface TransactionResponse {
   products: ProductTransactionRequest[]
 }
 
+export interface TransactionResponsePaginate
+  extends Paginate<TransactionResponse> {}
+
 export enum TransactionType {
   SAIDA = 'Saída',
   ENTRADA = 'Entrada'

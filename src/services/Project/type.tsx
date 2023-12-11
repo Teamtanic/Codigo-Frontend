@@ -25,4 +25,7 @@ export interface ProjectResponse {
   companyRelationship: CompanyRelationshipProjectResponse
   offerings: Set<OfferingResponse>
   users: UserRoleResponse[]
+  status: boolean
 }
+
+export interface ProjectResponsePaginate extends Paginate<ProjectResponse> {}

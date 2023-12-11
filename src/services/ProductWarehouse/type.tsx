@@ -25,6 +25,9 @@ export interface ProductWarehouseResponse {
   supplierProducts: ProductSupplierInfoResponse[]
 }
 
+export interface ProductWarehouseResponsePaginate
+  extends Paginate<ProductWarehouseResponse> {}
+
 export interface SupplierProduct {
   id: SupplierProductKey
   companyRelationship: CompanyRelationshipResponse

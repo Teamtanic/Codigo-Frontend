@@ -1,9 +1,11 @@
 export interface DepartmentCreateRequest {
-    name: string;
-  }
+  name: string
+}
 
-  export interface DepartmentResponse {
-    id: string;
-    name: string;
-  }
-  
+export interface DepartmentResponse {
+  id: string
+  name: string
+}
+
+export interface DepartmentResponsePaginate
+  extends Paginate<DepartmentResponse> {}

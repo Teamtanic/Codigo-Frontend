@@ -9,7 +9,9 @@ export interface OfferingResponse {
   type: OfferingType
 }
 
+export interface OfferingResponsePaginate extends Paginate<OfferingResponse> {}
+
 export enum OfferingType {
-  SERVICO,
-  PRODUTO
+  SERVICO = 'Serviço',
+  PRODUTO = 'Produto'
 }
