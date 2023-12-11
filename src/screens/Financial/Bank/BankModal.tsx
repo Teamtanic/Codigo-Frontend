@@ -22,8 +22,6 @@ export function BankModal({ action, optionsTrigger, title }: ModelModalProp) {
       }
 
       await createBankAccount(bankaccountData)
-
-      console.log(bankaccountData)
     } catch (error) {
       console.error(error)
     }

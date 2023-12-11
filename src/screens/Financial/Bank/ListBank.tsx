@@ -11,6 +11,7 @@ import { useEffect, useState } from 'react'
 import { BankAccountResponse } from '../../../services/BankAccount/types'
 import { getAllBankAccounts } from '../../../services/BankAccount/apiService'
 import { Loader } from '../../../components/Loader'
+import { Pagination } from '../../../components/Pagination'
 
 interface BankProps {
   id: string
@@ -21,13 +22,18 @@ interface BankProps {
 export function ListBank() {
   const [bankAccount, setBankAccount] = useState<BankAccountResponse[]>([])
   const [loading, setLoading] = useState(true)
+  const [currentPage, setCurrentPage] = useState(1)
+  const [totalPages, setTotalPages] = useState(1)
+  const [numberOfElements, setNumberOfElements] = useState(0)
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await getAllBankAccounts()
+        const response = await getAllBankAccounts(currentPage - 1)
 
         setBankAccount(response.data.content)
+        setTotalPages(response.data.totalPages)
+        setNumberOfElements(response.data.numberOfElements)
       } catch (error) {
         console.error('Erro ao obter a bankaccount:', error)
       } finally {
@@ -41,6 +47,10 @@ export function ListBank() {
     ...bank,
     balance: amountMask(bank.balance)
   }))
+
+  const handlePageChange = (pageNumber: number) => {
+    setCurrentPage(pageNumber)
+  }
 
   return (
     <Container>
@@ -70,6 +80,12 @@ export function ListBank() {
 
               <BankModal title="Cadastro de Banco" action="Adicionar" />
             </div>
+            <Pagination
+              totalPages={totalPages}
+              currentPage={currentPage}
+              onPageChange={handlePageChange}
+              numberOfElements={numberOfElements}
+            />
           </div>
         )}
       </div>
