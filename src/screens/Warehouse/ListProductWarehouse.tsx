@@ -10,27 +10,35 @@ import { useEffect, useState } from 'react'
 import { ProductWarehouseResponse } from '../../services/ProductWarehouse/type'
 import { getAllProducts } from '../../services/ProductWarehouse/apiService'
 import { Loader } from '../../components/Loader'
-import { hasPermission, isTokenExpired } from '../../utils'
-import { useNavigate } from 'react-router-dom'
+import { Pagination } from '../../components/Pagination'
 
 export function ListProductWarehouse() {
-  const [lista, setLista] = useState<ProductWarehouseResponse[]>([])
+  const [products, setProducts] = useState<ProductWarehouseResponse[]>([])
   const [loading, setLoading] = useState(true)
+  const [currentPage, setCurrentPage] = useState(1)
+  const [totalPages, setTotalPages] = useState(1)
+  const [numberOfElements, setNumberOfElements] = useState(1)
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await getAllProducts()
+        const response = await getAllProducts(currentPage - 1)
 
-        setLista(response.data.content)
+        setProducts(response.data.content)
+        setTotalPages(response.data.totalPages)
+        setNumberOfElements(response.data.numberOfElements)
       } catch (error) {
-        console.error('Erro ao obter a lista:', error)
+        console.error('Erro ao obter a products:', error)
       } finally {
         setLoading(false)
       }
     }
     fetchData()
-  }, [lista])
+  }, [products])
+
+  const handlePageChange = (pageNumber: number) => {
+    setCurrentPage(pageNumber)
+  }
 
   return (
     <Container>
@@ -56,10 +64,16 @@ export function ListProductWarehouse() {
             </Card>
 
             <div className="mt-10">
-              <TableListProductWarehouse data={lista} />
+              <TableListProductWarehouse data={products} />
 
               <ProductModal title="Cadastro de Produto" action="Adicionar" />
             </div>
+            <Pagination
+              totalPages={totalPages}
+              currentPage={currentPage}
+              onPageChange={handlePageChange}
+              numberOfElements={numberOfElements}
+            />
           </div>
         )}
       </div>

@@ -5,8 +5,10 @@ import {
   ProductWarehouseResponsePaginate
 } from './type'
 
-export const getAllProducts = () =>
-  api.get<ProductWarehouseResponsePaginate>('/produtos')
+export const getAllProducts = (page: number, size?: number) =>
+  api.get<ProductWarehouseResponsePaginate>('/produtos', {
+    params: { page, size }
+  })
 
 export const createProduct = (productData: ProductWarehouseCreateRequest) =>
   api.post<ProductWarehouseResponse>('/produtos', productData)
