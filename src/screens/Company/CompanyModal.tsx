@@ -11,7 +11,8 @@ import { createCompany } from '../../services/Company/apiService'
 
 interface CompanyFormProps {
   name: string
-  code: string
+  cpf: string
+  cnpj: string
   email: string
   telephone?: string
   cell_phone?: string
@@ -25,14 +26,14 @@ export function CompanyModal({
   title
 }: ModelModalProp) {
   const validationSchema = object({
-    name: string().required('Razão Social é obrigatória'),
-    code: string()
-      .required('CPF ou CNPJ é obrigatório')
-      .matches(/^[0-9]+$/, 'O código deve conter apenas números'),
+    name: string().required('Nome é obrigatório'),
+    cpf: string(),
+    cnpj: string(),
     email: string()
       .email('Insira um e-mail válido')
       .required('E-mail é obrigatório'),
-    tel: string(),
+    telephone: string(),
+    cell_phone: string(),
     checkCustomer: boolean(),
     checkSupplier: boolean()
   })
@@ -45,9 +46,6 @@ export function CompanyModal({
       let isSupplier: BusinessRelationshipType | undefined =
         values.checkSupplier ? BusinessRelationshipType.FORNECEDOR : undefined
 
-      let cnpj = values.code.length === 14 ? values.code : undefined
-      let cpf = values.code.length === 11 ? values.code : undefined
-
       const businessRelationshipTypeArray: BusinessRelationshipType[] = [
         isCustomer,
         isSupplier
@@ -55,8 +53,8 @@ export function CompanyModal({
 
       const companyData: CompanyCreateRequest = {
         name: values.name,
-        cnpj: cnpj,
-        cpf: cpf,
+        cnpj: values.cnpj,
+        cpf: values.cpf,
         email: values.email,
         telephone: values.telephone,
         cell_phone: values.cell_phone,
@@ -99,13 +97,13 @@ export function CompanyModal({
                 render={({ input, meta }) => (
                   <TextInput.Root
                     labelFor="name"
-                    labelText="Razão Social"
+                    labelText="Nome da Empresa"
                     error={meta.touched && meta.error ? meta.error : undefined}
                   >
                     <TextInput.Input
                       id="name"
                       type="text"
-                      placeholder="Digite a razão social..."
+                      placeholder="Digite o nome..."
                       {...input}
                     />
                   </TextInput.Root>
@@ -113,17 +111,37 @@ export function CompanyModal({
               />
 
               <Field
-                name="code"
+                name="cpf"
                 render={({ input, meta }) => (
                   <TextInput.Root
-                    labelFor="code"
-                    labelText="CPF ou CNPJ"
+                    labelFor="cpf"
+                    labelText="CPF"
                     error={meta.touched && meta.error ? meta.error : undefined}
                   >
                     <TextInput.Input
-                      id="code"
+                      id="cpf"
                       type="text"
                       placeholder="Digite o código..."
+                      mask="999.999.999-99"
+                      {...input}
+                    />
+                  </TextInput.Root>
+                )}
+              />
+
+              <Field
+                name="cnpj"
+                render={({ input, meta }) => (
+                  <TextInput.Root
+                    labelFor="cnpj"
+                    labelText="CNPJ"
+                    error={meta.touched && meta.error ? meta.error : undefined}
+                  >
+                    <TextInput.Input
+                      id="cnpj"
+                      type="text"
+                      placeholder="Digite o código..."
+                      mask="99.999.999/9999-99"
                       {...input}
                     />
                   </TextInput.Root>
@@ -149,17 +167,37 @@ export function CompanyModal({
               />
 
               <Field
-                name="tel"
+                name="telephone"
                 render={({ input, meta }) => (
                   <TextInput.Root
-                    labelFor="tel"
-                    labelText="Telefone"
+                    labelFor="telephone"
+                    labelText="Tefone"
                     error={meta.touched && meta.error ? meta.error : undefined}
                   >
                     <TextInput.Input
-                      id="tel"
+                      id="telephone"
                       type="text"
-                      placeholder="Digite o telefone de contato..."
+                      placeholder="(99) 9999-9999"
+                      mask="(99) 9999-9999"
+                      {...input}
+                    />
+                  </TextInput.Root>
+                )}
+              />
+
+              <Field
+                name="cell_phone"
+                render={({ input, meta }) => (
+                  <TextInput.Root
+                    labelFor="cell_phone"
+                    labelText="Celular"
+                    error={meta.touched && meta.error ? meta.error : undefined}
+                  >
+                    <TextInput.Input
+                      id="cell_phone"
+                      type="text"
+                      mask="(99) 99999-9999"
+                      placeholder="(99) 99999-9999"
                       {...input}
                     />
                   </TextInput.Root>
