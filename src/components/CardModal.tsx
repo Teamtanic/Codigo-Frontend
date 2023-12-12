@@ -9,13 +9,15 @@ export interface ModelModalProp {
   triggerStyle?: string
   optionsTrigger?: boolean | false
   title: string
-  mode?: 'create' | 'edit'
+  iconTrigger?: React.ReactNode
+  mode?: 'create' | 'edit' | 'delete'
 }
 
 interface CardModalProps {
   children: ReactNode
   title?: string
   action?: string
+  iconTrigger?: React.ReactNode
   triggerStyle?: string
   optionsTrigger?: boolean
 }
@@ -25,7 +27,8 @@ export const CardModal = ({
   title,
   action,
   triggerStyle,
-  optionsTrigger
+  optionsTrigger,
+  iconTrigger
 }: CardModalProps) => {
   const [isOpen, setIsOpen] = useState(false)
 
@@ -35,12 +38,11 @@ export const CardModal = ({
         <Button
           className={`${
             optionsTrigger
-              ? '!w-full !bg-transparent !shadow-none hover:!bg-gray-200 hover:dark:!bg-gray-600 bottom-3 !font-normal '
-              : '!w-fit inline-flex items-center justify-center px-[15px] font-medium leading-none focus:shadow-[0_0_0_2px] fixed bottom-5 right-8 rounded shadow-[rgba(0,_0,_0,_0.25)_0px_25px_50px_-12px] focus:shadow-black focus:outline-none'
-          }
-                 ${triggerStyle}  text-gray-100 dark:text-gray-100 `}
+              ? 'w-full !bg-transparent !shadow-none hover:bg-gray-200 hover:dark:bg-gray-600 bottom-3 !font-normal '
+              : 'w-fit inline-flex items-center justify-center px-[15px] font-medium leading-none focus:shadow-[0_0_0_2px] fixed bottom-5 right-8 rounded shadow-[rgba(0,_0,_0,_0.25)_0px_25px_50px_-12px] focus:shadow-black focus:outline-none'
+          } ${triggerStyle} text-gray-100 dark:text-gray-100 `}
         >
-          {action ? action : 'Abrir'}
+          {iconTrigger ? iconTrigger : action ? action : 'Abrir'}
         </Button>
       </Dialog.Trigger>
       <Dialog.Portal>

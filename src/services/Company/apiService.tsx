@@ -22,3 +22,6 @@ export const editCompany = (companyData: CompanyUpdateRequest, id: string) =>
   api.patch<CompanyResponse>(`/empresas/${id}`, companyData)
 
 export const deleteCompany = (id: string) => api.delete(`/empresas/${id}`)
+
+export const getCompanyById = (id: string) =>
+  api.get<CompanyResponse>(`/empresas/${id}`)

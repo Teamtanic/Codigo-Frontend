@@ -11,7 +11,13 @@ import {
   CompanyUpdateRequest
 } from '../../services/Company/types'
 import { BusinessRelationshipType } from '../../services/CompanyRelationship/types'
-import { createCompany, editCompany } from '../../services/Company/apiService'
+import {
+  createCompany,
+  editCompany,
+  getCompanyById
+} from '../../services/Company/apiService'
+import { useNavigate } from 'react-router-dom'
+import { HttpStatusCode } from 'axios'
 
 interface CompanyFormProps {
   name: string
@@ -29,8 +35,12 @@ export function CompanyModal({
   optionsTrigger,
   title,
   mode = 'create',
-  data
+  data,
+  triggerStyle,
+  iconTrigger
 }: ModelModalProp & { data?: CompanyResponse }) {
+  let navigate = useNavigate()
+
   const validationSchema = object({
     name: string().required('Nome é obrigatório'),
     cpf: string(),
@@ -93,7 +103,14 @@ export function CompanyModal({
             data,
             companyData
           )
-          await editCompany(updateCompanyData, data.id)
+          let editResponse = await editCompany(updateCompanyData, data.id)
+          if (editResponse.status === HttpStatusCode.Ok) {
+            let updateResponse = await getCompanyById(data.id)
+            if (updateResponse.status === HttpStatusCode.Ok) {
+              const record: CompanyResponse = updateResponse.data
+              navigate(`/empresa/${data.id}`, { state: { record } })
+            }
+          }
         }
       }
     } catch (error) {
@@ -141,6 +158,8 @@ export function CompanyModal({
           title={title}
           action={action}
           optionsTrigger={optionsTrigger}
+          triggerStyle={triggerStyle}
+          iconTrigger={iconTrigger}
         >
           <form
             onSubmit={handleSubmit}
