@@ -4,7 +4,7 @@ import { Heading } from '../../../components/Heading'
 import { Navbar } from '../../../components/Navbar'
 import { TextInput } from '../../../components/TextInput'
 import { MagnifyingGlass } from 'phosphor-react'
-import { TableListBank } from './TableListBank'
+import { BankProps, TableListBank } from './TableListBank'
 import { amountMask } from '../../../utils'
 import { BankModal } from './BankModal'
 import { useEffect, useState } from 'react'
@@ -12,12 +12,6 @@ import { BankAccountResponse } from '../../../services/BankAccount/types'
 import { getAllBankAccounts } from '../../../services/BankAccount/apiService'
 import { Loader } from '../../../components/Loader'
 import { Pagination } from '../../../components/Pagination'
-
-interface BankProps {
-  id: string
-  name: string
-  balance: string
-}
 
 export function ListBank() {
   const [bankAccount, setBankAccount] = useState<BankAccountResponse[]>([])
@@ -45,7 +39,7 @@ export function ListBank() {
 
   var banksDTO: BankProps[] = bankAccount.map(bank => ({
     ...bank,
-    balance: amountMask(bank.balance)
+    balanceMask: amountMask(bank.balance)
   }))
 
   const handlePageChange = (pageNumber: number) => {

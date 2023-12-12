@@ -12,8 +12,6 @@ import { TableListProject } from '../Project/TableListProject'
 import { CompanyResponse } from '../../services/Company/types'
 import { CompanyModal } from './CompanyModal'
 import { PencilSimple, Trash } from 'phosphor-react'
-import { CardModal } from '../../components/CardModal'
-import { Button } from '../../components/Button'
 import { deleteCompany } from '../../services/Company/apiService'
 import { CardDelete } from '../../components/CardDelete'
 

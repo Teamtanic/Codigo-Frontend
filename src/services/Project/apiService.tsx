@@ -5,8 +5,8 @@ import {
   ProjectResponsePaginate
 } from './type'
 
-export const getAllProjects = () =>
-  api.get<ProjectResponsePaginate>('/projetos')
+export const getAllProjects = (page: number, size?: number) =>
+  api.get<ProjectResponsePaginate>('/projetos', { params: { page, size } })
 
 export const createProject = (projectData: ProjectCreateRequest) =>
   api.post<ProjectResponse>('/projetos', projectData)

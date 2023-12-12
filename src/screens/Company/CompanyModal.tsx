@@ -18,6 +18,7 @@ import {
 } from '../../services/Company/apiService'
 import { useNavigate } from 'react-router-dom'
 import { HttpStatusCode } from 'axios'
+import { createUpdateObject } from '../../utils'
 
 interface CompanyFormProps {
   name: string
@@ -53,24 +54,6 @@ export function CompanyModal({
     checkCustomer: boolean(),
     checkSupplier: boolean()
   })
-
-  function createUpdateObject<T extends Record<string, any>>(
-    currentData: T,
-    newData: Partial<T>
-  ): Partial<T> {
-    const updateObject: Partial<T> = {}
-
-    Object.keys(newData).forEach(key => {
-      if (
-        currentData.hasOwnProperty(key) &&
-        currentData[key] !== newData[key]
-      ) {
-        updateObject[key as keyof T] = newData[key]
-      }
-    })
-
-    return updateObject
-  }
 
   const onSubmit = async (values: CompanyFormProps) => {
     try {
