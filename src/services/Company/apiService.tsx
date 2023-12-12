@@ -2,7 +2,8 @@ import { api } from '../api'
 import {
   CompanyCreateRequest,
   CompanyResponse,
-  CompanyResponsePaginate
+  CompanyResponsePaginate,
+  CompanyUpdateRequest
 } from './types'
 
 export const getAllCompanies = (page: number, size?: number) =>
@@ -16,3 +17,8 @@ export const getAllSuppliers = () =>
 
 export const createCompany = (companyData: CompanyCreateRequest) =>
   api.post<CompanyResponse>('/empresas', companyData)
+
+export const editCompany = (companyData: CompanyUpdateRequest, id: string) =>
+  api.patch<CompanyResponse>(`/empresas/${id}`, companyData)
+
+export const deleteCompany = (id: string) => api.delete(`/empresas/${id}`)

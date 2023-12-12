@@ -5,9 +5,13 @@ import { Text } from '../../components/Text'
 import { TextInput } from '../../components/TextInput'
 import { Form, Field } from 'react-final-form'
 import { object, string, boolean } from 'yup'
-import { CompanyCreateRequest } from '../../services/Company/types'
+import {
+  CompanyCreateRequest,
+  CompanyResponse,
+  CompanyUpdateRequest
+} from '../../services/Company/types'
 import { BusinessRelationshipType } from '../../services/CompanyRelationship/types'
-import { createCompany } from '../../services/Company/apiService'
+import { createCompany, editCompany } from '../../services/Company/apiService'
 
 interface CompanyFormProps {
   name: string
@@ -23,8 +27,10 @@ interface CompanyFormProps {
 export function CompanyModal({
   action,
   optionsTrigger,
-  title
-}: ModelModalProp) {
+  title,
+  mode = 'create',
+  data
+}: ModelModalProp & { data?: CompanyResponse }) {
   const validationSchema = object({
     name: string().required('Nome é obrigatório'),
     cpf: string(),
@@ -37,6 +43,24 @@ export function CompanyModal({
     checkCustomer: boolean(),
     checkSupplier: boolean()
   })
+
+  function createUpdateObject<T extends Record<string, any>>(
+    currentData: T,
+    newData: Partial<T>
+  ): Partial<T> {
+    const updateObject: Partial<T> = {}
+
+    Object.keys(newData).forEach(key => {
+      if (
+        currentData.hasOwnProperty(key) &&
+        currentData[key] !== newData[key]
+      ) {
+        updateObject[key as keyof T] = newData[key]
+      }
+    })
+
+    return updateObject
+  }
 
   const onSubmit = async (values: CompanyFormProps) => {
     try {
@@ -61,17 +85,48 @@ export function CompanyModal({
         businessRelationshipType: businessRelationshipTypeArray
       }
 
-      await createCompany(companyData)
-
-      console.log(companyData)
+      if (mode === 'create') {
+        await createCompany(companyData)
+      } else if (mode === 'edit') {
+        if (data) {
+          const updateCompanyData: CompanyUpdateRequest = createUpdateObject(
+            data,
+            companyData
+          )
+          await editCompany(updateCompanyData, data.id)
+        }
+      }
     } catch (error) {
       console.error(error)
+    }
+  }
+
+  let initialValues = {}
+  if (data) {
+    initialValues = {
+      id: data.id,
+      name: data.name,
+      cpf: data.cpf ?? undefined,
+      cnpj: data.cnpj ?? undefined,
+      checkCustomer: data.companyRelationships.some(
+        relationship =>
+          relationship.businessRelationship === 'CLIENTE' && relationship.active
+      ),
+      checkSupplier: data.companyRelationships.some(
+        relationship =>
+          relationship.businessRelationship === 'FORNECEDOR' &&
+          relationship.active
+      ),
+      email: data.contact[0].email ?? undefined,
+      telephone: data.contact[0].telephone ?? undefined,
+      cell_phone: data.contact[0].cell_phone ?? undefined
     }
   }
 
   return (
     <Form
       onSubmit={onSubmit}
+      initialValues={initialValues}
       validate={values => {
         try {
           validationSchema.validateSync(values, { abortEarly: false })
