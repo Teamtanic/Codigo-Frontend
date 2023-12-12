@@ -1,5 +1,9 @@
 import { Outlet, Navigate } from 'react-router-dom'
-import { getUserIndex, hasPermission, isTokenExpired } from '../utils'
+import {
+  getUserIndex,
+  hasPermission,
+  isTokenExpired
+} from '../services/User/utils'
 
 const PrivateRoutes = ({
   necessaryPermissions
