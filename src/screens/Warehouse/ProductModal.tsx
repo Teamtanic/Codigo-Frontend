@@ -3,41 +3,91 @@ import { CardModal, ModelModalProp } from '../../components/CardModal'
 import { TextInput } from '../../components/TextInput'
 import { Form, Field } from 'react-final-form'
 import { number, object, string } from 'yup'
-import { ProductWarehouseCreateRequest } from '../../services/ProductWarehouse/type'
-import { createProduct } from '../../services/ProductWarehouse/apiService'
+import {
+  ProductWarehouseCreateRequest,
+  ProductWarehouseResponse,
+  ProductWarehouseUpdateRequest
+} from '../../services/ProductWarehouse/type'
+import {
+  createProduct,
+  editProduct,
+  getProductById
+} from '../../services/ProductWarehouse/apiService'
+import { ProductWarehouseProps } from './TableListProductWarehouse'
+import { useNavigate } from 'react-router-dom'
+import { createUpdateObject } from '../../utils'
+import { HttpStatusCode } from 'axios'
+import { useEffect, useState } from 'react'
 
 export function ProductModal({
   action,
   optionsTrigger,
-  title
-}: ModelModalProp) {
+  title,
+  mode = 'create',
+  data,
+  triggerStyle,
+  iconTrigger
+}: ModelModalProp & { data?: ProductWarehouseProps }) {
+  let navigate = useNavigate()
+
   const validationSchema = object({
     product: string().required('Nome é obrigatório'),
     quantity: number().required('Quantidade é obrigatório'),
-    companyRelationship: string().required('Fornecedor é obrigatório'),
-    supplierPrice: number().required('Preço é obrigatório')
+    companyRelationship: string(),
+    supplierPrice: number()
   })
 
   const onSubmit = async (values: ProductWarehouseCreateRequest) => {
     try {
       const productData: ProductWarehouseCreateRequest = {
         product: values.product,
-        quantity: values.quantity,
+        quantity: parseInt(values.quantity, 10),
         companyRelationship: values.companyRelationship,
         supplierPrice: values.supplierPrice
       }
 
-      await createProduct(productData)
-
+      if (mode === 'create') {
+        await createProduct(productData)
+      } else if (mode === 'edit') {
+        if (data) {
+          const updateData: ProductWarehouseUpdateRequest = createUpdateObject(
+            data,
+            productData
+          )
+          let editResponse = await editProduct(updateData, data.id)
+          if (editResponse.status === HttpStatusCode.Ok) {
+            let updateResponse = await getProductById(data.id)
+            if (updateResponse.status === HttpStatusCode.Ok) {
+              const record: ProductWarehouseResponse = updateResponse.data
+              navigate(`/produto/${data.id}`, { state: { record } })
+            }
+          }
+        }
+      }
       console.log(values)
     } catch (error) {
       console.error(error)
     }
   }
 
+  const [initialValues, setInitialValues] = useState<any>({})
+
+  useEffect(() => {
+    if (data) {
+      setInitialValues({
+        id: data.id,
+        product: data.product,
+        quantity: data.quantity
+      })
+    } else {
+      setInitialValues({})
+    }
+  }, [])
+
   return (
     <Form
       onSubmit={onSubmit}
+      initialValues={initialValues}
       validate={values => {
         try {
           validationSchema.validateSync(values, { abortEarly: false })
@@ -92,10 +142,11 @@ export function ProductModal({
                 )}
               />
 
+              {/*
               <Field
-                name="companyRelationship"
-                render={({ input, meta }) => (
-                  <TextInput.Root
+              name="companyRelationship"
+              render={({ input, meta }) => (
+                <TextInput.Root
                     labelFor="companyRelationship"
                     labelText="Fornecedor"
                     error={meta.touched && meta.error ? meta.error : undefined}
@@ -109,25 +160,26 @@ export function ProductModal({
                   </TextInput.Root>
                 )}
               />
-
+              
               <Field
-                name="supplierPrice"
-                render={({ input, meta }) => (
+              name="supplierPrice"
+              render={({ input, meta }) => (
                   <TextInput.Root
-                    labelFor="supplierPrice"
+                  labelFor="supplierPrice"
                     labelText="Preço"
                     error={meta.touched && meta.error ? meta.error : undefined}
                   >
                     <TextInput.Input
-                      id="supplierPrice"
-                      type="text"
-                      placeholder="Informe o preço..."
-                      {...input}
+                    id="supplierPrice"
+                    type="text"
+                    placeholder="Informe o preço..."
+                    {...input}
                     />
-                  </TextInput.Root>
-                )}
-              />
-
+                    </TextInput.Root>
+                    )}
+                    />
+                    
+              */}
               <Button
                 className={`rounded-md z-50 !w-fit h-12 translate-y-10 ml-auto mr-0`}
                 textSize="sm"

@@ -47,9 +47,11 @@ export function BankModal({
         await createBankAccount(bankaccountData)
       } else if (mode === 'edit') {
         if (data) {
-          const updateCompanyData: BankAccountUpdateRequest =
-            createUpdateObject(data, bankaccountData)
-          let editResponse = await editBankAccount(updateCompanyData, data.id)
+          const updateData: BankAccountUpdateRequest = createUpdateObject(
+            data,
+            bankaccountData
+          )
+          let editResponse = await editBankAccount(updateData, data.id)
           if (editResponse.status === HttpStatusCode.Ok) {
             let updateResponse = await getBankAccountById(data.id)
             if (updateResponse.status === HttpStatusCode.Ok) {

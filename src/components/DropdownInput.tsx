@@ -7,7 +7,7 @@ interface ComboboxProps {
   labelText?: string
   labelStyle?: string
   error?: string | undefined
-  inputValue: Record | null
+  inputValue?: Record | null
   placeholder?: string
   onChange: (record: Record | null) => void
   searchFunction: (query: string) => Promise<{ data: { content: Record[] } }>
