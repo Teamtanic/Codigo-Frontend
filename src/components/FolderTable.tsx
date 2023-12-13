@@ -14,15 +14,16 @@ export interface Column<Data> {
   width?: string;
 }
 
-interface TableProps<Data extends { id: string }> {
+interface TableProps<Data extends { name: string }> {
   columns: Column<Data>[];
   data: Data[];
   menu?: boolean;
   options?: ModalOptions[];
+  isFolder?: boolean;
   link?: string;
 }
 
-export function Table<Data extends { id: string }>({
+export function FolderTable<Data extends { name: string }>({
   data,
   columns,
   menu = true,
@@ -35,7 +36,7 @@ export function Table<Data extends { id: string }>({
     if (link) {
       window.scrollTo(0, 0);
 
-      navigate(`/${link}/${record.id}`, { state: { record } });
+      navigate(`${link}/${record.name}`, { state: { record } });
     }
   };
 
