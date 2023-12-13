@@ -1,8 +1,8 @@
 import { UserResponse } from '../User/types'
 
-enum Permission {
-  CAN_VIEW,
-  CAN_WRITE
+export enum Permission {
+  CAN_VIEW = 'CAN_VIEW',
+  CAN_WRITE = 'CAN_WRITE'
 }
 
 export interface UserRoleCreateRequest {
@@ -17,12 +17,17 @@ export interface UserRoleResponse {
 
 export interface RoleCreateRequest {
   name: string
+  rolePermissions: RolePermission[]
+}
+
+export interface RolePermission {
+  departmentId: string
   permissions?: Permission[]
 }
 
 export interface RoleUpdateRequest {
   name?: string
-  permissions?: Permission[]
+  rolePermissions?: RolePermission[]
 }
 
 export interface RoleResponse {
