@@ -6,8 +6,12 @@ export function logout() {
   window.location.href = '/login'
 }
 
-const token = localStorage.getItem('token')
+export function getToken() {
+  return localStorage.getItem('token')
+}
+
 export function getUserPermissions() {
+  let token = getToken()
   if (token) {
     try {
       const decodedToken: any = jwtDecode(token)
@@ -26,6 +30,7 @@ export function getUserPermissions() {
 }
 
 export function isTokenExpired() {
+  let token = getToken()
   if (!token) {
     return true
   }
@@ -63,6 +68,7 @@ export function hasPermission(requiredPermissions: string[]): boolean {
 }
 
 export function getUserIndex(): string {
+  let token = getToken()
   if (!token) {
     return '/login'
   }
@@ -88,6 +94,7 @@ interface UserData {
 }
 
 export function getUserData(): UserData | undefined {
+  let token = getToken()
   if (!token) {
     console.error('Token não encontrado.')
     return undefined
