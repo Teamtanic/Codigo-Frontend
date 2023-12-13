@@ -70,7 +70,7 @@ export function RoleModal({
             let updateResponse = await getRoleById(data.id)
             if (updateResponse.status === HttpStatusCode.Ok) {
               const record: RoleResponse = updateResponse.data
-              navigate(`/banco/${data.id}`, { state: { record } })
+              navigate(`/cargo/${data.id}`, { state: { record } })
             }
           }
         }

@@ -3,14 +3,32 @@ import { CardModal, ModelModalProp } from '../../../components/CardModal'
 import { TextInput } from '../../../components/TextInput'
 import { Form, Field } from 'react-final-form'
 import { object, string } from 'yup'
-import { DepartmentCreateRequest } from '../../../services/Department/types'
-import { createDepartment } from '../../../services/Department/apiService'
+import {
+  DepartmentCreateRequest,
+  DepartmentResponse,
+  DepartmentUpdateRequest
+} from '../../../services/Department/types'
+import {
+  createDepartment,
+  editDepartment,
+  getDepartmentById
+} from '../../../services/Department/apiService'
+import { useNavigate } from 'react-router'
+import { createUpdateObject } from '../../../utils'
+import { HttpStatusCode } from 'axios'
+import { useEffect, useState } from 'react'
 
 export function DepartmentModal({
   action,
   optionsTrigger,
-  title
-}: ModelModalProp) {
+  title,
+  mode = 'create',
+  data,
+  triggerStyle,
+  iconTrigger
+}: ModelModalProp & { data?: DepartmentResponse }) {
+  let navigate = useNavigate()
+
   const validationSchema = object({
     name: string().required('Nome é obrigatório')
   })
@@ -21,16 +39,46 @@ export function DepartmentModal({
         name: values.name
       }
 
-      const response = await createDepartment(departmentData)
-      console.log(response)
+      if (mode === 'create') {
+        await createDepartment(departmentData)
+      } else if (mode === 'edit') {
+        if (data) {
+          const updateData: DepartmentUpdateRequest = createUpdateObject(
+            data,
+            departmentData
+          )
+          let editResponse = await editDepartment(updateData, data.id)
+          if (editResponse.status === HttpStatusCode.Ok) {
+            let updateResponse = await getDepartmentById(data.id)
+            if (updateResponse.status === HttpStatusCode.Ok) {
+              const record: DepartmentResponse = updateResponse.data
+              navigate(`/departamento/${data.id}`, { state: { record } })
+            }
+          }
+        }
+      }
     } catch (error) {
       console.error(error)
     }
   }
 
+  const [initialValues, setInitialValues] = useState<any>({})
+
+  useEffect(() => {
+    if (data) {
+      setInitialValues({
+        id: data.id,
+        name: data.name
+      })
+    } else {
+      setInitialValues({})
+    }
+  }, [])
+
   return (
     <Form
       onSubmit={onSubmit}
+      initialValues={initialValues}
       validate={values => {
         try {
           validationSchema.validateSync(values, { abortEarly: false })

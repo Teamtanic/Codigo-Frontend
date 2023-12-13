@@ -10,7 +10,6 @@ export function DetailsDepartment() {
   const location = useLocation()
   const { state } = location
   const department = state.record
-
   return (
     <Container>
       <Navbar />
