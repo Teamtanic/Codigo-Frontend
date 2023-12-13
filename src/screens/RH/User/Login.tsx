@@ -117,7 +117,14 @@ export function Login() {
                     )}
                   />
 
-                  <Button className="mt-4 ">
+                  <Text
+                    size="xm"
+                    className="text-blue-800 hover:text-blue-600 "
+                  >
+                    <a href="/recuperar-senha">Esqueci a senha</a>
+                  </Text>
+
+                  <Button className="mt-2 ">
                     <Text className="text-gray-100">
                       {submitting ? 'Entrando...' : 'Entrar'}
                     </Text>

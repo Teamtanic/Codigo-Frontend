@@ -1,12 +1,12 @@
-import { useState } from "react";
-import { Text } from "./Text";
-import { useDropzone } from "react-dropzone";
-import { FieldInputProps } from "react-final-form";
+import { useState } from 'react'
+import { Text } from './Text'
+import { useDropzone } from 'react-dropzone'
+import { FieldInputProps } from 'react-final-form'
 
 export interface DropFileProps extends FieldInputProps<any> {
-  labelText?: string;
-  labelStyle?: string;
-  error?: string | undefined;
+  labelText?: string
+  labelStyle?: string
+  error?: string | undefined
 }
 
 export function DropFile({
@@ -15,13 +15,13 @@ export function DropFile({
   error,
   ...props
 }: DropFileProps) {
-  const [selectedFileName, setSelectedFileName] = useState<string | null>(null);
+  const [selectedFileName, setSelectedFileName] = useState<string | null>(null)
   const { getRootProps, getInputProps } = useDropzone({
     onDrop: ([file]) => {
-      setSelectedFileName(file.name);
-      props.onChange(file);
-    },
-  });
+      setSelectedFileName(file.name)
+      props.onChange(file)
+    }
+  })
 
   return (
     <div>
@@ -56,7 +56,7 @@ export function DropFile({
               />
             </svg>
             <span className="font-medium text-gray-600">
-              Arraste seus arquivos aqui, ou{" "}
+              Arraste seus arquivos aqui, ou{' '}
               <span className="text-blue-600 underline">busque-os</span>
             </span>
           </span>
@@ -65,5 +65,5 @@ export function DropFile({
         <input {...getInputProps()} />
       </div>
     </div>
-  );
+  )
 }

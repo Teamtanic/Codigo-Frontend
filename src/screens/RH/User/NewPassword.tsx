@@ -1,4 +1,3 @@
-import { EnvelopeClosedIcon } from '@radix-ui/react-icons'
 import { Button } from '../../../components/Button'
 import { Card } from '../../../components/Card'
 import { Container } from '../../../components/Container'
@@ -8,28 +7,32 @@ import { TextInput } from '../../../components/TextInput'
 import ThemeToggle from '../../../components/ThemeToggle'
 import { Field, Form } from 'react-final-form'
 import { object, string } from 'yup'
-import { requestPasswordReset } from '../../../services/User/apiService'
-import { UserEmailRequest } from '../../../services/User/types'
-import { useNavigate } from 'react-router'
+import { resetPassword } from '../../../services/User/apiService'
+import { UserPasswordRequest } from '../../../services/User/types'
+import { useLocation, useNavigate } from 'react-router'
 
-export function RecoveryPassword() {
+export function NewPassword() {
+  const validationSchema = object({
+    password: string().required('Senha é obrigatória')
+  })
+  const location = useLocation()
+  const searchParams = new URLSearchParams(location.search)
+  const token = searchParams.get('token')
+
   const navigate = useNavigate()
 
-  const validationSchema = object({
-    email: string()
-      .email('Insira um e-mail válido')
-      .required('E-mail é obrigatório')
-  })
-
-  const onSubmit = async (values: UserEmailRequest) => {
+  const onSubmit = async (values: UserPasswordRequest) => {
     try {
-      const userData: UserEmailRequest = {
-        email: values.email
+      const userData: UserPasswordRequest = {
+        password: values.password
       }
 
-      await requestPasswordReset(userData)
+      console.log(token)
 
-      console.log(userData)
+      if (token) {
+        await resetPassword(userData, token)
+      }
+      navigate('/login')
     } catch (error) {
       console.error(error)
     }
@@ -73,20 +76,20 @@ export function RecoveryPassword() {
               render={({ handleSubmit, submitting }) => (
                 <form onSubmit={handleSubmit}>
                   <Field
-                    name="email"
+                    name="password"
                     render={({ input, meta }) => (
                       <TextInput.Root
-                        labelFor="email"
-                        labelText="Email"
+                        labelFor="password"
+                        labelText="Senha"
                         labelStyle="text-gray-900"
                         error={
                           meta.touched && meta.error ? meta.error : undefined
                         }
                       >
                         <TextInput.Input
-                          id="email"
-                          type="text"
-                          placeholder="Digite o email..."
+                          id="password"
+                          type="password"
+                          placeholder="*******"
                           {...input}
                         />
                       </TextInput.Root>

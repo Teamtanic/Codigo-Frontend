@@ -1,53 +1,54 @@
 import {
   BrowserRouter as Router,
   Routes as Switch,
-  Route,
-} from "react-router-dom";
+  Route
+} from 'react-router-dom'
 
 //#region Pages
-import Home from "./screens/Home/Home";
-import { ListCompany } from "./screens/Company/ListCompany";
-import { DetailsCompany } from "./screens/Company/DetailsCompany";
-import { ListProductWarehouse } from "./screens/Warehouse/ListProductWarehouse";
-import { ListProject } from "./screens/Project/ListProject";
-import { ListCourse } from "./screens/RH/Course/ListCourse";
-import { ListDepartment } from "./screens/RH/Department/ListDepartment";
-import { ListAuthority } from "./screens/RH/Authority/ListAuthority";
-import { ListUser } from "./screens/RH/User/ListUser";
-import { DetailsCourse } from "./screens/RH/Course/DetailsCourse";
-import { DetailsDepartment } from "./screens/RH/Department/DetailsDepartment";
-import { ListRoles } from "./screens/RH/Role/ListRole";
-import { DetailsRole } from "./screens/RH/Role/DetailsRole";
-import { DetailsUser } from "./screens/RH/User/DetailsUser";
-import { ListTransaction } from "./screens/Financial/Transaction/ListTransaction";
-import { ListBank } from "./screens/Financial/Bank/ListBank";
-import { DetailsProductWarehouse } from "./screens/Warehouse/DetailsProductWarehouse";
-import { DetailsBank } from "./screens/Financial/Bank/DetailsBank";
-import { DetailsTransaction } from "./screens/Financial/Transaction/DetailsTransaction";
-import { ListDocument } from "./screens/Documents/ListDocument";
-import { DetailsDocument } from "./screens/Documents/DetailsDocument";
-import { CreateUser } from "./screens/RH/User/CreateUser";
-import { DetailsProject } from "./screens/Project/DetailsProject";
-import { DetailsOffer } from "./screens/Offer/DetailsOffer";
-import { ListOffer } from "./screens/Offer/ListOffer";
-import { Login } from "./screens/RH/User/Login";
-import { RecoveryPassword } from "./screens/RH/User/RecoveryPassword";
-import PrivateRoutes from "./components/PrivateRoutes";
+import Home from './screens/Home/Home'
+import { ListCompany } from './screens/Company/ListCompany'
+import { DetailsCompany } from './screens/Company/DetailsCompany'
+import { ListProductWarehouse } from './screens/Warehouse/ListProductWarehouse'
+import { ListProject } from './screens/Project/ListProject'
+import { ListCourse } from './screens/RH/Course/ListCourse'
+import { ListDepartment } from './screens/RH/Department/ListDepartment'
+import { ListAuthority } from './screens/RH/Authority/ListAuthority'
+import { ListUser } from './screens/RH/User/ListUser'
+import { DetailsCourse } from './screens/RH/Course/DetailsCourse'
+import { DetailsDepartment } from './screens/RH/Department/DetailsDepartment'
+import { ListRoles } from './screens/RH/Role/ListRole'
+import { DetailsRole } from './screens/RH/Role/DetailsRole'
+import { DetailsUser } from './screens/RH/User/DetailsUser'
+import { ListTransaction } from './screens/Financial/Transaction/ListTransaction'
+import { ListBank } from './screens/Financial/Bank/ListBank'
+import { DetailsProductWarehouse } from './screens/Warehouse/DetailsProductWarehouse'
+import { DetailsBank } from './screens/Financial/Bank/DetailsBank'
+import { DetailsTransaction } from './screens/Financial/Transaction/DetailsTransaction'
+import { ListDocument } from './screens/Documents/ListDocument'
+import { DetailsDocument } from './screens/Documents/DetailsDocument'
+import { CreateUser } from './screens/RH/User/CreateUser'
+import { DetailsProject } from './screens/Project/DetailsProject'
+import { DetailsOffer } from './screens/Offer/DetailsOffer'
+import { ListOffer } from './screens/Offer/ListOffer'
+import { Login } from './screens/RH/User/Login'
+import { RecoveryPassword } from './screens/RH/User/RecoveryPassword'
+import PrivateRoutes from './components/PrivateRoutes'
+import { NewPassword } from './screens/RH/User/NewPassword'
 
 //#endregion
 
 export enum ModulePermission {
-  CAN_WRITE_ON_FINANCEIRO = "CAN_WRITE_ON_FINANCEIRO",
-  CAN_VIEW_ON_FINANCEIRO = "CAN_VIEW_ON_FINANCEIRO",
-  CAN_WRITE_ON_RH = "CAN_WRITE_ON_RH",
+  CAN_WRITE_ON_FINANCEIRO = 'CAN_WRITE_ON_FINANCEIRO',
+  CAN_VIEW_ON_FINANCEIRO = 'CAN_VIEW_ON_FINANCEIRO',
+  CAN_WRITE_ON_RH = 'CAN_WRITE_ON_RH'
   // Adicione mais permissões de módulos conforme necessário
 }
 
 export const moduleRoutes: Record<ModulePermission, string> = {
-  [ModulePermission.CAN_WRITE_ON_FINANCEIRO]: "/transacoes",
-  [ModulePermission.CAN_VIEW_ON_FINANCEIRO]: "/transacoes",
-  [ModulePermission.CAN_WRITE_ON_RH]: "/rh",
-};
+  [ModulePermission.CAN_WRITE_ON_FINANCEIRO]: '/transacoes',
+  [ModulePermission.CAN_VIEW_ON_FINANCEIRO]: '/transacoes',
+  [ModulePermission.CAN_WRITE_ON_RH]: '/rh'
+}
 
 function Routes() {
   return (
@@ -55,6 +56,7 @@ function Routes() {
       <Switch>
         <Route path="/login" element={<Login />} />
         <Route path="/recuperar-senha" element={<RecoveryPassword />} />
+        <Route path="/redefinir-senha" element={<NewPassword />} />
         <Route path="/teste" element={<Home />} />
 
         <Route path="/empresas" element={<ListCompany />} />
@@ -108,7 +110,7 @@ function Routes() {
         <Route path="/documento/:id" element={<DetailsDocument />} />
       </Switch>
     </Router>
-  );
+  )
 }
 
-export default Routes;
+export default Routes
