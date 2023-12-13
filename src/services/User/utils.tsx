@@ -108,3 +108,10 @@ export function getUserData(): UserData | undefined {
     return undefined
   }
 }
+
+export const checkPermission = (necessaryPermissions: string[]): boolean => {
+  const userPermissions = getUserPermissions()
+  return necessaryPermissions.some(permission =>
+    userPermissions?.includes(permission)
+  )
+}

@@ -40,14 +40,31 @@ import { NewPassword } from './screens/RH/User/NewPassword'
 export enum ModulePermission {
   CAN_WRITE_ON_FINANCEIRO = 'CAN_WRITE_ON_FINANCEIRO',
   CAN_VIEW_ON_FINANCEIRO = 'CAN_VIEW_ON_FINANCEIRO',
-  CAN_WRITE_ON_RH = 'CAN_WRITE_ON_RH'
-  // Adicione mais permissões de módulos conforme necessário
+  CAN_WRITE_ON_RH = 'CAN_WRITE_ON_RH',
+  CAN_VIEW_ON_RH = 'CAN_VIEW_ON_RH',
+  CAN_WRITE_ON_ALMOXARIFADO = 'CAN_WRITE_ON_ALMOXARIFADO',
+  CAN_VIEW_ON_ALMOXARIFADO = 'CAN_VIEW_ON_ALMOXARIFADO',
+  CAN_WRITE_ON_PROJETO = 'CAN_WRITE_ON_PROJETOS',
+  CAN_VIEW_ON_PROJETO = 'CAN_VIEW_ON_PROJETOS',
+  CAN_WRITE_ON_ADMINISTRATIVO = 'CAN_WRITE_ON_ADMINISTRATIVO',
+  CAN_VIEW_ON_ADMINISTRATIVO = 'CAN_VIEW_ON_ADMINISTRATIVO',
+  CAN_WRITE_ON_GLOBAL = 'CAN_WRITE_ON_GLOBAL',
+  CAN_VIEW_ON_GLOBAL = 'CAN_VIEW_ON_GLOBAL'
 }
 
 export const moduleRoutes: Record<ModulePermission, string> = {
   [ModulePermission.CAN_WRITE_ON_FINANCEIRO]: '/transacoes',
   [ModulePermission.CAN_VIEW_ON_FINANCEIRO]: '/transacoes',
-  [ModulePermission.CAN_WRITE_ON_RH]: '/rh'
+  [ModulePermission.CAN_WRITE_ON_RH]: '/empresas',
+  [ModulePermission.CAN_VIEW_ON_RH]: '/empresas',
+  [ModulePermission.CAN_WRITE_ON_ALMOXARIFADO]: '/almoxarifado',
+  [ModulePermission.CAN_VIEW_ON_ALMOXARIFADO]: '/almoxarifado',
+  [ModulePermission.CAN_WRITE_ON_PROJETO]: '/projetos',
+  [ModulePermission.CAN_VIEW_ON_PROJETO]: '/projetos',
+  [ModulePermission.CAN_WRITE_ON_ADMINISTRATIVO]: '/documentos',
+  [ModulePermission.CAN_VIEW_ON_ADMINISTRATIVO]: '/documentos',
+  [ModulePermission.CAN_WRITE_ON_GLOBAL]: '/empresas',
+  [ModulePermission.CAN_VIEW_ON_GLOBAL]: '/empresas'
 }
 
 function Routes() {
@@ -57,7 +74,7 @@ function Routes() {
         <Route path="/login" element={<Login />} />
         <Route path="/recuperar-senha" element={<RecoveryPassword />} />
         <Route path="/redefinir-senha" element={<NewPassword />} />
-        <Route path="/teste" element={<Home />} />
+        {/*<Route path="/teste" element={<Home />} />*/}
 
         <Route path="/empresas" element={<ListCompany />} />
         <Route path="/empresa/:id" element={<DetailsCompany />} />
@@ -66,48 +83,91 @@ function Routes() {
           element={
             <PrivateRoutes
               necessaryPermissions={[
-                'CAN_WRITE_ON_F',
-                'CAN_VIEW_ON_GLOBAL',
-                'CAN_VIEW_ON_ADMINISTRATIVO'
+                ModulePermission.CAN_VIEW_ON_GLOBAL,
+                ModulePermission.CAN_VIEW_ON_ALMOXARIFADO
               ]}
             />
           }
         >
           <Route path="/almoxarifado" element={<ListProductWarehouse />} />
+          <Route path="/produto/:id" element={<DetailsProductWarehouse />} />
         </Route>
-        <Route path="/produto/:id" element={<DetailsProductWarehouse />} />
 
-        <Route path="/ofertas" element={<ListOffer />} />
-        <Route path="/oferta/:id" element={<DetailsOffer />} />
+        <Route
+          element={
+            <PrivateRoutes
+              necessaryPermissions={[
+                ModulePermission.CAN_VIEW_ON_GLOBAL,
+                ModulePermission.CAN_VIEW_ON_PROJETO
+              ]}
+            />
+          }
+        >
+          <Route path="/ofertas" element={<ListOffer />} />
+          <Route path="/oferta/:id" element={<DetailsOffer />} />
 
-        <Route path="/projetos" element={<ListProject />} />
-        <Route path="/projeto/:id" element={<DetailsProject />} />
+          <Route path="/projetos" element={<ListProject />} />
+          <Route path="/projeto/:id" element={<DetailsProject />} />
+        </Route>
 
-        <Route path="/transacoes" element={<ListTransaction />} />
-        <Route path="/transacao/:id" element={<DetailsTransaction />} />
+        <Route
+          element={
+            <PrivateRoutes
+              necessaryPermissions={[
+                ModulePermission.CAN_VIEW_ON_GLOBAL,
+                ModulePermission.CAN_VIEW_ON_FINANCEIRO
+              ]}
+            />
+          }
+        >
+          <Route path="/transacoes" element={<ListTransaction />} />
+          <Route path="/transacao/:id" element={<DetailsTransaction />} />
 
-        <Route path="/bancos" element={<ListBank />} />
-        <Route path="/banco/:id" element={<DetailsBank />} />
+          <Route path="/bancos" element={<ListBank />} />
+          <Route path="/banco/:id" element={<DetailsBank />} />
+        </Route>
 
-        <Route path="/cursos" element={<ListCourse />} />
-        <Route path="/curso/:id" element={<DetailsCourse />} />
+        <Route
+          element={
+            <PrivateRoutes
+              necessaryPermissions={[
+                ModulePermission.CAN_VIEW_ON_GLOBAL,
+                ModulePermission.CAN_VIEW_ON_RH
+              ]}
+            />
+          }
+        >
+          <Route path="/cursos" element={<ListCourse />} />
+          <Route path="/curso/:id" element={<DetailsCourse />} />
 
-        <Route path="/cargos" element={<ListRoles />} />
-        <Route path="/cargo/:id" element={<DetailsRole />} />
+          <Route path="/cargos" element={<ListRoles />} />
+          <Route path="/cargo/:id" element={<DetailsRole />} />
 
-        <Route path="/departamentos" element={<ListDepartment />} />
-        <Route path="/departamento/:id" element={<DetailsDepartment />} />
+          <Route path="/departamentos" element={<ListDepartment />} />
+          <Route path="/departamento/:id" element={<DetailsDepartment />} />
 
-        <Route path="/autoridades" element={<ListAuthority />} />
+          <Route path="/autoridades" element={<ListAuthority />} />
 
-        <Route path="/privileges" element={<ListAuthority />} />
+          {/*<Route path="/privileges" element={<ListAuthority />} />*/}
 
-        <Route path="/registro" element={<CreateUser />} />
-        <Route path="/usuarios" element={<ListUser />} />
-        <Route path="/usuario/:id" element={<DetailsUser />} />
+          <Route path="/registro" element={<CreateUser />} />
+          <Route path="/usuarios" element={<ListUser />} />
+          <Route path="/usuario/:id" element={<DetailsUser />} />
+        </Route>
 
-        <Route path="/documentos/*" element={<ListDocument />} />
-        <Route path="/documento/:id" element={<DetailsDocument />} />
+        <Route
+          element={
+            <PrivateRoutes
+              necessaryPermissions={[
+                ModulePermission.CAN_WRITE_ON_GLOBAL,
+                ModulePermission.CAN_WRITE_ON_ADMINISTRATIVO
+              ]}
+            />
+          }
+        >
+          <Route path="/documentos/*" element={<ListDocument />} />
+          <Route path="/documento/:id" element={<DetailsDocument />} />
+        </Route>
       </Switch>
     </Router>
   )

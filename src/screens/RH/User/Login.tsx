@@ -35,6 +35,7 @@ export function Login() {
       localStorage.setItem('token', response.data.token)
 
       const userIndex = getUserIndex()
+      console.log(userIndex)
       navigate(userIndex)
     } catch (error) {
       console.error(error)

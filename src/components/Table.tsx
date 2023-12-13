@@ -1,26 +1,28 @@
-import { Card } from "./Card";
-import { Text } from "./Text";
-import { Heading } from "./Heading";
-import { ModalOptions, OptionsMenu } from "./OptionsMenu";
-import React from "react";
-import { useNavigate } from "react-router-dom";
+import { Card } from './Card'
+import { Text } from './Text'
+import { Heading } from './Heading'
+import { ModalOptions, OptionsMenu } from './OptionsMenu'
+import React from 'react'
+import { useNavigate } from 'react-router-dom'
+import { checkPermission } from '../services/User/utils'
+import { ModulePermission } from '../Routes'
 
 export interface Column<Data> {
-  key: string;
-  subkey?: string;
-  title: string;
-  dataIndex?: keyof Data;
-  render?: (record: Data) => React.ReactNode;
-  width?: string;
+  key: string
+  subkey?: string
+  title: string
+  dataIndex?: keyof Data
+  render?: (record: Data) => React.ReactNode
+  width?: string
 }
 
 interface TableProps<Data extends { id: string }> {
-  columns: Column<Data>[];
-  data: Data[];
-  menu?: boolean;
-  options?: ModalOptions[];
-  link?: string;
-  onDelete?: (record: Data) => void;
+  columns: Column<Data>[]
+  data: Data[]
+  menu?: boolean
+  options?: ModalOptions[]
+  link?: string
+  onDelete?: (record: Data) => void
 }
 
 export function Table<Data extends { id: string }>({
@@ -29,17 +31,17 @@ export function Table<Data extends { id: string }>({
   menu = true,
   options,
   link,
-  onDelete,
+  onDelete
 }: TableProps<Data>) {
-  const navigate = useNavigate();
+  const navigate = useNavigate()
 
   const handleNavigation = (record: Data) => {
     if (link) {
-      window.scrollTo(0, 0);
+      window.scrollTo(0, 0)
 
-      navigate(`/${link}/${record.id}`, { state: { record } });
+      navigate(`/${link}/${record.id}`, { state: { record } })
     }
-  };
+  }
 
   return (
     <div className="overflow-x-auto">
@@ -51,21 +53,21 @@ export function Table<Data extends { id: string }>({
                 <th
                   key={column.key}
                   className={`py-3 px-4 h-full ${
-                    column.width ? column.width : ""
+                    column.width ? column.width : ''
                   } rounded-bl-none ${
-                    index == 0 ? "rounded-tl-2xl" : ""
+                    index == 0 ? 'rounded-tl-2xl' : ''
                   } items-center
                                     ${
                                       index == columns.length - 1 &&
                                       menu === false
-                                        ? "rounded-r-2xl"
-                                        : "border-l-4 border-gray-700"
+                                        ? 'rounded-r-2xl'
+                                        : 'border-l-4 border-gray-700'
                                     }`}
                 >
                   <Heading className="!text-gray-800">{column.title}</Heading>
                 </th>
               ))}
-              {menu ? <td className="px-6 rounded-r-xl"></td> : ""}
+              {menu ? <td className="px-6 rounded-r-xl"></td> : ''}
             </tr>
           </Card>
         </thead>
@@ -75,13 +77,13 @@ export function Table<Data extends { id: string }>({
             <Card
               asChild
               key={index}
-              className={`${link ? "cursor-pointer" : ""} hover:bg-gray-400 
+              className={`${link ? 'cursor-pointer' : ''} hover:bg-gray-400 
                         shadow-[rgba(0,_0,_0,_0.24)_0px_3px_8px]`}
             >
               <tr
                 className="h-16 dark:border-gray-700 "
                 onClick={() => {
-                  handleNavigation(record);
+                  handleNavigation(record)
                 }}
               >
                 {columns.map((column, index) => {
@@ -89,19 +91,19 @@ export function Table<Data extends { id: string }>({
                     <td
                       key={column.key}
                       className={`px-6 max-w-[220px] ${
-                        column.width ? column.width : ""
-                      } truncate py-2 ${index === 0 ? "rounded-l-xl" : ""} }
+                        column.width ? column.width : ''
+                      } truncate py-2 ${index === 0 ? 'rounded-l-xl' : ''} }
                                         ${
                                           index === columns.length - 1 &&
                                           menu === false
-                                            ? "rounded-r-xl"
-                                            : ""
+                                            ? 'rounded-r-xl'
+                                            : ''
                                         }`}
                     >
                       <div
                         className="w-fit cursor-auto"
-                        onClick={(e) => {
-                          e.stopPropagation();
+                        onClick={e => {
+                          e.stopPropagation()
                         }}
                       >
                         {column.render ? (
@@ -121,35 +123,44 @@ export function Table<Data extends { id: string }>({
                         )}
                       </div>
                     </td>
-                  );
+                  )
                 })}
-                {menu ? (
-                  <td
-                    className="px-6 rounded-r-xl "
-                    onClick={(e) => {
-                      e.stopPropagation();
-                    }}
-                  >
-                    <div className="flex w-full items-center justify-end">
-                      {options ? (
-                        <OptionsMenu
-                          data={record}
-                          options={options}
-                          onDelete={() => onDelete && onDelete(record)}
-                        />
-                      ) : (
-                        ""
-                      )}
-                    </div>
-                  </td>
-                ) : (
-                  ""
-                )}
+
+                {checkPermission([
+                  ModulePermission.CAN_WRITE_ON_ADMINISTRATIVO,
+                  ModulePermission.CAN_WRITE_ON_GLOBAL,
+                  ModulePermission.CAN_WRITE_ON_ALMOXARIFADO,
+                  ModulePermission.CAN_WRITE_ON_FINANCEIRO,
+                  ModulePermission.CAN_WRITE_ON_PROJETO,
+                  ModulePermission.CAN_WRITE_ON_RH
+                ]) &&
+                  (menu ? (
+                    <td
+                      className="px-6 rounded-r-xl "
+                      onClick={e => {
+                        e.stopPropagation()
+                      }}
+                    >
+                      <div className="flex w-full items-center justify-end">
+                        {options ? (
+                          <OptionsMenu
+                            data={record}
+                            options={options}
+                            onDelete={() => onDelete && onDelete(record)}
+                          />
+                        ) : (
+                          ''
+                        )}
+                      </div>
+                    </td>
+                  ) : (
+                    ''
+                  ))}
               </tr>
             </Card>
           ))}
         </tbody>
       </table>
     </div>
-  );
+  )
 }

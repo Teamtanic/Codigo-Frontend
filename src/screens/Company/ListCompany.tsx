@@ -11,6 +11,8 @@ import { CompanyResponse } from '../../services/Company/types'
 import { getAllCompanies } from '../../services/Company/apiService'
 import { Loader } from '../../components/Loader'
 import { Pagination } from '../../components/Pagination'
+import { checkPermission } from '../../services/User/utils'
+import { ModulePermission } from '../../Routes'
 
 export function ListCompany() {
   const [companies, setCompanies] = useState<CompanyResponse[]>([])
@@ -68,11 +70,16 @@ export function ListCompany() {
             <div className="mt-10">
               <TableListCompany data={companies} />
 
-              <CompanyModal
-                action="Adicionar"
-                title="Cadastro de Empresa"
-                optionsTrigger={false}
-              />
+              {checkPermission([
+                ModulePermission.CAN_WRITE_ON_RH,
+                ModulePermission.CAN_WRITE_ON_GLOBAL
+              ]) && (
+                <CompanyModal
+                  action="Adicionar"
+                  title="Cadastro de Empresa"
+                  optionsTrigger={false}
+                />
+              )}
             </div>
             <Pagination
               totalPages={totalPages}
