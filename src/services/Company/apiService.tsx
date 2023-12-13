@@ -25,3 +25,28 @@ export const deleteCompany = (id: string) => api.delete(`/empresas/${id}`)
 
 export const getCompanyById = (id: string) =>
   api.get<CompanyResponse>(`/empresas/${id}`)
+
+export const searchCompany = (name: string, page = 0, size = 3) =>
+  api.get<CompanyResponsePaginate>('/empresas/pesquisa', {
+    params: { name, page, size }
+  })
+
+export const searchCompanyCustomer = (
+  name: string,
+  page = 0,
+  size = 3,
+  type = 'cliente'
+) =>
+  api.get<CompanyResponsePaginate>('/empresas/pesquisa', {
+    params: { name, page, size, type }
+  })
+
+export const searchCompanySupplier = (
+  name: string,
+  page = 0,
+  size = 3,
+  type = 'fornecedor'
+) =>
+  api.get<CompanyResponsePaginate>('/empresas/pesquisa', {
+    params: { name, page, size, type }
+  })

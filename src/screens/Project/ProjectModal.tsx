@@ -4,21 +4,45 @@ import { TextAreaInput } from '../../components/TextBox'
 import { TextInput } from '../../components/TextInput'
 import { Form, Field } from 'react-final-form'
 import { object, string } from 'yup'
-import { ProjectCreateRequest } from '../../services/Project/type'
-import { createProject } from '../../services/Project/apiService'
+import {
+  ProjectCreateRequest,
+  ProjectResponse,
+  ProjectUpdateRequest
+} from '../../services/Project/type'
+import {
+  createProject,
+  editProject,
+  getProjectById
+} from '../../services/Project/apiService'
 import { useEffect, useState } from 'react'
 import {
   getAllCustomers,
-  getAllSuppliers
+  getAllSuppliers,
+  searchCompany,
+  searchCompanyCustomer
 } from '../../services/Company/apiService'
 import { CompanyResponse } from '../../services/Company/types'
 import { Select, SelectOption } from '../../components/Select'
+import { useNavigate } from 'react-router-dom'
+import { createUpdateObject } from '../../utils'
+import { HttpStatusCode } from 'axios'
+import {
+  CompanyRelationshipProjectResponse,
+  CompanyRelationshipResponse
+} from '../../services/CompanyRelationship/types'
+import DropdownInput from '../../components/DropdownInput'
 
 export function ProjectModal({
   action,
   optionsTrigger,
-  title
-}: ModelModalProp) {
+  title,
+  mode = 'create',
+  data,
+  triggerStyle,
+  iconTrigger
+}: ModelModalProp & { data?: ProjectResponse }) {
+  let navigate = useNavigate()
+
   const validationSchema = object({
     title: string().required('Título é obrigatório'),
     description: string().required('Descrição é obrigatória'),
@@ -45,7 +69,7 @@ export function ProjectModal({
       }
     }
     fetchData()
-  }, [])
+  }, [data, customers, suppliers])
 
   const customerOptions: SelectOption[] = customers.map(customer => ({
     value: customer.id,
@@ -66,23 +90,90 @@ export function ProjectModal({
         offeringIds: [values.offering],
         users: [
           {
-            userId: values.userId,
+            user: values.userId,
             role: values.role
           }
         ]
       }
 
-      console.log(projectData)
-      const response = await createProject(projectData)
-      console.log(response)
+      if (mode === 'create') {
+        await createProject(projectData)
+      } else if (mode === 'edit') {
+        if (data) {
+          console.log(data)
+          const updateCompanyData: ProjectUpdateRequest = createUpdateObject(
+            data,
+            projectData
+          )
+          let editResponse = await editProject(updateCompanyData, data.id)
+          if (editResponse.status === HttpStatusCode.Ok) {
+            let updateResponse = await getProjectById(data.id)
+            if (updateResponse.status === HttpStatusCode.Ok) {
+              const record: ProjectResponse = updateResponse.data
+              navigate(`/projeto/${data.id}`, { state: { record } })
+            }
+          }
+        }
+      }
     } catch (error) {
       console.error(error)
     }
   }
 
+  const [initialValues, setInitialValues] = useState<any>({})
+
+  useEffect(() => {
+    if (data) {
+      setInitialValues({
+        id: data.id,
+        title: data.title,
+        description: data.description,
+        customerRelationship: findRelationshipIdByType(
+          data.companyRelationships,
+          'CLIENTE'
+        ),
+        supplierRelationship: findRelationshipIdByType(
+          data.companyRelationships,
+          'FORNECEDOR'
+        ),
+        offering: data.offerings[0].description
+      })
+    } else {
+      setInitialValues({})
+    }
+  }, [])
+
+  function findRelationshipIdByType(
+    companyRelationships: CompanyRelationshipProjectResponse[],
+    type: string
+  ): SelectOption | undefined {
+    const relationship: CompanyRelationshipProjectResponse | undefined =
+      companyRelationships.find(item => item.businessRelationship === type)
+
+    let option = {
+      value: relationship?.idCompanyRelationship,
+      label: relationship?.company.name
+    }
+
+    return relationship ? { ...option } : undefined
+  }
+
+  const searchFunction = async (query: string) => {
+    const response = await searchCompanyCustomer(query)
+    const data = response.data.content
+
+    const options: Option[] = data.map((item: CompanyResponse) => ({
+      label: item.name,
+      value: item.id
+    }))
+
+    return { data: { content: options } }
+  }
+
   return (
     <Form
       onSubmit={onSubmit}
+      initialValues={initialValues}
       validate={values => {
         try {
           validationSchema.validateSync(values, { abortEarly: false })
@@ -135,25 +226,13 @@ export function ProjectModal({
               <Field
                 name="customer"
                 render={({ input, meta }) => (
-                  <Select
+                  <DropdownInput
+                    searchFunction={searchFunction}
                     labelFor="customer"
+                    disabled
                     labelText="Cliente"
-                    placeHolder="Selecione o cliente"
-                    options={customerOptions}
-                    error={meta.touched && meta.error ? meta.error : undefined}
-                    {...input}
-                  />
-                )}
-              />
-
-              <Field
-                name="supplier"
-                render={({ input, meta }) => (
-                  <Select
-                    labelFor="supplier"
-                    labelText="Fornecedor"
-                    placeHolder="Selecione o fornecedor"
-                    options={customerOptions}
+                    inputValue={initialValues.customerRelationship}
+                    placeholder="Selecione o cliente"
                     error={meta.touched && meta.error ? meta.error : undefined}
                     {...input}
                   />
@@ -166,11 +245,13 @@ export function ProjectModal({
                   <TextInput.Root
                     labelFor="offering"
                     labelText="Serviço ou Produto"
+                    disabled
                     error={meta.touched && meta.error ? meta.error : undefined}
                   >
                     <TextInput.Input
                       id="offering"
                       type="text"
+                      disabled
                       placeholder="Informe o serviço ou produto fornecido..."
                       {...input}
                     />

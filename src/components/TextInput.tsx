@@ -10,6 +10,7 @@ export interface TextInputRootProps {
   className?: string
   labelStyle?: string
   error?: string | undefined
+  disabled?: boolean
 }
 
 function TextInputRoot({
@@ -17,6 +18,7 @@ function TextInputRoot({
   labelFor,
   labelText,
   error,
+  disabled,
   className = '',
   labelStyle = ''
 }: TextInputRootProps) {
@@ -29,7 +31,9 @@ function TextInputRoot({
         </Text>
       </div>
       <div
-        className={`font-poppins ${className} py-4 px-3 h-12 rounded bg-gray-200  w-full focus-within:ring-2 ring-emerald-800 flex items-center gap-3`}
+        className={`font-poppins ${className} py-4 px-3 h-12 rounded bg-gray-200  w-full focus-within:ring-2 ring-emerald-800 flex items-center gap-3 ${
+          disabled ? '!bg-gray-400' : ''
+        }`}
       >
         {children}
       </div>

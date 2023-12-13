@@ -9,9 +9,11 @@ import {
 } from '../../../services/Transaction/type'
 import { Select, SelectOption } from '../../../components/Select'
 import { Text } from '../../../components/Text'
-import DropdownInput from '../../../components/DropdownInput'
+import DropdownInput, { Option } from '../../../components/DropdownInput'
 import { createTransaction } from '../../../services/Transaction/apiService'
 import { format } from 'date-fns'
+import { searchBankAccount } from '../../../services/BankAccount/apiService'
+import { BankAccountResponse } from '../../../services/BankAccount/types'
 
 /*
 export function TransactionModal({ action, title }: ModelModalProp) {
@@ -72,6 +74,18 @@ export function TransactionModal({ action, title }: ModelModalProp) {
       label
     })
   )
+
+  const searchFunction = async (query: string) => {
+    const response = await searchBankAccount(query)
+    const data = response.data.content
+
+    const options: Option[] = data.map((item: BankAccountResponse) => ({
+      label: item.name,
+      value: item.id
+    }))
+
+    return { data: { content: options } }
+  }
 
   return (
     <Form
@@ -267,6 +281,7 @@ export function TransactionModal({ action, title }: ModelModalProp) {
                 name="bankAccountId"
                 render={({ input, meta }) => (
                   <DropdownInput
+                    searchFunction={searchFunction}
                     labelText="Banco da transação"
                     labelFor="searchInput"
                     placeholder="Informe o banco"

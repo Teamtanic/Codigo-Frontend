@@ -1,6 +1,7 @@
 import { CopiableText } from '../../components/CopiableText'
 import { ModalOptions } from '../../components/OptionsMenu'
 import { Column, Table } from '../../components/Table'
+import { deleteProject } from '../../services/Project/apiService'
 import { ProjectResponse } from '../../services/Project/type'
 import { ProjectModal } from './ProjectModal'
 
@@ -13,9 +14,17 @@ export interface TableListProps {
 }
 
 export function TableListProject({
-  data,
-  hasOptions = true
+  data
 }: { data: ProjectProps[] } & TableListProps) {
+  const handleDelete = async (record: ProjectResponse) => {
+    try {
+      await deleteProject(record.id)
+      window.location.reload()
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
   var columns: Column<ProjectProps>[] = [
     {
       key: 'id',
@@ -32,7 +41,12 @@ export function TableListProject({
     {
       key: 'Editar',
       children: (
-        <ProjectModal title="Editar Produto" action="Editar" optionsTrigger />
+        <ProjectModal
+          title="Editar Projeto"
+          action="Editar"
+          optionsTrigger
+          mode="edit"
+        />
       )
     }
   ]
@@ -42,8 +56,8 @@ export function TableListProject({
       link="projeto"
       data={data}
       columns={columns}
-      menu={hasOptions}
       options={options}
+      onDelete={handleDelete}
     />
   )
 }

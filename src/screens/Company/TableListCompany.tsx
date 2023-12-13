@@ -41,7 +41,7 @@ export function TableListCompany({ data }: { data: CompanyResponse[] }) {
           <div className="flex gap-4">
             {companyRelationships.map(relation => (
               <Card
-                key={relation.id}
+                key={relation.idCompanyRelationship}
                 className={`${
                   relation.businessRelationship == 'CLIENTE'
                     ? '!bg-emerald-600'

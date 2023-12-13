@@ -5,7 +5,7 @@ enum Permission {
   CAN_WRITE
 }
 
-export interface UserRoleDTO {
+export interface UserRoleCreateRequest {
   userId: string
   role: string
 }
