@@ -34,12 +34,14 @@ export function ListProject() {
       }
     }
     fetchData()
-  }, [projects])
+  }, [currentPage])
 
+  /*
   const projectsDTO: ProjectProps[] = projects.map(project => ({
     ...project,
     statusText: project.status === true ? 'Em aberto' : 'Fechado'
   }))
+  */
 
   const handlePageChange = (pageNumber: number) => {
     setCurrentPage(pageNumber)
@@ -69,7 +71,7 @@ export function ListProject() {
             </Card>
 
             <div className="mt-10">
-              <TableListProject data={projectsDTO} />
+              <TableListProject data={projects} />
 
               <ProjectModal title="Cadastro de Projeto" action="Adicionar" />
             </div>

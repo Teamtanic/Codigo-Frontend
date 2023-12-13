@@ -3,6 +3,11 @@ export interface OfferingCreateRequest {
   type: OfferingType
 }
 
+export interface OfferingUpdateRequest {
+  description?: string
+  type?: OfferingType
+}
+
 export interface OfferingResponse {
   id: string
   description: string

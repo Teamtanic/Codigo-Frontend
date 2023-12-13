@@ -14,7 +14,7 @@ interface ComboboxProps {
   disabled?: boolean
 }
 
-interface Record {
+export interface Record {
   value: string
   label: string
 }

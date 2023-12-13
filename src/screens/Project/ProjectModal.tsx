@@ -19,7 +19,8 @@ import {
   getAllCustomers,
   getAllSuppliers,
   searchCompany,
-  searchCompanyCustomer
+  searchCompanyCustomer,
+  searchCompanySupplier
 } from '../../services/Company/apiService'
 import { CompanyResponse } from '../../services/Company/types'
 import { Select, SelectOption } from '../../components/Select'
@@ -30,7 +31,10 @@ import {
   CompanyRelationshipProjectResponse,
   CompanyRelationshipResponse
 } from '../../services/CompanyRelationship/types'
-import DropdownInput from '../../components/DropdownInput'
+import DropdownInput, { Record } from '../../components/DropdownInput'
+import { searchOffer } from '../../services/Offering/apiService'
+import { OfferingResponse } from '../../services/Offering/types'
+import { getUserData } from '../../services/User/utils'
 
 export function ProjectModal({
   action,
@@ -51,51 +55,36 @@ export function ProjectModal({
     offering: string().required('A oferta oferecida é obrigatória')
   })
 
-  const [customers, setCustomers] = useState<CompanyResponse[]>([])
-  const [suppliers, setSuppliers] = useState<CompanyResponse[]>([])
-  const [offerings, setOfferings] = useState<CompanyResponse[]>([])
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const responseCustomers = await getAllCustomers()
-        const responseSuppliers = await getAllSuppliers()
-        const responseOffering = await getAllCustomers()
-
-        setCustomers(responseCustomers.data.content)
-        setSuppliers(responseSuppliers.data.content)
-      } catch (error) {
-        console.error('Erro ao obter a lista:', error)
-      }
-    }
-    fetchData()
-  }, [data, customers, suppliers])
-
-  const customerOptions: SelectOption[] = customers.map(customer => ({
-    value: customer.id,
-    label: customer.name
-  }))
-
-  const supplierOptions: SelectOption[] = suppliers.map(supplier => ({
-    value: supplier.id,
-    label: supplier.name
-  }))
+  let userInfo = getUserData()
 
   const onSubmit = async (values: any) => {
     try {
       const projectData: ProjectCreateRequest = {
         title: values.title,
         description: values.description,
-        companyRelationshipIds: [values.customer, values.supplier],
-        offeringIds: [values.offering],
+        companyRelationshipIds: [],
+        offeringIds: [],
         users: [
           {
-            user: values.userId,
-            role: values.role
+            userId: userInfo?.userId,
+            role: 'ADM'
           }
         ]
       }
 
+      if (values.customer) {
+        projectData.companyRelationshipIds.push(values.customer)
+      }
+
+      if (values.supplier) {
+        projectData.companyRelationshipIds.push(values.supplier)
+      }
+
+      if (values.offering) {
+        projectData.offeringIds.push(values.offering)
+      }
+
+      console.log(projectData)
       if (mode === 'create') {
         await createProject(projectData)
       } else if (mode === 'edit') {
@@ -128,14 +117,11 @@ export function ProjectModal({
         id: data.id,
         title: data.title,
         description: data.description,
-        customerRelationship: findRelationshipIdByType(
-          data.companyRelationships,
-          'CLIENTE'
-        ),
-        supplierRelationship: findRelationshipIdByType(
-          data.companyRelationships,
-          'FORNECEDOR'
-        ),
+        customerRelationship:
+          findRelationshipIdByType(data.companyRelationships, 'CLIENTE') || '',
+        supplierRelationship:
+          findRelationshipIdByType(data.companyRelationships, 'FORNECEDOR') ||
+          '',
         offering: data.offerings[0].description
       })
     } else {
@@ -158,12 +144,52 @@ export function ProjectModal({
     return relationship ? { ...option } : undefined
   }
 
-  const searchFunction = async (query: string) => {
+  const searchFunctionCompanyCustomer = async (query: string) => {
     const response = await searchCompanyCustomer(query)
     const data = response.data.content
 
-    const options: Option[] = data.map((item: CompanyResponse) => ({
+    const clientCompanies = data.filter((item: CompanyResponse) =>
+      item.companyRelationships.some(
+        cr => cr.businessRelationship === 'CLIENTE'
+      )
+    )
+
+    const options: Record[] = clientCompanies.map((item: CompanyResponse) => ({
       label: item.name,
+      value: item.companyRelationships
+        .filter(cr => cr.businessRelationship === 'CLIENTE')
+        .map(cr => cr.idCompanyRelationship)[0]
+    }))
+
+    return { data: { content: options } }
+  }
+
+  const searchFunctionCompanySupplier = async (query: string) => {
+    const response = await searchCompanySupplier(query)
+    const data = response.data.content
+
+    const clientCompanies = data.filter((item: CompanyResponse) =>
+      item.companyRelationships.some(
+        cr => cr.businessRelationship === 'FORNECEDOR'
+      )
+    )
+
+    const options: Record[] = clientCompanies.map((item: CompanyResponse) => ({
+      label: item.name,
+      value: item.companyRelationships
+        .filter(cr => cr.businessRelationship === 'FORNECEDOR')
+        .map(cr => cr.idCompanyRelationship)[0]
+    }))
+
+    return { data: { content: options } }
+  }
+
+  const searchFunctionOffer = async (query: string) => {
+    const response = await searchOffer(query)
+    const data = response.data.content
+
+    const options: Record[] = data.map((item: OfferingResponse) => ({
+      label: item.description,
       value: item.id
     }))
 
@@ -227,9 +253,9 @@ export function ProjectModal({
                 name="customer"
                 render={({ input, meta }) => (
                   <DropdownInput
-                    searchFunction={searchFunction}
+                    searchFunction={searchFunctionCompanyCustomer}
                     labelFor="customer"
-                    disabled
+                    disabled={mode == 'edit' ? true : false}
                     labelText="Cliente"
                     inputValue={initialValues.customerRelationship}
                     placeholder="Selecione o cliente"
@@ -240,22 +266,34 @@ export function ProjectModal({
               />
 
               <Field
+                name="supplier"
+                render={({ input, meta }) => (
+                  <DropdownInput
+                    searchFunction={searchFunctionCompanySupplier}
+                    labelFor="supplier"
+                    disabled={mode == 'edit' ? true : false}
+                    labelText="Fornecedor"
+                    inputValue={initialValues.supplierRelationship}
+                    placeholder="Selecione o fornecedor"
+                    error={meta.touched && meta.error ? meta.error : undefined}
+                    {...input}
+                  />
+                )}
+              />
+
+              <Field
                 name="offering"
                 render={({ input, meta }) => (
-                  <TextInput.Root
+                  <DropdownInput
+                    searchFunction={searchFunctionOffer}
                     labelFor="offering"
+                    disabled={mode == 'edit' ? true : false}
                     labelText="Serviço ou Produto"
-                    disabled
+                    inputValue={initialValues.customerRelationship}
+                    placeholder="Selecione o Serviço ou Produto"
                     error={meta.touched && meta.error ? meta.error : undefined}
-                  >
-                    <TextInput.Input
-                      id="offering"
-                      type="text"
-                      disabled
-                      placeholder="Informe o serviço ou produto fornecido..."
-                      {...input}
-                    />
-                  </TextInput.Root>
+                    {...input}
+                  />
                 )}
               />
 

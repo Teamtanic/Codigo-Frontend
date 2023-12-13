@@ -28,17 +28,19 @@ export function DetailsProject() {
                 {project.title}
               </Heading>
 
+              {/*
               <Card
-                className={`${
-                  project.status == 'Em aberto'
-                    ? '!bg-blue-400 '
-                    : '!bg-zinc-500'
-                } w-fit flex items-center justify-center max-sm:hidden`}
+              className={`${
+                project.status == 'Em aberto'
+                ? '!bg-blue-400 '
+                : '!bg-zinc-500'
+              } w-fit flex items-center justify-center max-sm:hidden`}
               >
                 <Text className="!text-gray-100" size="xm">
                   {project.status}
                 </Text>
               </Card>
+                */}
             </div>
             <div className="bg-gray-300 w-full p-4 overflow-y-auto">
               <Text className="!text-gray-900 font-semibold">
