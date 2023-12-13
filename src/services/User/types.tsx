@@ -24,6 +24,9 @@ export interface UserRegisterRequest {
   email: string
   telephone: string
   cell_phone: string
+  roleId: string
+  departmentId: string
+  courseId: string
 }
 
 export interface UserUpdateRequest {

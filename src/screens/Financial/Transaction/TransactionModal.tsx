@@ -9,10 +9,7 @@ import {
 } from '../../../services/Transaction/type'
 import { Select, SelectOption } from '../../../components/Select'
 import { Text } from '../../../components/Text'
-import DropdownInput, {
-  Option,
-  Record
-} from '../../../components/DropdownInput'
+import DropdownInput, { Record } from '../../../components/DropdownInput'
 import { createTransaction } from '../../../services/Transaction/apiService'
 import { format } from 'date-fns'
 import { searchBankAccount } from '../../../services/BankAccount/apiService'
@@ -86,7 +83,7 @@ export function TransactionModal({ action, title }: ModelModalProp) {
     const response = await searchBankAccount(query)
     const data = response.data.content
 
-    const options: Option[] = data.map((item: BankAccountResponse) => ({
+    const options: Record[] = data.map((item: BankAccountResponse) => ({
       label: item.name,
       value: item.id
     }))

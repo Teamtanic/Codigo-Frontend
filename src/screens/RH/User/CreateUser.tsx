@@ -8,6 +8,13 @@ import { Form, Field } from 'react-final-form'
 import { object, string } from 'yup'
 import { UserRegisterRequest } from '../../../services/User/types'
 import { createUser } from '../../../services/User/apiService'
+import DropdownInput, { Record } from '../../../components/DropdownInput'
+import { searchCourse } from '../../../services/Course/apiService'
+import { CourseResponse } from '../../../services/Course/types'
+import { searchRole } from '../../../services/Role/apiService'
+import { RoleResponse } from '../../../services/Role/types'
+import { searchDepartment } from '../../../services/Department/apiService'
+import { DepartmentResponse } from '../../../services/Department/types'
 
 export function CreateUser() {
   const validationSchema = object({
@@ -20,7 +27,10 @@ export function CreateUser() {
     password: string().required('Senha é obrigatório'),
     'confirm-password': string().required('Necessário confirmar a senha'),
     telephone: string(),
-    cell_phone: string()
+    cell_phone: string(),
+    roleId: string(),
+    departmentId: string(),
+    courseId: string()
   })
 
   const onSubmit = async (values: UserRegisterRequest) => {
@@ -32,7 +42,10 @@ export function CreateUser() {
         prontuary: values.prontuary,
         password: values.password,
         telephone: values.telephone,
-        cell_phone: values.cell_phone
+        cell_phone: values.cell_phone,
+        roleId: values.roleId,
+        departmentId: values.departmentId,
+        courseId: values.courseId
       }
 
       await createUser(userData)
@@ -41,6 +54,42 @@ export function CreateUser() {
     } catch (error) {
       console.error(error)
     }
+  }
+
+  const searchFunctionCourse = async (query: string) => {
+    const response = await searchCourse(query)
+    const data = response.data.content
+
+    const options: Record[] = data.map((item: CourseResponse) => ({
+      label: item.name,
+      value: item.id
+    }))
+
+    return { data: { content: options } }
+  }
+
+  const searchFunctionDepartment = async (query: string) => {
+    const response = await searchDepartment(query)
+    const data = response.data.content
+
+    const options: Record[] = data.map((item: DepartmentResponse) => ({
+      label: item.name,
+      value: item.id
+    }))
+
+    return { data: { content: options } }
+  }
+
+  const searchFunctionRole = async (query: string) => {
+    const response = await searchRole(query)
+    const data = response.data.content
+
+    const options: Record[] = data.map((item: RoleResponse) => ({
+      label: item.name,
+      value: item.id
+    }))
+
+    return { data: { content: options } }
   }
 
   return (
@@ -182,6 +231,60 @@ export function CreateUser() {
                         {...input}
                       />
                     </TextInput.Root>
+                  )}
+                />
+
+                <Field
+                  name="courseId"
+                  render={({ input, meta }) => (
+                    <DropdownInput
+                      searchFunction={searchFunctionCourse}
+                      labelFor="courseId"
+                      labelText="Curso"
+                      placeholder="Selecione o curso"
+                      labelStyle="!text-gray-200"
+                      error={
+                        meta.touched && meta.error ? meta.error : undefined
+                      }
+                      inputValue={input.value}
+                      onChange={input.onChange}
+                    />
+                  )}
+                />
+
+                <Field
+                  name="departmentId"
+                  render={({ input, meta }) => (
+                    <DropdownInput
+                      searchFunction={searchFunctionDepartment}
+                      labelFor="departmentId"
+                      labelText="Departamento na empresa"
+                      placeholder="Selecione o departamento"
+                      labelStyle="!text-gray-200"
+                      error={
+                        meta.touched && meta.error ? meta.error : undefined
+                      }
+                      inputValue={input.value}
+                      onChange={input.onChange}
+                    />
+                  )}
+                />
+
+                <Field
+                  name="roleId"
+                  render={({ input, meta }) => (
+                    <DropdownInput
+                      searchFunction={searchFunctionRole}
+                      labelFor="roleId"
+                      labelText="Cargo na empresa"
+                      placeholder="Selecione o cargo"
+                      labelStyle="!text-gray-200"
+                      error={
+                        meta.touched && meta.error ? meta.error : undefined
+                      }
+                      inputValue={input.value}
+                      onChange={input.onChange}
+                    />
                   )}
                 />
 

@@ -20,6 +20,11 @@ export interface RoleCreateRequest {
   permissions?: Permission[]
 }
 
+export interface RoleUpdateRequest {
+  name?: string
+  permissions?: Permission[]
+}
+
 export interface RoleResponse {
   id: string
   name: string

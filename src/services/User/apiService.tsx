@@ -37,5 +37,10 @@ export const authenticateUser = (authData: UserAuthenticationRequest) =>
 export const requestUserByEmail = (emailData: UserEmailRequest) =>
   api.post<UserResponse>('/auth/request-email', emailData)
 
-export const requestPasswordReset = (passwordData: UserPasswordRequest) =>
-  api.post<any>('/auth/request-password-reset', passwordData)
+export const requestPasswordReset = (emailData: UserEmailRequest) =>
+  api.post<any>('/auth/recuperar-senha', emailData)
+
+export const resetPassword = (
+  passwordData: UserPasswordRequest,
+  token: string
+) => api.post<any>(`/auth/reset-password?token=${token}`, passwordData)

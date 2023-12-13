@@ -18,3 +18,8 @@ export const deleteCourse = (id: string) => api.delete(`/cursos/${id}`)
 
 export const getCourseById = (id: string) =>
   api.get<CourseResponse>(`/cursos/${id}`)
+
+export const searchCourse = (name: string, page = 0, size = 3) =>
+  api.get<CourseResponsePaginate>('/cursos/pesquisa', {
+    params: { name, page, size }
+  })
