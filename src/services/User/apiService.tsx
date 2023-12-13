@@ -1,4 +1,3 @@
-import axios from 'axios'
 import { api } from '../api'
 import {
   UserAuthenticationRequest,
@@ -23,16 +22,9 @@ export const updateUser = (userId: number, userData: UserUpdateRequest) =>
 
 export const deleteUser = (userId: number) => api.delete(`/usuarios/${userId}`)
 
-const apiLogin = axios.create({
-  baseURL: 'http://localhost:8081',
-  headers: {
-    'Content-Type': 'application/json'
-  }
-})
-
 // métodos de autenticação
 export const authenticateUser = (authData: UserAuthenticationRequest) =>
-  apiLogin.post<any>('/auth/login', authData)
+  api.post<any>('/auth/login', authData)
 
 export const requestUserByEmail = (emailData: UserEmailRequest) =>
   api.post<UserResponse>('/auth/request-email', emailData)

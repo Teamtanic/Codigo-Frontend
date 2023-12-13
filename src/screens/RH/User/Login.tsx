@@ -11,7 +11,7 @@ import { authenticateUser } from '../../../services/User/apiService'
 import { UserAuthenticationRequest } from '../../../services/User/types'
 import { Field, Form } from 'react-final-form'
 import { useNavigate } from 'react-router-dom'
-import { getUserIndex } from '../../../services/User/utils'
+import { getUserData, getUserIndex } from '../../../services/User/utils'
 
 export function Login() {
   const validationSchema = object({
@@ -35,7 +35,9 @@ export function Login() {
       localStorage.setItem('token', response.data.token)
 
       const userIndex = getUserIndex()
-      console.log(userIndex)
+
+      const userInfo = getUserData()
+
       navigate(userIndex)
     } catch (error) {
       console.error(error)
