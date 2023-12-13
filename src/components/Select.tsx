@@ -11,7 +11,7 @@ export interface SelectOption {
 export interface SelectProps {
   placeHolder: string
   options: SelectOption[]
-  selectedValue?: string
+  selectedValue?: SelectOption
   onChange?: (value: string) => void
   asChild?: boolean
   className?: string
@@ -31,16 +31,18 @@ export function Select({
   selectedValue: propSelectedValue,
   onChange
 }: SelectProps) {
-  const [selectedValue, setSelectedValue] = useState(propSelectedValue)
+  const [selectedValue, setSelectedValue] = useState<SelectOption | undefined>(
+    propSelectedValue
+  )
 
   useEffect(() => {
     setSelectedValue(propSelectedValue)
   }, [propSelectedValue])
 
-  function handleSelectOption(value: string) {
-    setSelectedValue(value)
+  function handleSelectOption(option: SelectOption) {
+    setSelectedValue(option)
     if (onChange) {
-      onChange(value)
+      onChange(option.value)
     }
   }
 
@@ -49,7 +51,7 @@ export function Select({
   }
 
   return (
-    <Menu as="div" className="relative inline-block text-left w-full ">
+    <Menu as="div" className="relative inline-block text-left w-full">
       <div>
         <label htmlFor={labelFor} className="flex flex-col w-full">
           <div className="flex gap-4">
@@ -59,7 +61,7 @@ export function Select({
             </Text>
           </div>
           <Menu.Button className="inline-flex w-full h-12 items-center justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
-            {selectedValue == undefined ? placeHolder : selectedValue}
+            {selectedValue == undefined ? placeHolder : selectedValue.label}
 
             <CaretDown
               className="ml-auto mr-0 h-5 w-5 text-gray-400"
@@ -87,7 +89,7 @@ export function Select({
                     active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
                     'block px-4 py-2 text-sm rounded-md'
                   )}
-                  onClick={() => handleSelectOption(option.value)}
+                  onClick={() => handleSelectOption(option)}
                 >
                   {option.label}
                 </a>
