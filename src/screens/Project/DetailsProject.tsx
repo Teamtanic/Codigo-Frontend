@@ -1,21 +1,44 @@
-import { useLocation } from 'react-router-dom'
-import { Card } from '../../components/Card'
-import { Container } from '../../components/Container'
-import { Heading } from '../../components/Heading'
-import { Navbar } from '../../components/Navbar'
-import { Text } from '../../components/Text'
-import { TableListUser } from '../RH/User/TableListUser'
-import * as Tabs from '@radix-ui/react-tabs'
-import { TableListCompany } from '../Company/TableListCompany'
-import { TableListOffer } from '../Offer/TableListOffer'
-import { TableListDocument } from '../Documents/TableListDocument'
+import { useLocation } from "react-router-dom";
+import { Card } from "../../components/Card";
+import { Container } from "../../components/Container";
+import { Heading } from "../../components/Heading";
+import { Navbar } from "../../components/Navbar";
+import { Text } from "../../components/Text";
+import { TableListUser } from "../RH/User/TableListUser";
+import * as Tabs from "@radix-ui/react-tabs";
+import { TableListCompany } from "../Company/TableListCompany";
+import { TableListOffer } from "../Offer/TableListOffer";
+import { TableListDocument } from "../Documents/TableListDocument";
+import { ProjectResponse } from "../../services/Project/type";
+import { useEffect, useState } from "react";
+import { DocumentResponse } from "../../services/Document/types";
+import { getAllDocuments } from "../../services/Document/apiService";
+import { Loader } from "../../components/Loader";
 
 export function DetailsProject() {
-  const location = useLocation()
-  const { state } = location
-  const project = state.record
+  const location = useLocation();
+  const { state } = location;
+  const [documents, setDocuments] = useState<DocumentResponse[]>([]);
+  const [documentLoading, setDocumentLoading] = useState(false);
 
-  console.log(project)
+  const project = state.record as ProjectResponse;
+
+  useEffect(() => {
+    (async () => {
+      try {
+        setDocumentLoading(true);
+        const { data: content } = await getAllDocuments(
+          `Projetos/${project.title}`
+        );
+        setDocuments(content);
+      } catch (error) {
+        console.error("Erro ao obter conteúdo do documento:", error);
+      } finally {
+        setDocumentLoading(false);
+      }
+    })();
+  }, [project.title]);
+
   return (
     <Container>
       <Navbar />
@@ -85,41 +108,50 @@ export function DetailsProject() {
               className="grow p-5 bg-gray-100 rounded-b-md outline-none "
               value="tab1"
             >
-              {project.offer ? <TableListOffer data={project.offer} /> : ''}
+              {project.offerings ? (
+                <TableListOffer data={project.offerings} />
+              ) : (
+                ""
+              )}
             </Tabs.Content>
             <Tabs.Content
               className="grow p-5 bg-gray-100 rounded-b-md outline-none "
               value="tab2"
             >
-              {project.company ? (
-                <TableListCompany data={project.company} />
+              {project.companyRelationships &&
+              project.companyRelationships[0].company ? (
+                <TableListCompany
+                  data={project.companyRelationships.map((cr) => cr.company)}
+                />
               ) : (
-                ''
+                ""
               )}
             </Tabs.Content>
             <Tabs.Content
               className="grow p-5 bg-gray-100 rounded-b-md outline-none "
               value="tab3"
             >
-              {project.employees ? (
-                <TableListUser data={project.employees} />
+              {project.users ? (
+                <TableListUser data={project.users.map((u) => u.user)} />
               ) : (
-                ''
+                ""
               )}
             </Tabs.Content>
             <Tabs.Content
               className="grow p-5 bg-gray-100 rounded-b-md outline-none "
               value="tab4"
             >
-              {project.document ? (
-                <TableListDocument data={project.document} />
+              {documentLoading ? (
+                <Loader />
+              ) : documents ? (
+                <TableListDocument data={documents} />
               ) : (
-                ''
+                ""
               )}
             </Tabs.Content>
           </Tabs.Root>
         </div>
       </div>
     </Container>
-  )
+  );
 }

@@ -1,43 +1,43 @@
-import { Card } from '../../components/Card'
-import { Container } from '../../components/Container'
-import { Heading } from '../../components/Heading'
-import { Navbar } from '../../components/Navbar'
-import { TextInput } from '../../components/TextInput'
-import { MagnifyingGlass } from 'phosphor-react'
-import { TableListDocument } from './TableListDocument'
-import { DocumentModal } from './DocumentModal'
-import { useEffect, useState } from 'react'
-import { getAllDocuments } from '../../services/Document/apiService'
-import { DocumentResponse } from '../../services/Document/types'
-import { TableListFolder } from './TableListFolder'
-import { useLocation } from 'react-router-dom'
-import { Loader } from '../../components/Loader'
-import { checkPermission } from '../../services/User/utils'
-import { ModulePermission } from '../../Routes'
+import { Card } from "../../components/Card";
+import { Container } from "../../components/Container";
+import { Heading } from "../../components/Heading";
+import { Navbar } from "../../components/Navbar";
+import { TextInput } from "../../components/TextInput";
+import { MagnifyingGlass } from "phosphor-react";
+import { TableListDocument } from "./TableListDocument";
+import { DocumentModal } from "./DocumentModal";
+import { useEffect, useState } from "react";
+import { getAllDocuments } from "../../services/Document/apiService";
+import { DocumentResponse } from "../../services/Document/types";
+import { TableListFolder } from "./TableListFolder";
+import { useLocation } from "react-router-dom";
+import { Loader } from "../../components/Loader";
+import { checkPermission } from "../../services/User/utils";
+import { ModulePermission } from "../../Routes";
 
 export function ListDocument() {
-  const [items, setItems] = useState<DocumentResponse[]>()
-  const [loading, setLoading] = useState(true)
-  const { pathname } = useLocation()
+  const [items, setItems] = useState<DocumentResponse[]>();
+  const [loading, setLoading] = useState(true);
+  const { pathname } = useLocation();
 
-  const folders = items?.filter(item => item.nodeType === 'cm:folder')
-  const files = items?.filter(item => item.nodeType === 'cm:content')
+  const folders = items?.filter((item) => item.nodeType === "cm:folder");
+  const files = items?.filter((item) => item.nodeType === "cm:content");
 
   useEffect(() => {
-    ;(async () => {
+    (async () => {
       try {
-        setLoading(true)
+        setLoading(true);
         const res = await getAllDocuments(
           decodeURIComponent(pathname.substring(12))
-        )
-        setItems(res.data)
+        );
+        setItems(res.data);
       } catch (error) {
-        console.error('Erro ao obter documentos:', error)
+        console.error("Erro ao obter documentos:", error);
       } finally {
-        setLoading(false)
+        setLoading(false);
       }
-    })()
-  }, [pathname])
+    })();
+  }, [pathname]);
 
   return (
     <Container>
@@ -79,7 +79,7 @@ export function ListDocument() {
 
               {checkPermission([
                 ModulePermission.CAN_WRITE_ON_ADMINISTRATIVO,
-                ModulePermission.CAN_WRITE_ON_GLOBAL
+                ModulePermission.CAN_WRITE_ON_GLOBAL,
               ]) && (
                 <DocumentModal title="Cadastro Documento" action="Adicionar" />
               )}
@@ -88,5 +88,5 @@ export function ListDocument() {
         )}
       </div>
     </Container>
-  )
+  );
 }

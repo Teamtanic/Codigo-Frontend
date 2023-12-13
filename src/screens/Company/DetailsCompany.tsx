@@ -1,35 +1,102 @@
-import { Card } from '../../components/Card'
-import { Container } from '../../components/Container'
-import { Heading } from '../../components/Heading'
-import { Navbar } from '../../components/Navbar'
-import { Text } from '../../components/Text'
-import { codeMask, formatPhoneNumber } from '../../utils'
-import * as Tabs from '@radix-ui/react-tabs'
-import { useLocation } from 'react-router-dom'
-import { TableListDocument } from '../Documents/TableListDocument'
-import { TableListProductWarehouse } from '../Warehouse/TableListProductWarehouse'
-import { TableListProject } from '../Project/TableListProject'
-import { CompanyResponse } from '../../services/Company/types'
-import { CompanyModal } from './CompanyModal'
-import { PencilSimple, Trash } from 'phosphor-react'
-import { deleteCompany } from '../../services/Company/apiService'
-import { CardDelete } from '../../components/CardDelete'
+import { Card } from "../../components/Card";
+import { Container } from "../../components/Container";
+import { Heading } from "../../components/Heading";
+import { Navbar } from "../../components/Navbar";
+import { Text } from "../../components/Text";
+import { codeMask, formatPhoneNumber } from "../../utils";
+import * as Tabs from "@radix-ui/react-tabs";
+import { useLocation } from "react-router-dom";
+import { CompanyResponse } from "../../services/Company/types";
+import { CompanyModal } from "./CompanyModal";
+import { PencilSimple, Trash } from "phosphor-react";
+import { deleteCompany } from "../../services/Company/apiService";
+import { CardDelete } from "../../components/CardDelete";
+import { useEffect, useState } from "react";
+import { getAllCompanyProjects } from "../../services/Project/apiService";
+import { ProjectResponse } from "../../services/Project/type";
+import { TableListProject } from "../Project/TableListProject";
+import { ProductWarehouseResponse } from "../../services/ProductWarehouse/type";
+import { getAllCompanyProducts } from "../../services/ProductWarehouse/apiService";
+import { TableListProductWarehouse } from "../Warehouse/TableListProductWarehouse";
+import { Loader } from "../../components/Loader";
+import { TableListDocument } from "../Documents/TableListDocument";
+import { getAllDocuments } from "../../services/Document/apiService";
+import { DocumentResponse } from "../../services/Document/types";
 
 export function DetailsCompany() {
-  const location = useLocation()
-  const { state } = location
-  const company: CompanyResponse = state.record
+  const location = useLocation();
+  const [currentPage] = useState(1);
+  const [projects, setProjects] = useState<ProjectResponse[]>([]);
+  const [products, setProducts] = useState<ProductWarehouseResponse[]>([]);
+  const [documents, setDocuments] = useState<DocumentResponse[]>([]);
 
-  company.contact.map(contact => console.log(contact))
+  const [projectLoading, setProjectLoading] = useState(false);
+  const [productLoading, setProductLoading] = useState(false);
+  const [documentLoading, setDocumentLoading] = useState(false);
+
+  const { state } = location;
+  const company: CompanyResponse = state.record;
+
+  company.contact.map((contact) => console.log(contact));
+
+  useEffect(() => {
+    (async () => {
+      try {
+        setProjectLoading(true);
+        const { data: content } = await getAllCompanyProjects(
+          company.name,
+          currentPage - 1
+        );
+        setProjects(content.content);
+      } catch (error) {
+        console.error("Erro ao obter conteúdo do documento:", error);
+      } finally {
+        setProjectLoading(false);
+      }
+    })();
+  }, [company.id, currentPage]);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        setProductLoading(true);
+        const { data: content } = await getAllCompanyProducts(
+          company.id,
+          currentPage - 1
+        );
+        setProducts(content.content);
+      } catch (error) {
+        console.error("Erro ao obter conteúdo do documento:", error);
+      } finally {
+        setProductLoading(false);
+      }
+    })();
+  }, [company.id, currentPage]);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        setDocumentLoading(true);
+        const { data: content } = await getAllDocuments(
+          `Empresas/${company.id}`
+        );
+        setDocuments(content);
+      } catch (error) {
+        console.error("Erro ao obter conteúdo do documento:", error);
+      } finally {
+        setDocumentLoading(false);
+      }
+    })();
+  }, [company.id, currentPage]);
 
   const handleDelete = async (record: CompanyResponse) => {
     try {
-      await deleteCompany(record.id)
-      window.location.href = '/empresas'
+      await deleteCompany(record.id);
+      window.location.href = "/empresas";
     } catch (error) {
-      console.error(error)
+      console.error(error);
     }
-  }
+  };
 
   return (
     <Container>
@@ -61,12 +128,12 @@ export function DetailsCompany() {
                 <Text className="!text-gray-900 .contactfont-semibold">
                   {company.name}
                 </Text>
-                {company.companyRelationships.map(relation => (
+                {company.companyRelationships.map((relation) => (
                   <Card
                     className={`${
-                      relation.businessRelationship == 'FORNECEDOR'
-                        ? '!bg-blue-950 '
-                        : '!bg-emerald-600'
+                      relation.businessRelationship == "FORNECEDOR"
+                        ? "!bg-blue-950 "
+                        : "!bg-emerald-600"
                     } w-fit flex items-center justify-center md:hidden`}
                   >
                     <Text className="" size="xm">
@@ -80,15 +147,15 @@ export function DetailsCompany() {
                   ? codeMask(company.cpf)
                   : company.cnpj
                   ? codeMask(company.cnpj)
-                  : 'Não informado'}
+                  : "Não informado"}
               </Text>
               <div className="flex gap-3">
-                {company.companyRelationships.map(relation => (
+                {company.companyRelationships.map((relation) => (
                   <Card
                     className={`${
-                      relation.businessRelationship == 'FORNECEDOR'
-                        ? '!bg-blue-950 '
-                        : '!bg-emerald-600'
+                      relation.businessRelationship == "FORNECEDOR"
+                        ? "!bg-blue-950 "
+                        : "!bg-emerald-600"
                     } w-fit flex items-center justify-center max-sm:hidden`}
                   >
                     <Text className="!text-gray-100" size="xm">
@@ -106,8 +173,8 @@ export function DetailsCompany() {
                     <span key={index}>
                       {contact.telephone
                         ? formatPhoneNumber(contact.telephone)
-                        : 'Não informado'}
-                      {index < company.contact.length - 1 ? ' / ' : ''}
+                        : "Não informado"}
+                      {index < company.contact.length - 1 ? " / " : ""}
                     </span>
                   ))}
                 </Text>
@@ -119,8 +186,8 @@ export function DetailsCompany() {
                     <span key={index}>
                       {contact.cell_phone
                         ? formatPhoneNumber(contact.cell_phone)
-                        : 'Não informado'}
-                      {index < company.contact.length - 1 ? ' / ' : ''}
+                        : "Não informado"}
+                      {index < company.contact.length - 1 ? " / " : ""}
                     </span>
                   ))}
                 </Text>
@@ -130,7 +197,7 @@ export function DetailsCompany() {
                 <Text className="!text-gray-900">
                   {company.contact.map((contact, index) => (
                     <span key={index}>
-                      {contact.email ? contact.email : 'Não informado'}
+                      {contact.email ? contact.email : "Não informado"}
                     </span>
                   ))}
                 </Text>
@@ -167,26 +234,44 @@ export function DetailsCompany() {
             className="grow p-5 bg-gray-100 rounded-b-md outline-none "
             value="tab1"
           >
-            {/*company.document ? (
-              <TableListDocument data={company.document} />
+            {documentLoading ? (
+              <Loader />
+            ) : documents ? (
+              <TableListDocument
+                data={documents.filter(
+                  (document) => document.nodeType === "cm:content"
+                )}
+              />
             ) : (
-              ''
-            )*/}
+              ""
+            )}
           </Tabs.Content>
           <Tabs.Content
             className="grow p-5 bg-gray-100 rounded-b-md outline-none "
             value="tab2"
           >
-            {/*company.project ? <TableListProject data={company.project} /> : ''*/}
+            {projectLoading ? (
+              <Loader />
+            ) : company ? (
+              <TableListProject data={projects} />
+            ) : (
+              ""
+            )}
           </Tabs.Content>
           <Tabs.Content
             className="grow p-5 bg-gray-100 rounded-b-md outline-none "
             value="tab3"
           >
-            {/*company.product? <TableListProductWarehouse data={company.product} /> : ''*/}
+            {productLoading ? (
+              <Loader />
+            ) : products ? (
+              <TableListProductWarehouse data={products} />
+            ) : (
+              ""
+            )}
           </Tabs.Content>
         </Tabs.Root>
       </div>
     </Container>
-  )
+  );
 }
