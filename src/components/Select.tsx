@@ -34,7 +34,7 @@ export function Select({
   }
 
   return (
-    <Menu as="div" className="relative inline-block text-left w-full ">
+    <Menu as="div" className="relative inline-block text-left w-full">
       <div>
         <label htmlFor={labelFor} className="flex flex-col w-full">
           <div className="flex gap-4">

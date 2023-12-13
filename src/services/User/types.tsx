@@ -1,6 +1,7 @@
 import { ContactResponse } from '../Contact/types'
 import { CourseResponse } from '../Course/types'
 import { DepartmentResponse } from '../Department/types'
+import { RoleResponse } from '../Role/types'
 
 export interface UserAuthenticationRequest {
   login: string
@@ -38,10 +39,11 @@ export interface UserResponse {
   id: string
   name: string
   prontuary: string
-  status: boolean
   course: CourseResponse
   department: DepartmentResponse
+  role: RoleResponse
   contact: ContactResponse
+  status: boolean
 }
 
 export interface UserResponsePaginate extends Paginate<UserResponse> {}

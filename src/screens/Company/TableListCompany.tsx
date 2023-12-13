@@ -6,10 +6,7 @@ import { ModalOptions } from '../../components/OptionsMenu'
 import { CompanyModal } from './CompanyModal'
 import { codeMask } from '../../utils'
 import { CompanyResponse } from '../../services/Company/types'
-import {
-  BusinessRelationshipType,
-  CompanyRelationshipResponse
-} from '../../services/CompanyRelationship/types'
+import { deleteCompany } from '../../services/Company/apiService'
 
 export interface CompanyProps {
   id: string
@@ -19,6 +16,15 @@ export interface CompanyProps {
 }
 
 export function TableListCompany({ data }: { data: CompanyResponse[] }) {
+  const handleDelete = async (record: CompanyResponse) => {
+    try {
+      await deleteCompany(record.id)
+      window.location.reload()
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
   var columns: Column<CompanyResponse>[] = [
     {
       key: 'id',
@@ -35,7 +41,7 @@ export function TableListCompany({ data }: { data: CompanyResponse[] }) {
           <div className="flex gap-4">
             {companyRelationships.map(relation => (
               <Card
-                key={relation.id}
+                key={relation.idCompanyRelationship}
                 className={`${
                   relation.businessRelationship == 'CLIENTE'
                     ? '!bg-emerald-600'
@@ -77,12 +83,19 @@ export function TableListCompany({ data }: { data: CompanyResponse[] }) {
           optionsTrigger
           title="Edição de Empresa"
           action="Editar"
+          mode="edit"
         />
       )
     }
   ]
 
   return (
-    <Table link="empresa" data={data} columns={columns} options={options} />
+    <Table
+      link="empresa"
+      data={data}
+      columns={columns}
+      options={options}
+      onDelete={handleDelete}
+    />
   )
 }

@@ -11,7 +11,7 @@ import { authenticateUser } from '../../../services/User/apiService'
 import { UserAuthenticationRequest } from '../../../services/User/types'
 import { Field, Form } from 'react-final-form'
 import { useNavigate } from 'react-router-dom'
-import { getUserIndex } from '../../../utils'
+import { getUserIndex } from '../../../services/User/utils'
 
 export function Login() {
   const validationSchema = object({

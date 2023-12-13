@@ -3,10 +3,31 @@ import { CardModal, ModelModalProp } from '../../../components/CardModal'
 import { TextInput } from '../../../components/TextInput'
 import { Form, Field } from 'react-final-form'
 import { object, string } from 'yup'
-import { CourseCreateRequest } from '../../../services/Course/types'
-import { createCourse } from '../../../services/Course/apiService'
+import {
+  CourseCreateRequest,
+  CourseResponse,
+  CourseUpdateRequest
+} from '../../../services/Course/types'
+import {
+  createCourse,
+  editCourse,
+  getCourseById
+} from '../../../services/Course/apiService'
+import { useNavigate } from 'react-router-dom'
+import { createUpdateObject } from '../../../utils'
+import { HttpStatusCode } from 'axios'
 
-export function CourseModal({ action, optionsTrigger, title }: ModelModalProp) {
+export function CourseModal({
+  action,
+  optionsTrigger,
+  title,
+  mode = 'create',
+  data,
+  triggerStyle,
+  iconTrigger
+}: ModelModalProp & { data?: CourseResponse }) {
+  let navigate = useNavigate()
+
   const validationSchema = object({
     name: string().required('Nome é obrigatório')
   })
@@ -17,16 +38,44 @@ export function CourseModal({ action, optionsTrigger, title }: ModelModalProp) {
         name: values.name
       }
 
-      const response = await createCourse(courseData)
-      console.log(response)
+      if (mode === 'create') {
+        await createCourse(courseData)
+      } else if (mode === 'edit') {
+        if (data) {
+          const updateCompanyData: CourseUpdateRequest = createUpdateObject(
+            data,
+            courseData
+          )
+          let editResponse = await editCourse(updateCompanyData, data.id)
+          if (editResponse.status === HttpStatusCode.Ok) {
+            let updateResponse = await getCourseById(data.id)
+            console.log(updateResponse)
+            if (updateResponse.status === HttpStatusCode.Ok) {
+              const record: CourseResponse = updateResponse.data
+              navigate(`/cursos/${data.id}`, {
+                state: { record }
+              })
+            }
+          }
+        }
+      }
     } catch (error) {
       console.error(error)
+    }
+  }
+
+  let initialValues = {}
+  if (data) {
+    initialValues = {
+      id: data.id,
+      name: data.name
     }
   }
 
   return (
     <Form
       onSubmit={onSubmit}
+      initialValues={initialValues}
       validate={values => {
         try {
           validationSchema.validateSync(values, { abortEarly: false })
@@ -41,6 +90,8 @@ export function CourseModal({ action, optionsTrigger, title }: ModelModalProp) {
           title={title}
           action={action}
           optionsTrigger={optionsTrigger}
+          triggerStyle={triggerStyle}
+          iconTrigger={iconTrigger}
         >
           <form onSubmit={handleSubmit}>
             <div className="flex flex-col w-full max-md:px-12 md:px-24 gap-4">

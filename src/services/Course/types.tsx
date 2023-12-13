@@ -4,6 +4,10 @@ export interface CourseCreateRequest {
   name: string
 }
 
+export interface CourseUpdateRequest {
+  name?: string
+}
+
 export interface CourseResponse {
   id: string
   name: string

@@ -3,20 +3,76 @@ import { CardModal, ModelModalProp } from '../../../components/CardModal'
 import { TextInput } from '../../../components/TextInput'
 import { Form, Field } from 'react-final-form'
 import { object, string } from 'yup'
-import { TransactionType } from '../../../services/Transaction/type'
+import {
+  TransactionCreateRequest,
+  TransactionType
+} from '../../../services/Transaction/type'
 import { Select, SelectOption } from '../../../components/Select'
 import { Text } from '../../../components/Text'
-import DropdownInput from '../../../components/DropdownInput'
+import DropdownInput, {
+  Option,
+  Record
+} from '../../../components/DropdownInput'
+import { createTransaction } from '../../../services/Transaction/apiService'
+import { format } from 'date-fns'
+import { searchBankAccount } from '../../../services/BankAccount/apiService'
+import { BankAccountResponse } from '../../../services/BankAccount/types'
+import { searchProject } from '../../../services/Project/apiService'
+import { ProjectResponse } from '../../../services/Project/type'
+import { searchProduct } from '../../../services/ProductWarehouse/apiService'
+import { ProductWarehouseResponse } from '../../../services/ProductWarehouse/type'
+
+/*
+export function TransactionModal({ action, title }: ModelModalProp) {
+  const validationSchema = object({
+    description: string(),
+    amount: string(),
+    transactionType: string(),
+    dtCashflow: string(),
+    paymentMethod: string(),
+    installments: string(),
+    qtyInstallments: string(),
+    projectId: string(),
+    bankAccountId: string(),
+    productsWarehouse: string()
+  })
+  */
 
 export function TransactionModal({ action, title }: ModelModalProp) {
   const validationSchema = object({
     description: string().required('Nome do banco é obrigatória'),
-    location: string().required('A localização é obrigatória'),
-    balance: string().required('O saldo é obrigatório')
+    amount: string().required('Valor é obrigatório'),
+    transactionType: string().required('Tipo é obrigatório'),
+    dtCashflow: string().required('Data é obrigatória'),
+    paymentMethod: string().required('Método de pagamento é obrigatório'),
+    installments: string().required('Valor da parcela é obrigatória'),
+    qtyInstallments: string().required('Quantidade de parcelas é obrigatória'),
+    projectId: string(),
+    bankAccountId: string(),
+    productsWarehouse: string()
   })
 
-  const onSubmit = (values: any) => {
-    console.log(values)
+  const onSubmit = async (values: any) => {
+    try {
+      const transactionData: TransactionCreateRequest = {
+        description: values.description,
+        amount: values.amount,
+        paymentMethod: values.paymentMethod,
+        type: values.transactionType,
+        dtCashflow: format(new Date(values.dtCashflow), 'dd/MM/yyyy'),
+        installments: values.installments,
+        qtyInstallments: values.qtyInstallments,
+        bankAccountId: values.bankAccountId,
+        productsWarehouse: values.productsWarehouse,
+        projectId: values.projectId
+      }
+
+      console.log(transactionData)
+
+      await createTransaction(transactionData)
+    } catch (error) {
+      console.error(error)
+    }
   }
 
   const enumOptions: SelectOption[] = Object.entries(TransactionType).map(
@@ -25,6 +81,42 @@ export function TransactionModal({ action, title }: ModelModalProp) {
       label
     })
   )
+
+  const searchFunctionBankAccount = async (query: string) => {
+    const response = await searchBankAccount(query)
+    const data = response.data.content
+
+    const options: Option[] = data.map((item: BankAccountResponse) => ({
+      label: item.name,
+      value: item.id
+    }))
+
+    return { data: { content: options } }
+  }
+
+  const searchFunctionProject = async (query: string) => {
+    const response = await searchProject(query)
+    const data = response.data.content
+
+    const options: Record[] = data.map((item: ProjectResponse) => ({
+      label: item.description,
+      value: item.id
+    }))
+
+    return { data: { content: options } }
+  }
+
+  const searchFunctionProduct = async (query: string) => {
+    const response = await searchProduct(query)
+    const data = response.data.content
+
+    const options: Record[] = data.map((item: ProductWarehouseResponse) => ({
+      label: item.product,
+      value: item.id
+    }))
+
+    return { data: { content: options } }
+  }
 
   return (
     <Form
@@ -88,7 +180,7 @@ export function TransactionModal({ action, title }: ModelModalProp) {
 
                 <div className="flex-1 mb-4 lg:mb-0">
                   <Field
-                    name="type"
+                    name="transactionType"
                     render={({ input, meta }) => (
                       <Select
                         labelFor="amount"
@@ -201,61 +293,45 @@ export function TransactionModal({ action, title }: ModelModalProp) {
               <Field
                 name="projectId"
                 render={({ input, meta }) => (
-                  <TextInput.Root
+                  <DropdownInput
+                    searchFunction={searchFunctionProject}
                     labelFor="projectId"
                     labelText="Projeto relacionado"
+                    placeholder="Selecione o projeto"
                     error={meta.touched && meta.error ? meta.error : undefined}
-                  >
-                    <TextInput.Input
-                      id="projectId"
-                      type="text"
-                      placeholder="Informe o projeto..."
-                      {...input}
-                    />
-                  </TextInput.Root>
+                    inputValue={input.value}
+                    onChange={input.onChange}
+                  />
                 )}
-              />
-
-              <DropdownInput
-                labelText="Buscar Dados"
-                labelFor="searchInput"
-                className="seu-estilo-customizado"
-                labelStyle="seu-estilo-de-label"
               />
 
               <Field
                 name="bankAccountId"
                 render={({ input, meta }) => (
-                  <TextInput.Root
-                    labelFor="bankAccountId"
+                  <DropdownInput
+                    searchFunction={searchFunctionBankAccount}
                     labelText="Banco da transação"
+                    labelFor="searchInput"
+                    placeholder="Informe o banco"
                     error={meta.touched && meta.error ? meta.error : undefined}
-                  >
-                    <TextInput.Input
-                      id="bankAccountId"
-                      type="text"
-                      placeholder="Informe o banco..."
-                      {...input}
-                    />
-                  </TextInput.Root>
+                    inputValue={input.value}
+                    onChange={input.onChange}
+                  />
                 )}
               />
 
               <Field
                 name="productsWarehouse"
                 render={({ input, meta }) => (
-                  <TextInput.Root
+                  <DropdownInput
+                    searchFunction={searchFunctionProduct}
                     labelFor="productsWarehouse"
                     labelText="Produtos da transação"
+                    placeholder="Informe o banco"
                     error={meta.touched && meta.error ? meta.error : undefined}
-                  >
-                    <TextInput.Input
-                      id="productsWarehouse"
-                      type="text"
-                      placeholder="Informe os produtos..."
-                      {...input}
-                    />
-                  </TextInput.Root>
+                    inputValue={input.value}
+                    onChange={input.onChange}
+                  />
                 )}
               />
 

@@ -5,8 +5,10 @@ import {
   TransactionResponsePaginate
 } from './type'
 
-export const getAllTransactions = () =>
-  api.get<TransactionResponsePaginate>('/transacoes')
+export const getAllTransactions = (page: number, size?: number) =>
+  api.get<TransactionResponsePaginate>('/transacoes', {
+    params: { page, size }
+  })
 
 export const createTransaction = (transactionData: TransactionCreateRequest) =>
   api.post<TransactionResponse>('/transacoes', transactionData)

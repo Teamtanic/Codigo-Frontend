@@ -9,7 +9,7 @@ export interface TransactionCreateRequest {
   paymentMethod: string
   installments?: number
   qtyInstallments?: number
-  dtCashflow?: Date
+  dtCashflow: string
   projectId?: string
   bankAccountId?: string
   productsWarehouse?: ProductTransactionRequest[]
@@ -33,6 +33,6 @@ export interface TransactionResponsePaginate
   extends Paginate<TransactionResponse> {}
 
 export enum TransactionType {
-  SAIDA = 'Saída',
-  ENTRADA = 'Entrada'
+  SAIDA = 'SAIDA',
+  ENTRADA = 'ENTRADA'
 }

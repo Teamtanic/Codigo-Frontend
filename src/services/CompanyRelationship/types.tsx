@@ -1,13 +1,13 @@
 import { CompanyResponse } from '../Company/types'
 
 export interface CompanyRelationshipProjectResponse {
-  id: string
+  idCompanyRelationship: string
   businessRelationship: BusinessRelationshipType
   company: CompanyResponse
 }
 
 export interface CompanyRelationshipResponse {
-  id: string
+  idCompanyRelationship: string
   active: boolean
   businessRelationship: BusinessRelationshipType
   company: CompanyResponse

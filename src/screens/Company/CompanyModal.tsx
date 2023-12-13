@@ -5,13 +5,25 @@ import { Text } from '../../components/Text'
 import { TextInput } from '../../components/TextInput'
 import { Form, Field } from 'react-final-form'
 import { object, string, boolean } from 'yup'
-import { CompanyCreateRequest } from '../../services/Company/types'
+import {
+  CompanyCreateRequest,
+  CompanyResponse,
+  CompanyUpdateRequest
+} from '../../services/Company/types'
 import { BusinessRelationshipType } from '../../services/CompanyRelationship/types'
-import { createCompany } from '../../services/Company/apiService'
+import {
+  createCompany,
+  editCompany,
+  getCompanyById
+} from '../../services/Company/apiService'
+import { useNavigate } from 'react-router-dom'
+import { HttpStatusCode } from 'axios'
+import { createUpdateObject } from '../../utils'
 
 interface CompanyFormProps {
   name: string
-  code: string
+  cpf: string
+  cnpj: string
   email: string
   telephone?: string
   cell_phone?: string
@@ -22,17 +34,23 @@ interface CompanyFormProps {
 export function CompanyModal({
   action,
   optionsTrigger,
-  title
-}: ModelModalProp) {
+  title,
+  mode = 'create',
+  data,
+  triggerStyle,
+  iconTrigger
+}: ModelModalProp & { data?: CompanyResponse }) {
+  let navigate = useNavigate()
+
   const validationSchema = object({
-    name: string().required('Razão Social é obrigatória'),
-    code: string()
-      .required('CPF ou CNPJ é obrigatório')
-      .matches(/^[0-9]+$/, 'O código deve conter apenas números'),
+    name: string().required('Nome é obrigatório'),
+    cpf: string(),
+    cnpj: string(),
     email: string()
       .email('Insira um e-mail válido')
       .required('E-mail é obrigatório'),
-    tel: string(),
+    telephone: string(),
+    cell_phone: string(),
     checkCustomer: boolean(),
     checkSupplier: boolean()
   })
@@ -45,9 +63,6 @@ export function CompanyModal({
       let isSupplier: BusinessRelationshipType | undefined =
         values.checkSupplier ? BusinessRelationshipType.FORNECEDOR : undefined
 
-      let cnpj = values.code.length === 14 ? values.code : undefined
-      let cpf = values.code.length === 11 ? values.code : undefined
-
       const businessRelationshipTypeArray: BusinessRelationshipType[] = [
         isCustomer,
         isSupplier
@@ -55,25 +70,63 @@ export function CompanyModal({
 
       const companyData: CompanyCreateRequest = {
         name: values.name,
-        cnpj: cnpj,
-        cpf: cpf,
+        cnpj: values.cnpj,
+        cpf: values.cpf,
         email: values.email,
         telephone: values.telephone,
         cell_phone: values.cell_phone,
         businessRelationshipType: businessRelationshipTypeArray
       }
 
-      await createCompany(companyData)
-
-      console.log(companyData)
+      if (mode === 'create') {
+        await createCompany(companyData)
+      } else if (mode === 'edit') {
+        if (data) {
+          const updateCompanyData: CompanyUpdateRequest = createUpdateObject(
+            data,
+            companyData
+          )
+          let editResponse = await editCompany(updateCompanyData, data.id)
+          if (editResponse.status === HttpStatusCode.Ok) {
+            let updateResponse = await getCompanyById(data.id)
+            if (updateResponse.status === HttpStatusCode.Ok) {
+              const record: CompanyResponse = updateResponse.data
+              navigate(`/empresa/${data.id}`, { state: { record } })
+            }
+          }
+        }
+      }
     } catch (error) {
       console.error(error)
+    }
+  }
+
+  let initialValues = {}
+  if (data) {
+    initialValues = {
+      id: data.id,
+      name: data.name,
+      cpf: data.cpf ?? undefined,
+      cnpj: data.cnpj ?? undefined,
+      checkCustomer: data.companyRelationships.some(
+        relationship =>
+          relationship.businessRelationship === 'CLIENTE' && relationship.active
+      ),
+      checkSupplier: data.companyRelationships.some(
+        relationship =>
+          relationship.businessRelationship === 'FORNECEDOR' &&
+          relationship.active
+      ),
+      email: data.contact[0].email ?? undefined,
+      telephone: data.contact[0].telephone ?? undefined,
+      cell_phone: data.contact[0].cell_phone ?? undefined
     }
   }
 
   return (
     <Form
       onSubmit={onSubmit}
+      initialValues={initialValues}
       validate={values => {
         try {
           validationSchema.validateSync(values, { abortEarly: false })
@@ -88,6 +141,8 @@ export function CompanyModal({
           title={title}
           action={action}
           optionsTrigger={optionsTrigger}
+          triggerStyle={triggerStyle}
+          iconTrigger={iconTrigger}
         >
           <form
             onSubmit={handleSubmit}
@@ -99,13 +154,13 @@ export function CompanyModal({
                 render={({ input, meta }) => (
                   <TextInput.Root
                     labelFor="name"
-                    labelText="Razão Social"
+                    labelText="Nome da Empresa"
                     error={meta.touched && meta.error ? meta.error : undefined}
                   >
                     <TextInput.Input
                       id="name"
                       type="text"
-                      placeholder="Digite a razão social..."
+                      placeholder="Digite o nome..."
                       {...input}
                     />
                   </TextInput.Root>
@@ -113,17 +168,37 @@ export function CompanyModal({
               />
 
               <Field
-                name="code"
+                name="cpf"
                 render={({ input, meta }) => (
                   <TextInput.Root
-                    labelFor="code"
-                    labelText="CPF ou CNPJ"
+                    labelFor="cpf"
+                    labelText="CPF"
                     error={meta.touched && meta.error ? meta.error : undefined}
                   >
                     <TextInput.Input
-                      id="code"
+                      id="cpf"
                       type="text"
                       placeholder="Digite o código..."
+                      mask="999.999.999-99"
+                      {...input}
+                    />
+                  </TextInput.Root>
+                )}
+              />
+
+              <Field
+                name="cnpj"
+                render={({ input, meta }) => (
+                  <TextInput.Root
+                    labelFor="cnpj"
+                    labelText="CNPJ"
+                    error={meta.touched && meta.error ? meta.error : undefined}
+                  >
+                    <TextInput.Input
+                      id="cnpj"
+                      type="text"
+                      placeholder="Digite o código..."
+                      mask="99.999.999/9999-99"
                       {...input}
                     />
                   </TextInput.Root>
@@ -149,17 +224,37 @@ export function CompanyModal({
               />
 
               <Field
-                name="tel"
+                name="telephone"
                 render={({ input, meta }) => (
                   <TextInput.Root
-                    labelFor="tel"
-                    labelText="Telefone"
+                    labelFor="telephone"
+                    labelText="Tefone"
                     error={meta.touched && meta.error ? meta.error : undefined}
                   >
                     <TextInput.Input
-                      id="tel"
+                      id="telephone"
                       type="text"
-                      placeholder="Digite o telefone de contato..."
+                      placeholder="(99) 9999-9999"
+                      mask="(99) 9999-9999"
+                      {...input}
+                    />
+                  </TextInput.Root>
+                )}
+              />
+
+              <Field
+                name="cell_phone"
+                render={({ input, meta }) => (
+                  <TextInput.Root
+                    labelFor="cell_phone"
+                    labelText="Celular"
+                    error={meta.touched && meta.error ? meta.error : undefined}
+                  >
+                    <TextInput.Input
+                      id="cell_phone"
+                      type="text"
+                      mask="(99) 99999-9999"
+                      placeholder="(99) 99999-9999"
                       {...input}
                     />
                   </TextInput.Root>

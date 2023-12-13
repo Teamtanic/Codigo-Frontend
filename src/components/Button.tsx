@@ -31,7 +31,7 @@ export function Button({
   return (
     <Component
       className={clsx(
-        'flex items-center justify-center w-full py-3 px-4 bg-emerald-500 rounded font-semibold text-gray-900 text-sm transition-colors hover:bg-emerald-400 focus:ring-2 ring-white',
+        'flex items-center justify-center py-3 px-4 bg-emerald-500 rounded font-semibold text-gray-900 text-sm transition-colors hover:bg-emerald-400 focus:ring-2 ring-white',
         className
       )}
       {...props}

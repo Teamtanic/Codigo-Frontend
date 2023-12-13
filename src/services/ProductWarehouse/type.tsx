@@ -12,6 +12,11 @@ export interface ProductWarehouseCreateRequest {
   supplierPrice?: number
 }
 
+export interface ProductWarehouseUpdateRequest {
+  product?: string
+  quantity?: number
+}
+
 export interface ProductSupplierInfoResponse {
   product: string
   supplierPrice: number

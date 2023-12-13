@@ -1,6 +1,3 @@
-import { JwtPayload, jwtDecode } from 'jwt-decode'
-import { ModulePermission, moduleRoutes } from './Routes'
-
 export function codeMask(code: string) {
   if (code.length === 11) {
     return code
@@ -52,67 +49,17 @@ export function amountMask(amount: number) {
   return `R$ ${amount.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`
 }
 
-const token = localStorage.getItem('token')
-export function getUserPermissions() {
-  if (token) {
-    try {
-      const decodedToken: any = jwtDecode(token)
+export function createUpdateObject<T extends Record<string, any>>(
+  currentData: T,
+  newData: Partial<T>
+): Partial<T> {
+  const updateObject: Partial<T> = {}
 
-      //console.log(decodedToken)
-
-      const permissions: string[] = decodedToken.permissions
-
-      return permissions
-    } catch (error) {
-      console.error('Erro ao decodificar o token:', error)
+  Object.keys(newData).forEach(key => {
+    if (currentData.hasOwnProperty(key) && currentData[key] !== newData[key]) {
+      updateObject[key as keyof T] = newData[key]
     }
-  } else {
-    console.error('Token não encontrado.')
-  }
-}
+  })
 
-export function isTokenExpired() {
-  if (!token) {
-    return true
-  }
-
-  const decodedToken = jwtDecode(token)
-
-  if (typeof decodedToken.exp === 'undefined') {
-    return true
-  }
-
-  const expirationTimeInSeconds = decodedToken.exp
-
-  const currentTimeInSeconds = Date.now() / 1000
-
-  return expirationTimeInSeconds < currentTimeInSeconds
-}
-
-export interface tokenProps extends JwtPayload {
-  permissions: string[]
-}
-
-export function hasPermission(requiredPermission: string): boolean {
-  let userPermissions: string[] | undefined = getUserPermissions()
-  if (userPermissions === undefined) {
-    return false
-  }
-  return userPermissions.includes(requiredPermission)
-}
-
-export function getUserIndex(): string {
-  if (!token) {
-    return '/login'
-  }
-
-  const decodedToken: tokenProps = jwtDecode(token)
-
-  const userPermissionString = decodedToken.permissions[0]
-  const userPermissionEnum: ModulePermission | undefined =
-    ModulePermission[userPermissionString as keyof typeof ModulePermission]
-
-  const userIndex = moduleRoutes[userPermissionEnum]
-
-  return userIndex
+  return updateObject
 }

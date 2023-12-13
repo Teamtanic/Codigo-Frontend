@@ -5,7 +5,6 @@ import { Navbar } from '../../components/Navbar'
 import { TextInput } from '../../components/TextInput'
 import { MagnifyingGlass } from 'phosphor-react'
 import { TableListCompany } from './TableListCompany'
-import { codeMask } from '../../utils'
 import { CompanyModal } from './CompanyModal'
 import { useEffect, useState } from 'react'
 import { CompanyResponse } from '../../services/Company/types'
@@ -18,6 +17,7 @@ export function ListCompany() {
   const [loading, setLoading] = useState(true)
   const [currentPage, setCurrentPage] = useState(1)
   const [totalPages, setTotalPages] = useState(1)
+  const [numberOfElements, setNumberOfElements] = useState(1)
 
   useEffect(() => {
     const fetchData = async () => {
@@ -27,6 +27,7 @@ export function ListCompany() {
 
         setCompanies(response.data.content)
         setTotalPages(response.data.totalPages)
+        setNumberOfElements(response.data.numberOfElements)
       } catch (error) {
         console.error('Erro ao obter a companies:', error)
       } finally {
@@ -77,6 +78,7 @@ export function ListCompany() {
               totalPages={totalPages}
               currentPage={currentPage}
               onPageChange={handlePageChange}
+              numberOfElements={numberOfElements}
             />
           </div>
         )}

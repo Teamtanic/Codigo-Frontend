@@ -20,6 +20,7 @@ interface TableProps<Data extends { id: string }> {
   menu?: boolean;
   options?: ModalOptions[];
   link?: string;
+  onDelete?: (record: Data) => void;
 }
 
 export function Table<Data extends { id: string }>({
@@ -28,6 +29,7 @@ export function Table<Data extends { id: string }>({
   menu = true,
   options,
   link,
+  onDelete,
 }: TableProps<Data>) {
   const navigate = useNavigate();
 
@@ -129,7 +131,15 @@ export function Table<Data extends { id: string }>({
                     }}
                   >
                     <div className="flex w-full items-center justify-end">
-                      {options ? <OptionsMenu options={options} /> : ""}
+                      {options ? (
+                        <OptionsMenu
+                          data={record}
+                          options={options}
+                          onDelete={() => onDelete && onDelete(record)}
+                        />
+                      ) : (
+                        ""
+                      )}
                     </div>
                   </td>
                 ) : (

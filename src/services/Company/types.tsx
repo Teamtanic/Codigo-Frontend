@@ -15,7 +15,7 @@ export interface CompanyCreateRequest {
 }
 
 export interface CompanyUpdateRequest {
-  name: string
+  name?: string
   cpf?: string
   cnpj?: string
 }
