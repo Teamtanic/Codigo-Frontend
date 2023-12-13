@@ -1,106 +1,110 @@
-import { Button } from '../../../components/Button'
-import { CardModal, ModelModalProp } from '../../../components/CardModal'
-import DropdownInput, { Record } from '../../../components/DropdownInput'
-import { TextInput } from '../../../components/TextInput'
-import { Form, Field } from 'react-final-form'
-import { array, object, string } from 'yup'
-import { searchDepartment } from '../../../services/Department/apiService'
-import { DepartmentResponse } from '../../../services/Department/types'
-import { Select, SelectOption } from '../../../components/Select'
+import { Button } from "../../../components/Button";
+import { CardModal, ModelModalProp } from "../../../components/CardModal";
+import DropdownInput, { Record } from "../../../components/DropdownInput";
+import { TextInput } from "../../../components/TextInput";
+import { Form, Field } from "react-final-form";
+import { array, object, string } from "yup";
+import { searchDepartment } from "../../../services/Department/apiService";
+import { DepartmentResponse } from "../../../services/Department/types";
+import { Select, SelectOption } from "../../../components/Select";
 import {
   Permission,
   RoleCreateRequest,
   RoleResponse,
-  RoleUpdateRequest
-} from '../../../services/Role/types'
+  RoleUpdateRequest,
+} from "../../../services/Role/types";
 import {
   createRole,
   editRole,
-  getRoleById
-} from '../../../services/Role/apiService'
-import { createUpdateObject } from '../../../utils'
-import { HttpStatusCode } from 'axios'
-import { useNavigate } from 'react-router'
-import { useEffect, useState } from 'react'
+  getRoleById,
+} from "../../../services/Role/apiService";
+import { createUpdateObject } from "../../../utils";
+import { HttpStatusCode } from "axios";
+import { useNavigate } from "react-router";
+import { useEffect, useState } from "react";
 
 interface RoleFormProps {
-  name: string
-  departmentId: string
-  permissions: Permission[]
+  name: string;
+  departmentId: string;
+  permissions: Permission[];
 }
 
 export function RoleModal({
   action,
   optionsTrigger,
   title,
-  mode = 'create',
+  mode = "create",
   data,
   triggerStyle,
-  iconTrigger
+  iconTrigger,
 }: ModelModalProp & { data?: RoleResponse }) {
-  console.log(data)
-  let navigate = useNavigate()
+  console.log(data);
+  let navigate = useNavigate();
 
   const validationSchema = object({
-    name: string().required('Nome é obrigatório'),
-    departmentId: string().required('Departamento é obrigatório')
-  })
+    name: string().required("Nome é obrigatório"),
+    departmentId: string().required("Departamento é obrigatório"),
+  });
 
   const onSubmit = async (values: RoleFormProps) => {
     try {
       const roleData: RoleCreateRequest = {
         name: values.name,
         rolePermissions: [
-          { departmentId: values.departmentId, permissions: values.permissions }
-        ]
-      }
+          {
+            departmentId: values.departmentId,
+            permissions: values.permissions,
+          },
+        ],
+      };
 
-      console.log(values)
-      console.log(roleData)
-      if (mode === 'create') {
-        await createRole(roleData)
-      } else if (mode === 'edit') {
+      console.log(values);
+      console.log(roleData);
+      if (mode === "create") {
+        const res = await createRole(roleData);
+        navigate(`/cargo/${res.data.id}`, { state: { record: res.data } });
+      } else if (mode === "edit") {
         if (data) {
           const updateData: RoleUpdateRequest = createUpdateObject(
             data,
             roleData
-          )
-          let editResponse = await editRole(updateData, data.id)
+          );
+          let editResponse = await editRole(updateData, data.id);
           if (editResponse.status === HttpStatusCode.Ok) {
-            let updateResponse = await getRoleById(data.id)
+            let updateResponse = await getRoleById(data.id);
             if (updateResponse.status === HttpStatusCode.Ok) {
-              const record: RoleResponse = updateResponse.data
-              navigate(`/cargo/${data.id}`, { state: { record } })
+              const record: RoleResponse = updateResponse.data;
+              navigate(`/cargo/${data.id}`, { state: { record } });
             }
           }
         }
       }
     } catch (error) {
-      console.error(error)
+      console.error(error);
     }
-  }
+  };
 
   const searchFunctionDepartment = async (query: string) => {
-    const response = await searchDepartment(query)
-    const data = response.data.content
+    const response = await searchDepartment(query);
+    const data = response.data.content;
 
     const options: Record[] = data.map((item: DepartmentResponse) => ({
       label: item.name,
-      value: item.id
-    }))
+      value: item.id,
+    }));
 
-    return { data: { content: options } }
-  }
+    return { data: { content: options } };
+  };
 
   function enumToOptions(enumObject: any): { value: string; label: string }[] {
     return Object.keys(enumObject)
-      .filter(key => isNaN(Number(key))) // Filter out enum keys with numeric values
-      .map(key => ({ value: enumObject[key], label: enumObject[key] }))
+      .filter((key) => isNaN(Number(key))) // Filter out enum keys with numeric values
+      .map((key) => ({ value: enumObject[key], label: enumObject[key] }));
   }
 
-  const permissionOptions = enumToOptions(Permission)
+  const permissionOptions = enumToOptions(Permission);
 
-  const [initialValues, setInitialValues] = useState<any>({})
+  const [initialValues, setInitialValues] = useState<any>({});
 
   useEffect(() => {
     if (data) {
@@ -108,24 +112,24 @@ export function RoleModal({
         id: data.id,
         name: data.name,
         departmentId: data.rolePermissions.departmentId,
-        permissions: [data.rolePermissions.permissions]
-      })
+        permissions: [data.rolePermissions.permissions],
+      });
     } else {
-      setInitialValues({})
+      setInitialValues({});
     }
-  }, [])
+  }, []);
 
   return (
     <Form
       onSubmit={onSubmit}
       initialValues={initialValues}
-      validate={values => {
+      validate={(values) => {
         try {
-          validationSchema.validateSync(values, { abortEarly: false })
+          validationSchema.validateSync(values, { abortEarly: false });
         } catch (err: any) {
           return err.inner.reduce((errors: any, error: any) => {
-            return { ...errors, [error.path]: error.message }
-          }, {})
+            return { ...errors, [error.path]: error.message };
+          }, {});
         }
       }}
       render={({ handleSubmit, submitting }) => (
@@ -192,12 +196,12 @@ export function RoleModal({
                 textStyle="text-gray-100"
                 disabled={submitting}
               >
-                {submitting ? 'Enviando...' : action}
+                {submitting ? "Enviando..." : action}
               </Button>
             </div>
           </form>
         </CardModal>
       )}
     />
-  )
+  );
 }

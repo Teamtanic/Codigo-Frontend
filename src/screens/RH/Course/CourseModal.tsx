@@ -1,88 +1,91 @@
-import { Button } from '../../../components/Button'
-import { CardModal, ModelModalProp } from '../../../components/CardModal'
-import { TextInput } from '../../../components/TextInput'
-import { Form, Field } from 'react-final-form'
-import { object, string } from 'yup'
+import { Button } from "../../../components/Button";
+import { CardModal, ModelModalProp } from "../../../components/CardModal";
+import { TextInput } from "../../../components/TextInput";
+import { Form, Field } from "react-final-form";
+import { object, string } from "yup";
 import {
   CourseCreateRequest,
   CourseResponse,
-  CourseUpdateRequest
-} from '../../../services/Course/types'
+  CourseUpdateRequest,
+} from "../../../services/Course/types";
 import {
   createCourse,
   editCourse,
-  getCourseById
-} from '../../../services/Course/apiService'
-import { useNavigate } from 'react-router-dom'
-import { createUpdateObject } from '../../../utils'
-import { HttpStatusCode } from 'axios'
+  getCourseById,
+} from "../../../services/Course/apiService";
+import { useNavigate } from "react-router-dom";
+import { createUpdateObject } from "../../../utils";
+import { HttpStatusCode } from "axios";
 
 export function CourseModal({
   action,
   optionsTrigger,
   title,
-  mode = 'create',
+  mode = "create",
   data,
   triggerStyle,
-  iconTrigger
+  iconTrigger,
 }: ModelModalProp & { data?: CourseResponse }) {
-  let navigate = useNavigate()
+  let navigate = useNavigate();
 
   const validationSchema = object({
-    name: string().required('Nome é obrigatório')
-  })
+    name: string().required("Nome é obrigatório"),
+  });
 
   const onSubmit = async (values: CourseCreateRequest) => {
     try {
       const courseData: CourseCreateRequest = {
-        name: values.name
-      }
+        name: values.name,
+      };
 
-      if (mode === 'create') {
-        await createCourse(courseData)
-      } else if (mode === 'edit') {
+      if (mode === "create") {
+        const res = await createCourse(courseData);
+        navigate(`/cursos/${res.data.id}`, {
+          state: { record: res.data },
+        });
+      } else if (mode === "edit") {
         if (data) {
           const updateCompanyData: CourseUpdateRequest = createUpdateObject(
             data,
             courseData
-          )
-          let editResponse = await editCourse(updateCompanyData, data.id)
+          );
+          let editResponse = await editCourse(updateCompanyData, data.id);
           if (editResponse.status === HttpStatusCode.Ok) {
-            let updateResponse = await getCourseById(data.id)
-            console.log(updateResponse)
+            let updateResponse = await getCourseById(data.id);
+            console.log(updateResponse);
             if (updateResponse.status === HttpStatusCode.Ok) {
-              const record: CourseResponse = updateResponse.data
+              const record: CourseResponse = updateResponse.data;
               navigate(`/cursos/${data.id}`, {
-                state: { record }
-              })
+                state: { record },
+              });
             }
           }
         }
       }
     } catch (error) {
-      console.error(error)
+      console.error(error);
     }
-  }
+  };
 
-  let initialValues = {}
+  let initialValues = {};
   if (data) {
     initialValues = {
       id: data.id,
-      name: data.name
-    }
+      name: data.name,
+    };
   }
 
   return (
     <Form
       onSubmit={onSubmit}
       initialValues={initialValues}
-      validate={values => {
+      validate={(values) => {
         try {
-          validationSchema.validateSync(values, { abortEarly: false })
+          validationSchema.validateSync(values, { abortEarly: false });
         } catch (err: any) {
           return err.inner.reduce((errors: any, error: any) => {
-            return { ...errors, [error.path]: error.message }
-          }, {})
+            return { ...errors, [error.path]: error.message };
+          }, {});
         }
       }}
       render={({ handleSubmit, submitting }) => (
@@ -119,12 +122,12 @@ export function CourseModal({
                 textStyle="text-gray-100"
                 disabled={submitting}
               >
-                {submitting ? 'Enviando...' : action}
+                {submitting ? "Enviando..." : action}
               </Button>
             </div>
           </form>
         </CardModal>
       )}
     />
-  )
+  );
 }

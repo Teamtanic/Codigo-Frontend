@@ -1,61 +1,61 @@
-import { Button } from '../../components/Button'
-import { CardModal, ModelModalProp } from '../../components/CardModal'
-import { TextAreaInput } from '../../components/TextBox'
-import { TextInput } from '../../components/TextInput'
-import { Form, Field } from 'react-final-form'
-import { object, string } from 'yup'
+import { Button } from "../../components/Button";
+import { CardModal, ModelModalProp } from "../../components/CardModal";
+import { TextAreaInput } from "../../components/TextBox";
+import { TextInput } from "../../components/TextInput";
+import { Form, Field } from "react-final-form";
+import { object, string } from "yup";
 import {
   ProjectCreateRequest,
   ProjectResponse,
-  ProjectUpdateRequest
-} from '../../services/Project/type'
+  ProjectUpdateRequest,
+} from "../../services/Project/type";
 import {
   createProject,
   editProject,
-  getProjectById
-} from '../../services/Project/apiService'
-import { useEffect, useState } from 'react'
+  getProjectById,
+} from "../../services/Project/apiService";
+import { useEffect, useState } from "react";
 import {
   getAllCustomers,
   getAllSuppliers,
   searchCompany,
   searchCompanyCustomer,
-  searchCompanySupplier
-} from '../../services/Company/apiService'
-import { CompanyResponse } from '../../services/Company/types'
-import { Select, SelectOption } from '../../components/Select'
-import { useNavigate } from 'react-router-dom'
-import { createUpdateObject } from '../../utils'
-import { HttpStatusCode } from 'axios'
+  searchCompanySupplier,
+} from "../../services/Company/apiService";
+import { CompanyResponse } from "../../services/Company/types";
+import { Select, SelectOption } from "../../components/Select";
+import { useNavigate } from "react-router-dom";
+import { createUpdateObject } from "../../utils";
+import { HttpStatusCode } from "axios";
 import {
   CompanyRelationshipProjectResponse,
-  CompanyRelationshipResponse
-} from '../../services/CompanyRelationship/types'
-import DropdownInput, { Record } from '../../components/DropdownInput'
-import { searchOffer } from '../../services/Offering/apiService'
-import { OfferingResponse } from '../../services/Offering/types'
-import { getUserData } from '../../services/User/utils'
+  CompanyRelationshipResponse,
+} from "../../services/CompanyRelationship/types";
+import DropdownInput, { Record } from "../../components/DropdownInput";
+import { searchOffer } from "../../services/Offering/apiService";
+import { OfferingResponse } from "../../services/Offering/types";
+import { getUserData } from "../../services/User/utils";
 
 export function ProjectModal({
   action,
   optionsTrigger,
   title,
-  mode = 'create',
+  mode = "create",
   data,
   triggerStyle,
-  iconTrigger
+  iconTrigger,
 }: ModelModalProp & { data?: ProjectResponse }) {
-  let navigate = useNavigate()
+  let navigate = useNavigate();
 
   const validationSchema = object({
-    title: string().required('Título é obrigatório'),
-    description: string().required('Descrição é obrigatória'),
+    title: string().required("Título é obrigatório"),
+    description: string().required("Descrição é obrigatória"),
     customer: string(),
     supplier: string(),
-    offering: string().required('A oferta oferecida é obrigatória')
-  })
+    offering: string().required("A oferta oferecida é obrigatória"),
+  });
 
-  let userInfo = getUserData()
+  let userInfo = getUserData();
 
   const onSubmit = async (values: any) => {
     try {
@@ -67,49 +67,50 @@ export function ProjectModal({
         users: [
           {
             userId: userInfo?.userId,
-            role: 'ADM'
-          }
-        ]
-      }
+            role: "ADM",
+          },
+        ],
+      };
 
       if (values.customer) {
-        projectData.companyRelationshipIds.push(values.customer)
+        projectData.companyRelationshipIds.push(values.customer);
       }
 
       if (values.supplier) {
-        projectData.companyRelationshipIds.push(values.supplier)
+        projectData.companyRelationshipIds.push(values.supplier);
       }
 
       if (values.offering) {
-        projectData.offeringIds.push(values.offering)
+        projectData.offeringIds.push(values.offering);
       }
 
-      console.log(projectData)
-      if (mode === 'create') {
-        await createProject(projectData)
-      } else if (mode === 'edit') {
+      console.log(projectData);
+      if (mode === "create") {
+        const res = await createProject(projectData);
+        navigate(`/projeto/${res.data.id}`, { state: { record: res.data } });
+      } else if (mode === "edit") {
         if (data) {
-          console.log(data)
+          console.log(data);
           const updateCompanyData: ProjectUpdateRequest = createUpdateObject(
             data,
             projectData
-          )
-          let editResponse = await editProject(updateCompanyData, data.id)
+          );
+          let editResponse = await editProject(updateCompanyData, data.id);
           if (editResponse.status === HttpStatusCode.Ok) {
-            let updateResponse = await getProjectById(data.id)
+            let updateResponse = await getProjectById(data.id);
             if (updateResponse.status === HttpStatusCode.Ok) {
-              const record: ProjectResponse = updateResponse.data
-              navigate(`/projeto/${data.id}`, { state: { record } })
+              const record: ProjectResponse = updateResponse.data;
+              navigate(`/projeto/${data.id}`, { state: { record } });
             }
           }
         }
       }
     } catch (error) {
-      console.error(error)
+      console.error(error);
     }
-  }
+  };
 
-  const [initialValues, setInitialValues] = useState<any>({})
+  const [initialValues, setInitialValues] = useState<any>({});
 
   useEffect(() => {
     if (data) {
@@ -118,95 +119,95 @@ export function ProjectModal({
         title: data.title,
         description: data.description,
         customerRelationship:
-          findRelationshipIdByType(data.companyRelationships, 'CLIENTE') || '',
+          findRelationshipIdByType(data.companyRelationships, "CLIENTE") || "",
         supplierRelationship:
-          findRelationshipIdByType(data.companyRelationships, 'FORNECEDOR') ||
-          '',
-        offering: data.offerings[0].description
-      })
+          findRelationshipIdByType(data.companyRelationships, "FORNECEDOR") ||
+          "",
+        offering: data.offerings[0].description,
+      });
     } else {
-      setInitialValues({})
+      setInitialValues({});
     }
-  }, [])
+  }, []);
 
   function findRelationshipIdByType(
     companyRelationships: CompanyRelationshipProjectResponse[],
     type: string
   ): SelectOption | undefined {
     const relationship: CompanyRelationshipProjectResponse | undefined =
-      companyRelationships.find(item => item.businessRelationship === type)
+      companyRelationships.find((item) => item.businessRelationship === type);
 
     let option = {
       value: relationship?.idCompanyRelationship,
-      label: relationship?.company.name
-    }
+      label: relationship?.company.name,
+    };
 
-    return relationship ? { ...option } : undefined
+    return relationship ? { ...option } : undefined;
   }
 
   const searchFunctionCompanyCustomer = async (query: string) => {
-    const response = await searchCompanyCustomer(query)
-    const data = response.data.content
+    const response = await searchCompanyCustomer(query);
+    const data = response.data.content;
 
     const clientCompanies = data.filter((item: CompanyResponse) =>
       item.companyRelationships.some(
-        cr => cr.businessRelationship === 'CLIENTE'
+        (cr) => cr.businessRelationship === "CLIENTE"
       )
-    )
+    );
 
     const options: Record[] = clientCompanies.map((item: CompanyResponse) => ({
       label: item.name,
       value: item.companyRelationships
-        .filter(cr => cr.businessRelationship === 'CLIENTE')
-        .map(cr => cr.idCompanyRelationship)[0]
-    }))
+        .filter((cr) => cr.businessRelationship === "CLIENTE")
+        .map((cr) => cr.idCompanyRelationship)[0],
+    }));
 
-    return { data: { content: options } }
-  }
+    return { data: { content: options } };
+  };
 
   const searchFunctionCompanySupplier = async (query: string) => {
-    const response = await searchCompanySupplier(query)
-    const data = response.data.content
+    const response = await searchCompanySupplier(query);
+    const data = response.data.content;
 
     const clientCompanies = data.filter((item: CompanyResponse) =>
       item.companyRelationships.some(
-        cr => cr.businessRelationship === 'FORNECEDOR'
+        (cr) => cr.businessRelationship === "FORNECEDOR"
       )
-    )
+    );
 
     const options: Record[] = clientCompanies.map((item: CompanyResponse) => ({
       label: item.name,
       value: item.companyRelationships
-        .filter(cr => cr.businessRelationship === 'FORNECEDOR')
-        .map(cr => cr.idCompanyRelationship)[0]
-    }))
+        .filter((cr) => cr.businessRelationship === "FORNECEDOR")
+        .map((cr) => cr.idCompanyRelationship)[0],
+    }));
 
-    return { data: { content: options } }
-  }
+    return { data: { content: options } };
+  };
 
   const searchFunctionOffer = async (query: string) => {
-    const response = await searchOffer(query)
-    const data = response.data.content
+    const response = await searchOffer(query);
+    const data = response.data.content;
 
     const options: Record[] = data.map((item: OfferingResponse) => ({
       label: item.description,
-      value: item.id
-    }))
+      value: item.id,
+    }));
 
-    return { data: { content: options } }
-  }
+    return { data: { content: options } };
+  };
 
   return (
     <Form
       onSubmit={onSubmit}
       initialValues={initialValues}
-      validate={values => {
+      validate={(values) => {
         try {
-          validationSchema.validateSync(values, { abortEarly: false })
+          validationSchema.validateSync(values, { abortEarly: false });
         } catch (err: any) {
           return err.inner.reduce((errors: any, error: any) => {
-            return { ...errors, [error.path]: error.message }
-          }, {})
+            return { ...errors, [error.path]: error.message };
+          }, {});
         }
       }}
       render={({ handleSubmit, submitting }) => (
@@ -255,7 +256,7 @@ export function ProjectModal({
                   <DropdownInput
                     searchFunction={searchFunctionCompanyCustomer}
                     labelFor="customer"
-                    disabled={mode == 'edit' ? true : false}
+                    disabled={mode == "edit" ? true : false}
                     labelText="Cliente"
                     inputValue={initialValues.customerRelationship}
                     placeholder="Selecione o cliente"
@@ -271,7 +272,7 @@ export function ProjectModal({
                   <DropdownInput
                     searchFunction={searchFunctionCompanySupplier}
                     labelFor="supplier"
-                    disabled={mode == 'edit' ? true : false}
+                    disabled={mode == "edit" ? true : false}
                     labelText="Fornecedor"
                     inputValue={initialValues.supplierRelationship}
                     placeholder="Selecione o fornecedor"
@@ -287,7 +288,7 @@ export function ProjectModal({
                   <DropdownInput
                     searchFunction={searchFunctionOffer}
                     labelFor="offering"
-                    disabled={mode == 'edit' ? true : false}
+                    disabled={mode == "edit" ? true : false}
                     labelText="Serviço ou Produto"
                     inputValue={initialValues.customerRelationship}
                     placeholder="Selecione o Serviço ou Produto"
@@ -303,12 +304,12 @@ export function ProjectModal({
                 textStyle="text-gray-100"
                 disabled={submitting}
               >
-                {submitting ? 'Enviando...' : 'Adicionar'}
+                {submitting ? "Enviando..." : "Adicionar"}
               </Button>
             </div>
           </form>
         </CardModal>
       )}
     />
-  )
+  );
 }

@@ -1,37 +1,40 @@
-import { Button } from '../../../components/Button'
-import { Container } from '../../../components/Container'
-import { Heading } from '../../../components/Heading'
-import { Navbar } from '../../../components/Navbar'
-import { Text } from '../../../components/Text'
-import { TextInput } from '../../../components/TextInput'
-import { Form, Field } from 'react-final-form'
-import { object, string } from 'yup'
-import { UserRegisterRequest } from '../../../services/User/types'
-import { createUser } from '../../../services/User/apiService'
-import DropdownInput, { Record } from '../../../components/DropdownInput'
-import { searchCourse } from '../../../services/Course/apiService'
-import { CourseResponse } from '../../../services/Course/types'
-import { searchRole } from '../../../services/Role/apiService'
-import { RoleResponse } from '../../../services/Role/types'
-import { searchDepartment } from '../../../services/Department/apiService'
-import { DepartmentResponse } from '../../../services/Department/types'
+import { Button } from "../../../components/Button";
+import { Container } from "../../../components/Container";
+import { Heading } from "../../../components/Heading";
+import { Navbar } from "../../../components/Navbar";
+import { Text } from "../../../components/Text";
+import { TextInput } from "../../../components/TextInput";
+import { Form, Field } from "react-final-form";
+import { object, string } from "yup";
+import { UserRegisterRequest } from "../../../services/User/types";
+import { createUser } from "../../../services/User/apiService";
+import DropdownInput, { Record } from "../../../components/DropdownInput";
+import { searchCourse } from "../../../services/Course/apiService";
+import { CourseResponse } from "../../../services/Course/types";
+import { searchRole } from "../../../services/Role/apiService";
+import { RoleResponse } from "../../../services/Role/types";
+import { searchDepartment } from "../../../services/Department/apiService";
+import { DepartmentResponse } from "../../../services/Department/types";
+import { useNavigate } from "react-router-dom";
 
 export function CreateUser() {
   const validationSchema = object({
-    name: string().required('Nome é obrigatório'),
+    name: string().required("Nome é obrigatório"),
     email: string()
-      .email('Insira um e-mail válido')
-      .required('E-mail é obrigatório'),
-    login: string().required('Login é obrigatório'),
-    prontuary: string().required('Prontuário é obrigatório'),
-    password: string().required('Senha é obrigatório'),
-    'confirm-password': string().required('Necessário confirmar a senha'),
+      .email("Insira um e-mail válido")
+      .required("E-mail é obrigatório"),
+    login: string().required("Login é obrigatório"),
+    prontuary: string().required("Prontuário é obrigatório"),
+    password: string().required("Senha é obrigatório"),
+    "confirm-password": string().required("Necessário confirmar a senha"),
     telephone: string(),
     cell_phone: string(),
     roleId: string(),
     departmentId: string(),
-    courseId: string()
-  })
+    courseId: string(),
+  });
+
+  const navigate = useNavigate();
 
   const onSubmit = async (values: UserRegisterRequest) => {
     try {
@@ -45,52 +48,53 @@ export function CreateUser() {
         cell_phone: values.cell_phone,
         roleId: values.roleId,
         departmentId: values.departmentId,
-        courseId: values.courseId
-      }
+        courseId: values.courseId,
+      };
 
-      await createUser(userData)
+      const res = await createUser(userData);
+      navigate(`/usuario/${res.data.id}`, { state: { record: res.data } });
 
-      console.log(userData)
+      console.log(userData);
     } catch (error) {
-      console.error(error)
+      console.error(error);
     }
-  }
+  };
 
   const searchFunctionCourse = async (query: string) => {
-    const response = await searchCourse(query)
-    const data = response.data.content
+    const response = await searchCourse(query);
+    const data = response.data.content;
 
     const options: Record[] = data.map((item: CourseResponse) => ({
       label: item.name,
-      value: item.id
-    }))
+      value: item.id,
+    }));
 
-    return { data: { content: options } }
-  }
+    return { data: { content: options } };
+  };
 
   const searchFunctionDepartment = async (query: string) => {
-    const response = await searchDepartment(query)
-    const data = response.data.content
+    const response = await searchDepartment(query);
+    const data = response.data.content;
 
     const options: Record[] = data.map((item: DepartmentResponse) => ({
       label: item.name,
-      value: item.id
-    }))
+      value: item.id,
+    }));
 
-    return { data: { content: options } }
-  }
+    return { data: { content: options } };
+  };
 
   const searchFunctionRole = async (query: string) => {
-    const response = await searchRole(query)
-    const data = response.data.content
+    const response = await searchRole(query);
+    const data = response.data.content;
 
     const options: Record[] = data.map((item: RoleResponse) => ({
       label: item.name,
-      value: item.id
-    }))
+      value: item.id,
+    }));
 
-    return { data: { content: options } }
-  }
+    return { data: { content: options } };
+  };
 
   return (
     <Container>
@@ -100,13 +104,13 @@ export function CreateUser() {
 
         <Form
           onSubmit={onSubmit}
-          validate={values => {
+          validate={(values) => {
             try {
-              validationSchema.validateSync(values, { abortEarly: false })
+              validationSchema.validateSync(values, { abortEarly: false });
             } catch (err: any) {
               return err.inner.reduce((errors: any, error: any) => {
-                return { ...errors, [error.path]: error.message }
-              }, {})
+                return { ...errors, [error.path]: error.message };
+              }, {});
             }
           }}
           render={({ handleSubmit, submitting }) => (
@@ -330,7 +334,7 @@ export function CreateUser() {
 
                 <Button className="mt-4 ">
                   <Text className="text-gray-100">
-                    {submitting ? 'Enviando...' : 'Cadastrar'}
+                    {submitting ? "Enviando..." : "Cadastrar"}
                   </Text>
                 </Button>
               </form>
@@ -339,5 +343,5 @@ export function CreateUser() {
         />
       </div>
     </Container>
-  )
+  );
 }

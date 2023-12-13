@@ -1,92 +1,93 @@
-import { Button } from '../../../components/Button'
-import { CardModal, ModelModalProp } from '../../../components/CardModal'
-import { TextInput } from '../../../components/TextInput'
-import { Form, Field } from 'react-final-form'
-import { object, string } from 'yup'
+import { Button } from "../../../components/Button";
+import { CardModal, ModelModalProp } from "../../../components/CardModal";
+import { TextInput } from "../../../components/TextInput";
+import { Form, Field } from "react-final-form";
+import { object, string } from "yup";
 import {
   BankAccountCreateRequest,
   BankAccountResponse,
-  BankAccountUpdateRequest
-} from '../../../services/BankAccount/types'
+  BankAccountUpdateRequest,
+} from "../../../services/BankAccount/types";
 import {
   createBankAccount,
   editBankAccount,
-  getBankAccountById
-} from '../../../services/BankAccount/apiService'
-import { BankProps } from './TableListBank'
-import { createUpdateObject } from '../../../utils'
-import { HttpStatusCode } from 'axios'
-import { useNavigate } from 'react-router-dom'
+  getBankAccountById,
+} from "../../../services/BankAccount/apiService";
+import { BankProps } from "./TableListBank";
+import { createUpdateObject } from "../../../utils";
+import { HttpStatusCode } from "axios";
+import { useNavigate } from "react-router-dom";
 
 export function BankModal({
   action,
   optionsTrigger,
   title,
-  mode = 'create',
+  mode = "create",
   data,
   triggerStyle,
-  iconTrigger
+  iconTrigger,
 }: ModelModalProp & { data?: BankProps }) {
-  let navigate = useNavigate()
+  let navigate = useNavigate();
 
   const validationSchema = object({
-    name: string().required('Nome do banco é obrigatória'),
-    location: string().required('A localização é obrigatória'),
-    balance: string().required('O saldo é obrigatório')
-  })
+    name: string().required("Nome do banco é obrigatória"),
+    location: string().required("A localização é obrigatória"),
+    balance: string().required("O saldo é obrigatório"),
+  });
 
   const onSubmit = async (values: BankAccountCreateRequest) => {
     try {
       const bankaccountData: BankAccountCreateRequest = {
         name: values.name,
         balance: values.balance,
-        location: values.location
-      }
+        location: values.location,
+      };
 
-      if (mode === 'create') {
-        await createBankAccount(bankaccountData)
-      } else if (mode === 'edit') {
+      if (mode === "create") {
+        const res = await createBankAccount(bankaccountData);
+        navigate(`/banco/${res.data.id}`, { state: { record: res.data } });
+      } else if (mode === "edit") {
         if (data) {
           const updateData: BankAccountUpdateRequest = createUpdateObject(
             data,
             bankaccountData
-          )
-          let editResponse = await editBankAccount(updateData, data.id)
+          );
+          let editResponse = await editBankAccount(updateData, data.id);
           if (editResponse.status === HttpStatusCode.Ok) {
-            let updateResponse = await getBankAccountById(data.id)
+            let updateResponse = await getBankAccountById(data.id);
             if (updateResponse.status === HttpStatusCode.Ok) {
-              const record: BankAccountResponse = updateResponse.data
-              navigate(`/banco/${data.id}`, { state: { record } })
+              const record: BankAccountResponse = updateResponse.data;
+              navigate(`/banco/${data.id}`, { state: { record } });
             }
           }
         }
       }
     } catch (error) {
-      console.error(error)
+      console.error(error);
     }
-  }
+  };
 
-  let initialValues = {}
+  let initialValues = {};
   if (data) {
     initialValues = {
       id: data.id,
       name: data.name,
       location: data.location,
-      balance: data.balance
-    }
+      balance: data.balance,
+    };
   }
 
   return (
     <Form
       onSubmit={onSubmit}
       initialValues={initialValues}
-      validate={values => {
+      validate={(values) => {
         try {
-          validationSchema.validateSync(values, { abortEarly: false })
+          validationSchema.validateSync(values, { abortEarly: false });
         } catch (err: any) {
           return err.inner.reduce((errors: any, error: any) => {
-            return { ...errors, [error.path]: error.message }
-          }, {})
+            return { ...errors, [error.path]: error.message };
+          }, {});
         }
       }}
       render={({ handleSubmit, submitting }) => (
@@ -160,12 +161,12 @@ export function BankModal({
                 textStyle="text-gray-100"
                 disabled={submitting}
               >
-                {submitting ? 'Enviando...' : action}
+                {submitting ? "Enviando..." : action}
               </Button>
             </div>
           </form>
         </CardModal>
       )}
     />
-  )
+  );
 }

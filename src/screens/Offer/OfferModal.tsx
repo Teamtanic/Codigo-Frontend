@@ -1,61 +1,65 @@
-import { Button } from '../../components/Button'
-import { CardModal, ModelModalProp } from '../../components/CardModal'
-import { RadioGroup } from '../../components/RadioGroup'
-import { Text } from '../../components/Text'
-import { TextInput } from '../../components/TextInput'
-import { Form, Field } from 'react-final-form'
-import { object, string } from 'yup'
+import { Button } from "../../components/Button";
+import { CardModal, ModelModalProp } from "../../components/CardModal";
+import { RadioGroup } from "../../components/RadioGroup";
+import { Text } from "../../components/Text";
+import { TextInput } from "../../components/TextInput";
+import { Form, Field } from "react-final-form";
+import { object, string } from "yup";
 import {
   OfferingCreateRequest,
-  OfferingType
-} from '../../services/Offering/types'
-import { createOffer } from '../../services/Offering/apiService'
+  OfferingType,
+} from "../../services/Offering/types";
+import { createOffer } from "../../services/Offering/apiService";
+import { useNavigate } from "react-router-dom";
 
 interface OfferingTypeOption {
-  value: string
-  label: string
+  value: string;
+  label: string;
 }
 
 export function OfferModal({ action, optionsTrigger, title }: ModelModalProp) {
   const validationSchema = object({
-    description: string().required('Descrição da oferta é obrigatória'),
-    type: string().required('É necessário escolher um tipo')
-  })
+    description: string().required("Descrição da oferta é obrigatória"),
+    type: string().required("É necessário escolher um tipo"),
+  });
+
+  const navigate = useNavigate();
 
   const onSubmit = async (values: OfferingCreateRequest) => {
     try {
       const offerData: OfferingCreateRequest = {
         description: values.description,
-        type: values.type
-      }
+        type: values.type,
+      };
 
-      await createOffer(offerData)
+      const res = await createOffer(offerData);
+      navigate("/oferta/" + res.data.id);
 
-      console.log(offerData)
+      console.log(offerData);
     } catch (error) {
-      console.error(error)
+      console.error(error);
     }
-  }
+  };
 
   const getOfferingTypeOptions = (): OfferingTypeOption[] => {
-    return Object.keys(OfferingType).map(key => ({
+    return Object.keys(OfferingType).map((key) => ({
       value: key,
-      label: OfferingType[key as keyof typeof OfferingType]
-    }))
-  }
+      label: OfferingType[key as keyof typeof OfferingType],
+    }));
+  };
 
-  const offeringTypeOptions = getOfferingTypeOptions()
+  const offeringTypeOptions = getOfferingTypeOptions();
 
   return (
     <Form
       onSubmit={onSubmit}
-      validate={values => {
+      validate={(values) => {
         try {
-          validationSchema.validateSync(values, { abortEarly: false })
+          validationSchema.validateSync(values, { abortEarly: false });
         } catch (err: any) {
           return err.inner.reduce((errors: any, error: any) => {
-            return { ...errors, [error.path]: error.message }
-          }, {})
+            return { ...errors, [error.path]: error.message };
+          }, {});
         }
       }}
       render={({ handleSubmit, submitting }) => (
@@ -92,13 +96,13 @@ export function OfferModal({ action, optionsTrigger, title }: ModelModalProp) {
                     type="radio"
                     render={({
                       input: { value, onChange, type, ...input },
-                      meta
+                      meta,
                     }) => (
                       <>
                         <RadioGroup
                           direction="row"
                           options={offeringTypeOptions}
-                          onChange={checked => onChange(checked)}
+                          onChange={(checked) => onChange(checked)}
                           {...input}
                         />
                         {meta.touched && meta.error && (
@@ -118,12 +122,12 @@ export function OfferModal({ action, optionsTrigger, title }: ModelModalProp) {
                 textStyle="text-gray-100"
                 disabled={submitting}
               >
-                {submitting ? 'Enviando...' : action}
+                {submitting ? "Enviando..." : action}
               </Button>
             </div>
           </form>
         </CardModal>
       )}
     />
-  )
+  );
 }

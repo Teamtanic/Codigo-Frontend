@@ -1,72 +1,72 @@
-import { Button } from '../../components/Button'
-import { CardModal, ModelModalProp } from '../../components/CardModal'
-import { Checkbox } from '../../components/Checkbox'
-import { Text } from '../../components/Text'
-import { TextInput } from '../../components/TextInput'
-import { Form, Field } from 'react-final-form'
-import { object, string, boolean } from 'yup'
+import { Button } from "../../components/Button";
+import { CardModal, ModelModalProp } from "../../components/CardModal";
+import { Checkbox } from "../../components/Checkbox";
+import { Text } from "../../components/Text";
+import { TextInput } from "../../components/TextInput";
+import { Form, Field } from "react-final-form";
+import { object, string, boolean } from "yup";
 import {
   CompanyCreateRequest,
   CompanyResponse,
-  CompanyUpdateRequest
-} from '../../services/Company/types'
-import { BusinessRelationshipType } from '../../services/CompanyRelationship/types'
+  CompanyUpdateRequest,
+} from "../../services/Company/types";
+import { BusinessRelationshipType } from "../../services/CompanyRelationship/types";
 import {
   createCompany,
   editCompany,
-  getCompanyById
-} from '../../services/Company/apiService'
-import { useNavigate } from 'react-router-dom'
-import { HttpStatusCode } from 'axios'
-import { createUpdateObject } from '../../utils'
+  getCompanyById,
+} from "../../services/Company/apiService";
+import { useNavigate } from "react-router-dom";
+import { HttpStatusCode } from "axios";
+import { createUpdateObject } from "../../utils";
 
 interface CompanyFormProps {
-  name: string
-  cpf: string
-  cnpj: string
-  email: string
-  telephone?: string
-  cell_phone?: string
-  checkCustomer?: string
-  checkSupplier?: string
+  name: string;
+  cpf: string;
+  cnpj: string;
+  email: string;
+  telephone?: string;
+  cell_phone?: string;
+  checkCustomer?: string;
+  checkSupplier?: string;
 }
 
 export function CompanyModal({
   action,
   optionsTrigger,
   title,
-  mode = 'create',
+  mode = "create",
   data,
   triggerStyle,
-  iconTrigger
+  iconTrigger,
 }: ModelModalProp & { data?: CompanyResponse }) {
-  let navigate = useNavigate()
+  let navigate = useNavigate();
 
   const validationSchema = object({
-    name: string().required('Nome é obrigatório'),
+    name: string().required("Nome é obrigatório"),
     cpf: string(),
     cnpj: string(),
     email: string()
-      .email('Insira um e-mail válido')
-      .required('E-mail é obrigatório'),
+      .email("Insira um e-mail válido")
+      .required("E-mail é obrigatório"),
     telephone: string(),
     cell_phone: string(),
     checkCustomer: boolean(),
-    checkSupplier: boolean()
-  })
+    checkSupplier: boolean(),
+  });
 
   const onSubmit = async (values: CompanyFormProps) => {
     try {
       let isCustomer: BusinessRelationshipType | undefined =
-        values.checkCustomer ? BusinessRelationshipType.CLIENTE : undefined
+        values.checkCustomer ? BusinessRelationshipType.CLIENTE : undefined;
 
       let isSupplier: BusinessRelationshipType | undefined =
-        values.checkSupplier ? BusinessRelationshipType.FORNECEDOR : undefined
+        values.checkSupplier ? BusinessRelationshipType.FORNECEDOR : undefined;
 
       const businessRelationshipTypeArray: BusinessRelationshipType[] = [
         isCustomer,
-        isSupplier
-      ].filter((type): type is BusinessRelationshipType => type !== undefined)
+        isSupplier,
+      ].filter((type): type is BusinessRelationshipType => type !== undefined);
 
       const companyData: CompanyCreateRequest = {
         name: values.name,
@@ -75,33 +75,34 @@ export function CompanyModal({
         email: values.email,
         telephone: values.telephone,
         cell_phone: values.cell_phone,
-        businessRelationshipType: businessRelationshipTypeArray
-      }
+        businessRelationshipType: businessRelationshipTypeArray,
+      };
 
-      if (mode === 'create') {
-        await createCompany(companyData)
-      } else if (mode === 'edit') {
+      if (mode === "create") {
+        const res = await createCompany(companyData);
+        navigate(`/empresa/${res.data.id}`, { state: { record: res.data } });
+      } else if (mode === "edit") {
         if (data) {
           const updateCompanyData: CompanyUpdateRequest = createUpdateObject(
             data,
             companyData
-          )
-          let editResponse = await editCompany(updateCompanyData, data.id)
+          );
+          let editResponse = await editCompany(updateCompanyData, data.id);
           if (editResponse.status === HttpStatusCode.Ok) {
-            let updateResponse = await getCompanyById(data.id)
+            let updateResponse = await getCompanyById(data.id);
             if (updateResponse.status === HttpStatusCode.Ok) {
-              const record: CompanyResponse = updateResponse.data
-              navigate(`/empresa/${data.id}`, { state: { record } })
+              const record: CompanyResponse = updateResponse.data;
+              navigate(`/empresa/${data.id}`, { state: { record } });
             }
           }
         }
       }
     } catch (error) {
-      console.error(error)
+      console.error(error);
     }
-  }
+  };
 
-  let initialValues = {}
+  let initialValues = {};
   if (data) {
     initialValues = {
       id: data.id,
@@ -109,31 +110,31 @@ export function CompanyModal({
       cpf: data.cpf ?? undefined,
       cnpj: data.cnpj ?? undefined,
       checkCustomer: data.companyRelationships.some(
-        relationship =>
-          relationship.businessRelationship === 'CLIENTE' && relationship.active
+        (relationship) =>
+          relationship.businessRelationship === "CLIENTE" && relationship.active
       ),
       checkSupplier: data.companyRelationships.some(
-        relationship =>
-          relationship.businessRelationship === 'FORNECEDOR' &&
+        (relationship) =>
+          relationship.businessRelationship === "FORNECEDOR" &&
           relationship.active
       ),
       email: data.contact[0].email ?? undefined,
       telephone: data.contact[0].telephone ?? undefined,
-      cell_phone: data.contact[0].cell_phone ?? undefined
-    }
+      cell_phone: data.contact[0].cell_phone ?? undefined,
+    };
   }
 
   return (
     <Form
       onSubmit={onSubmit}
       initialValues={initialValues}
-      validate={values => {
+      validate={(values) => {
         try {
-          validationSchema.validateSync(values, { abortEarly: false })
+          validationSchema.validateSync(values, { abortEarly: false });
         } catch (err: any) {
           return err.inner.reduce((errors: any, error: any) => {
-            return { ...errors, [error.path]: error.message }
-          }, {})
+            return { ...errors, [error.path]: error.message };
+          }, {});
         }
       }}
       render={({ handleSubmit, submitting }) => (
@@ -146,7 +147,7 @@ export function CompanyModal({
         >
           <form
             onSubmit={handleSubmit}
-            onClick={event => event.stopPropagation()}
+            onClick={(event) => event.stopPropagation()}
           >
             <div className="flex flex-col w-full max-md:px-12 md:px-24 gap-4">
               <Field
@@ -269,7 +270,7 @@ export function CompanyModal({
                     type="checkbox"
                     render={({
                       input: { value, onChange, type, ...input },
-                      meta
+                      meta,
                     }) => (
                       <>
                         <label
@@ -279,7 +280,7 @@ export function CompanyModal({
                           <Checkbox
                             id="checkCustomer"
                             checked={!!value}
-                            onCheckedChange={checked => onChange(checked)}
+                            onCheckedChange={(checked) => onChange(checked)}
                             {...input}
                           />
                           {meta.touched && meta.error && (
@@ -301,7 +302,7 @@ export function CompanyModal({
                     type="checkbox"
                     render={({
                       input: { value, onChange, type, ...input },
-                      meta
+                      meta,
                     }) => (
                       <>
                         <label
@@ -311,7 +312,7 @@ export function CompanyModal({
                           <Checkbox
                             id="checkSupplier"
                             checked={!!value}
-                            onCheckedChange={checked => onChange(checked)}
+                            onCheckedChange={(checked) => onChange(checked)}
                             {...input}
                           />
                           {meta.touched && meta.error && (
@@ -336,12 +337,12 @@ export function CompanyModal({
                 textStyle="text-gray-100"
                 disabled={submitting}
               >
-                {submitting ? 'Enviando...' : action}
+                {submitting ? "Enviando..." : action}
               </Button>
             </div>
           </form>
         </CardModal>
       )}
     />
-  )
+  );
 }

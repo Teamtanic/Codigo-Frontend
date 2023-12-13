@@ -1,91 +1,94 @@
-import { Button } from '../../../components/Button'
-import { CardModal, ModelModalProp } from '../../../components/CardModal'
-import { TextInput } from '../../../components/TextInput'
-import { Form, Field } from 'react-final-form'
-import { object, string } from 'yup'
+import { Button } from "../../../components/Button";
+import { CardModal, ModelModalProp } from "../../../components/CardModal";
+import { TextInput } from "../../../components/TextInput";
+import { Form, Field } from "react-final-form";
+import { object, string } from "yup";
 import {
   DepartmentCreateRequest,
   DepartmentResponse,
-  DepartmentUpdateRequest
-} from '../../../services/Department/types'
+  DepartmentUpdateRequest,
+} from "../../../services/Department/types";
 import {
   createDepartment,
   editDepartment,
-  getDepartmentById
-} from '../../../services/Department/apiService'
-import { useNavigate } from 'react-router'
-import { createUpdateObject } from '../../../utils'
-import { HttpStatusCode } from 'axios'
-import { useEffect, useState } from 'react'
+  getDepartmentById,
+} from "../../../services/Department/apiService";
+import { useNavigate } from "react-router";
+import { createUpdateObject } from "../../../utils";
+import { HttpStatusCode } from "axios";
+import { useEffect, useState } from "react";
 
 export function DepartmentModal({
   action,
   optionsTrigger,
   title,
-  mode = 'create',
+  mode = "create",
   data,
   triggerStyle,
-  iconTrigger
+  iconTrigger,
 }: ModelModalProp & { data?: DepartmentResponse }) {
-  let navigate = useNavigate()
+  let navigate = useNavigate();
 
   const validationSchema = object({
-    name: string().required('Nome é obrigatório')
-  })
+    name: string().required("Nome é obrigatório"),
+  });
 
   const onSubmit = async (values: any) => {
     try {
       const departmentData: DepartmentCreateRequest = {
-        name: values.name
-      }
+        name: values.name,
+      };
 
-      if (mode === 'create') {
-        await createDepartment(departmentData)
-      } else if (mode === 'edit') {
+      if (mode === "create") {
+        const res = await createDepartment(departmentData);
+        navigate(`/departamento/${res.data.id}`, {
+          state: { record: res.data },
+        });
+      } else if (mode === "edit") {
         if (data) {
           const updateData: DepartmentUpdateRequest = createUpdateObject(
             data,
             departmentData
-          )
-          let editResponse = await editDepartment(updateData, data.id)
+          );
+          let editResponse = await editDepartment(updateData, data.id);
           if (editResponse.status === HttpStatusCode.Ok) {
-            let updateResponse = await getDepartmentById(data.id)
+            let updateResponse = await getDepartmentById(data.id);
             if (updateResponse.status === HttpStatusCode.Ok) {
-              const record: DepartmentResponse = updateResponse.data
-              navigate(`/departamento/${data.id}`, { state: { record } })
+              const record: DepartmentResponse = updateResponse.data;
+              navigate(`/departamento/${data.id}`, { state: { record } });
             }
           }
         }
       }
     } catch (error) {
-      console.error(error)
+      console.error(error);
     }
-  }
+  };
 
-  const [initialValues, setInitialValues] = useState<any>({})
+  const [initialValues, setInitialValues] = useState<any>({});
 
   useEffect(() => {
     if (data) {
       setInitialValues({
         id: data.id,
-        name: data.name
-      })
+        name: data.name,
+      });
     } else {
-      setInitialValues({})
+      setInitialValues({});
     }
-  }, [])
+  }, []);
 
   return (
     <Form
       onSubmit={onSubmit}
       initialValues={initialValues}
-      validate={values => {
+      validate={(values) => {
         try {
-          validationSchema.validateSync(values, { abortEarly: false })
+          validationSchema.validateSync(values, { abortEarly: false });
         } catch (err: any) {
           return err.inner.reduce((errors: any, error: any) => {
-            return { ...errors, [error.path]: error.message }
-          }, {})
+            return { ...errors, [error.path]: error.message };
+          }, {});
         }
       }}
       render={({ handleSubmit, submitting }) => (
@@ -120,12 +123,12 @@ export function DepartmentModal({
                 textStyle="text-gray-100"
                 disabled={submitting}
               >
-                {submitting ? 'Enviando...' : 'Adicionar'}
+                {submitting ? "Enviando..." : "Adicionar"}
               </Button>
             </div>
           </form>
         </CardModal>
       )}
     />
-  )
+  );
 }

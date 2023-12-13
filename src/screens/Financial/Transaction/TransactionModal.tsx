@@ -1,23 +1,24 @@
-import { Button } from '../../../components/Button'
-import { CardModal, ModelModalProp } from '../../../components/CardModal'
-import { TextInput } from '../../../components/TextInput'
-import { Form, Field } from 'react-final-form'
-import { object, string } from 'yup'
+import { Button } from "../../../components/Button";
+import { CardModal, ModelModalProp } from "../../../components/CardModal";
+import { TextInput } from "../../../components/TextInput";
+import { Form, Field } from "react-final-form";
+import { object, string } from "yup";
 import {
   TransactionCreateRequest,
-  TransactionType
-} from '../../../services/Transaction/type'
-import { Select, SelectOption } from '../../../components/Select'
-import { Text } from '../../../components/Text'
-import DropdownInput, { Record } from '../../../components/DropdownInput'
-import { createTransaction } from '../../../services/Transaction/apiService'
-import { format } from 'date-fns'
-import { searchBankAccount } from '../../../services/BankAccount/apiService'
-import { BankAccountResponse } from '../../../services/BankAccount/types'
-import { searchProject } from '../../../services/Project/apiService'
-import { ProjectResponse } from '../../../services/Project/type'
-import { searchProduct } from '../../../services/ProductWarehouse/apiService'
-import { ProductWarehouseResponse } from '../../../services/ProductWarehouse/type'
+  TransactionType,
+} from "../../../services/Transaction/type";
+import { Select, SelectOption } from "../../../components/Select";
+import { Text } from "../../../components/Text";
+import DropdownInput, { Record } from "../../../components/DropdownInput";
+import { createTransaction } from "../../../services/Transaction/apiService";
+import { format } from "date-fns";
+import { searchBankAccount } from "../../../services/BankAccount/apiService";
+import { BankAccountResponse } from "../../../services/BankAccount/types";
+import { searchProject } from "../../../services/Project/apiService";
+import { ProjectResponse } from "../../../services/Project/type";
+import { searchProduct } from "../../../services/ProductWarehouse/apiService";
+import { ProductWarehouseResponse } from "../../../services/ProductWarehouse/type";
+import { useNavigate } from "react-router-dom";
 
 /*
 export function TransactionModal({ action, title }: ModelModalProp) {
@@ -37,17 +38,19 @@ export function TransactionModal({ action, title }: ModelModalProp) {
 
 export function TransactionModal({ action, title }: ModelModalProp) {
   const validationSchema = object({
-    description: string().required('Nome do banco é obrigatória'),
-    amount: string().required('Valor é obrigatório'),
-    transactionType: string().required('Tipo é obrigatório'),
-    dtCashflow: string().required('Data é obrigatória'),
-    paymentMethod: string().required('Método de pagamento é obrigatório'),
-    installments: string().required('Valor da parcela é obrigatória'),
-    qtyInstallments: string().required('Quantidade de parcelas é obrigatória'),
+    description: string().required("Nome do banco é obrigatória"),
+    amount: string().required("Valor é obrigatório"),
+    transactionType: string().required("Tipo é obrigatório"),
+    dtCashflow: string().required("Data é obrigatória"),
+    paymentMethod: string().required("Método de pagamento é obrigatório"),
+    installments: string().required("Valor da parcela é obrigatória"),
+    qtyInstallments: string().required("Quantidade de parcelas é obrigatória"),
     projectId: string(),
     bankAccountId: string(),
-    productsWarehouse: string()
-  })
+    productsWarehouse: string(),
+  });
+
+  const navigate = useNavigate();
 
   const onSubmit = async (values: any) => {
     try {
@@ -56,75 +59,76 @@ export function TransactionModal({ action, title }: ModelModalProp) {
         amount: values.amount,
         paymentMethod: values.paymentMethod,
         type: values.transactionType,
-        dtCashflow: format(new Date(values.dtCashflow), 'dd/MM/yyyy'),
+        dtCashflow: format(new Date(values.dtCashflow), "dd/MM/yyyy"),
         installments: values.installments,
         qtyInstallments: values.qtyInstallments,
         bankAccountId: values.bankAccountId,
         productsWarehouse: values.productsWarehouse,
-        projectId: values.projectId
-      }
+        projectId: values.projectId,
+      };
 
-      console.log(transactionData)
+      console.log(transactionData);
 
-      await createTransaction(transactionData)
+      const res = await createTransaction(transactionData);
+      navigate("/transacao/" + res.data.id, { state: { record: res.data } });
     } catch (error) {
-      console.error(error)
+      console.error(error);
     }
-  }
+  };
 
   const enumOptions: SelectOption[] = Object.entries(TransactionType).map(
     ([value, label]) => ({
       value,
-      label
+      label,
     })
-  )
+  );
 
   const searchFunctionBankAccount = async (query: string) => {
-    const response = await searchBankAccount(query)
-    const data = response.data.content
+    const response = await searchBankAccount(query);
+    const data = response.data.content;
 
     const options: Record[] = data.map((item: BankAccountResponse) => ({
       label: item.name,
-      value: item.id
-    }))
+      value: item.id,
+    }));
 
-    return { data: { content: options } }
-  }
+    return { data: { content: options } };
+  };
 
   const searchFunctionProject = async (query: string) => {
-    const response = await searchProject(query)
-    const data = response.data.content
+    const response = await searchProject(query);
+    const data = response.data.content;
 
     const options: Record[] = data.map((item: ProjectResponse) => ({
       label: item.description,
-      value: item.id
-    }))
+      value: item.id,
+    }));
 
-    return { data: { content: options } }
-  }
+    return { data: { content: options } };
+  };
 
   const searchFunctionProduct = async (query: string) => {
-    const response = await searchProduct(query)
-    const data = response.data.content
+    const response = await searchProduct(query);
+    const data = response.data.content;
 
     const options: Record[] = data.map((item: ProductWarehouseResponse) => ({
       label: item.product,
-      value: item.id
-    }))
+      value: item.id,
+    }));
 
-    return { data: { content: options } }
-  }
+    return { data: { content: options } };
+  };
 
   return (
     <Form
       onSubmit={onSubmit}
-      validate={values => {
+      validate={(values) => {
         try {
-          validationSchema.validateSync(values, { abortEarly: false })
+          validationSchema.validateSync(values, { abortEarly: false });
         } catch (err: any) {
           return err.inner.reduce((errors: any, error: any) => {
-            return { ...errors, [error.path]: error.message }
-          }, {})
+            return { ...errors, [error.path]: error.message };
+          }, {});
         }
       }}
       render={({ handleSubmit, submitting }) => (
@@ -338,12 +342,12 @@ export function TransactionModal({ action, title }: ModelModalProp) {
                 textStyle="text-gray-100"
                 disabled={submitting}
               >
-                {submitting ? 'Enviando...' : action}
+                {submitting ? "Enviando..." : action}
               </Button>
             </div>
           </form>
         </CardModal>
       )}
     />
-  )
+  );
 }
