@@ -19,3 +19,8 @@ export const deleteProject = (id: string) => api.delete(`/projetos/${id}`)
 
 export const getProjectById = (id: string) =>
   api.get<ProjectResponse>(`/projetos/${id}`)
+
+export const searchProject = (title: string, page = 0, size = 3) =>
+  api.get<ProjectResponsePaginate>('/projetos/pesquisa', {
+    params: { title, page, size }
+  })

@@ -9,11 +9,18 @@ import {
 } from '../../../services/Transaction/type'
 import { Select, SelectOption } from '../../../components/Select'
 import { Text } from '../../../components/Text'
-import DropdownInput, { Option } from '../../../components/DropdownInput'
+import DropdownInput, {
+  Option,
+  Record
+} from '../../../components/DropdownInput'
 import { createTransaction } from '../../../services/Transaction/apiService'
 import { format } from 'date-fns'
 import { searchBankAccount } from '../../../services/BankAccount/apiService'
 import { BankAccountResponse } from '../../../services/BankAccount/types'
+import { searchProject } from '../../../services/Project/apiService'
+import { ProjectResponse } from '../../../services/Project/type'
+import { searchProduct } from '../../../services/ProductWarehouse/apiService'
+import { ProductWarehouseResponse } from '../../../services/ProductWarehouse/type'
 
 /*
 export function TransactionModal({ action, title }: ModelModalProp) {
@@ -75,12 +82,36 @@ export function TransactionModal({ action, title }: ModelModalProp) {
     })
   )
 
-  const searchFunction = async (query: string) => {
+  const searchFunctionBankAccount = async (query: string) => {
     const response = await searchBankAccount(query)
     const data = response.data.content
 
     const options: Option[] = data.map((item: BankAccountResponse) => ({
       label: item.name,
+      value: item.id
+    }))
+
+    return { data: { content: options } }
+  }
+
+  const searchFunctionProject = async (query: string) => {
+    const response = await searchProject(query)
+    const data = response.data.content
+
+    const options: Record[] = data.map((item: ProjectResponse) => ({
+      label: item.description,
+      value: item.id
+    }))
+
+    return { data: { content: options } }
+  }
+
+  const searchFunctionProduct = async (query: string) => {
+    const response = await searchProduct(query)
+    const data = response.data.content
+
+    const options: Record[] = data.map((item: ProductWarehouseResponse) => ({
+      label: item.product,
       value: item.id
     }))
 
@@ -262,18 +293,15 @@ export function TransactionModal({ action, title }: ModelModalProp) {
               <Field
                 name="projectId"
                 render={({ input, meta }) => (
-                  <TextInput.Root
+                  <DropdownInput
+                    searchFunction={searchFunctionProject}
                     labelFor="projectId"
                     labelText="Projeto relacionado"
+                    placeholder="Selecione o projeto"
                     error={meta.touched && meta.error ? meta.error : undefined}
-                  >
-                    <TextInput.Input
-                      id="projectId"
-                      type="text"
-                      placeholder="Informe o projeto..."
-                      {...input}
-                    />
-                  </TextInput.Root>
+                    inputValue={input.value}
+                    onChange={input.onChange}
+                  />
                 )}
               />
 
@@ -281,7 +309,7 @@ export function TransactionModal({ action, title }: ModelModalProp) {
                 name="bankAccountId"
                 render={({ input, meta }) => (
                   <DropdownInput
-                    searchFunction={searchFunction}
+                    searchFunction={searchFunctionBankAccount}
                     labelText="Banco da transação"
                     labelFor="searchInput"
                     placeholder="Informe o banco"
@@ -295,18 +323,15 @@ export function TransactionModal({ action, title }: ModelModalProp) {
               <Field
                 name="productsWarehouse"
                 render={({ input, meta }) => (
-                  <TextInput.Root
+                  <DropdownInput
+                    searchFunction={searchFunctionProduct}
                     labelFor="productsWarehouse"
                     labelText="Produtos da transação"
+                    placeholder="Informe o banco"
                     error={meta.touched && meta.error ? meta.error : undefined}
-                  >
-                    <TextInput.Input
-                      id="productsWarehouse"
-                      type="text"
-                      placeholder="Informe os produtos..."
-                      {...input}
-                    />
-                  </TextInput.Root>
+                    inputValue={input.value}
+                    onChange={input.onChange}
+                  />
                 )}
               />
 
