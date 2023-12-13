@@ -14,22 +14,21 @@ export interface Column<Data> {
   width?: string;
 }
 
-interface TableProps<Data extends { id: string }> {
+interface TableProps<Data extends { name: string }> {
   columns: Column<Data>[];
   data: Data[];
   menu?: boolean;
   options?: ModalOptions[];
+  isFolder?: boolean;
   link?: string;
-  onDelete?: (record: Data) => void;
 }
 
-export function Table<Data extends { id: string }>({
+export function FolderTable<Data extends { name: string }>({
   data,
   columns,
   menu = true,
   options,
   link,
-  onDelete,
 }: TableProps<Data>) {
   const navigate = useNavigate();
 
@@ -37,7 +36,7 @@ export function Table<Data extends { id: string }>({
     if (link) {
       window.scrollTo(0, 0);
 
-      navigate(`/${link}/${record.id}`, { state: { record } });
+      navigate(`${link}/${record.name}`, { state: { record } });
     }
   };
 
@@ -131,15 +130,7 @@ export function Table<Data extends { id: string }>({
                     }}
                   >
                     <div className="flex w-full items-center justify-end">
-                      {options ? (
-                        <OptionsMenu
-                          data={record}
-                          options={options}
-                          onDelete={() => onDelete && onDelete(record)}
-                        />
-                      ) : (
-                        ""
-                      )}
+                      {options ? <OptionsMenu options={options} /> : ""}
                     </div>
                   </td>
                 ) : (

@@ -1,24 +1,23 @@
-import { useState, useEffect, Fragment } from 'react'
-import { Menu, Transition } from '@headlessui/react'
-import { CaretDown } from 'phosphor-react'
-import { Text } from './Text'
+import { Fragment } from "react";
+import { Menu, Transition } from "@headlessui/react";
+import { CaretDown } from "phosphor-react";
+import { Text } from "./Text";
+import { FieldInputProps } from "react-final-form";
 
 export interface SelectOption {
-  value: string
-  label: string
+  value: string;
+  label: string;
 }
 
-export interface SelectProps {
-  placeHolder: string
-  options: SelectOption[]
-  selectedValue?: SelectOption
-  onChange?: (value: string) => void
-  asChild?: boolean
-  className?: string
-  error?: string | undefined
-  labelFor?: string
-  labelText?: string
-  labelStyle?: string
+export interface SelectProps extends FieldInputProps<any> {
+  placeHolder: string;
+  options: SelectOption[];
+  asChild?: boolean;
+  className?: string;
+  error?: string | undefined;
+  labelFor?: string;
+  labelText?: string;
+  labelStyle?: string;
 }
 
 export function Select({
@@ -28,26 +27,10 @@ export function Select({
   error,
   labelText,
   labelStyle,
-  selectedValue: propSelectedValue,
-  onChange
+  ...props
 }: SelectProps) {
-  const [selectedValue, setSelectedValue] = useState<SelectOption | undefined>(
-    propSelectedValue
-  )
-
-  useEffect(() => {
-    setSelectedValue(propSelectedValue)
-  }, [propSelectedValue])
-
-  function handleSelectOption(option: SelectOption) {
-    setSelectedValue(option)
-    if (onChange) {
-      onChange(option.value)
-    }
-  }
-
   function classNames(...classes: any) {
-    return classes.filter(Boolean).join(' ')
+    return classes.filter(Boolean).join(" ");
   }
 
   return (
@@ -61,7 +44,9 @@ export function Select({
             </Text>
           </div>
           <Menu.Button className="inline-flex w-full h-12 items-center justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-400 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
-            {selectedValue == undefined ? placeHolder : selectedValue.label}
+            {props.value == undefined
+              ? placeHolder
+              : options.find((option) => option.value == props.value)?.label}
 
             <CaretDown
               className="ml-auto mr-0 h-5 w-5 text-gray-400"
@@ -81,15 +66,15 @@ export function Select({
         leaveTo="transform opacity-0 scale-95"
       >
         <Menu.Items className="absolute z-10 mt-2 w-full origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-          {options.map(option => (
+          {options.map((option) => (
             <Menu.Item key={option.value}>
               {({ active }) => (
                 <a
                   className={classNames(
-                    active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
-                    'block px-4 py-2 text-sm rounded-md'
+                    active ? "bg-gray-100 text-gray-900" : "text-gray-700",
+                    "block px-4 py-2 text-sm rounded-md"
                   )}
-                  onClick={() => handleSelectOption(option)}
+                  onClick={() => props.onChange(option.value)}
                 >
                   {option.label}
                 </a>
@@ -99,5 +84,5 @@ export function Select({
         </Menu.Items>
       </Transition>
     </Menu>
-  )
+  );
 }
